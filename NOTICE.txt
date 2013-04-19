@@ -1,14 +1,4 @@
 OpenSearchServer PHP Client
-===========================
-
-This API connector is intended to be used with PHP5 with any version >= 5.0.1
-It is based on the v1 API of OpenSearchServer.
-
-You can find more about the OSS API on the OSS WiKi
-http://www.open-search-server.com/documentation
-
-===========================
-OpenSearchServer PHP Client
 Copyright 2008-2013 Emmanuel Keller / Jaeksoft
 http://www.open-search-server.com
 
