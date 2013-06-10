@@ -99,6 +99,9 @@ class OssIndexDocument_Document extends ArrayObject {
   /** @var Array<OSS_DocumentField> */
   private $fieldByName = array();
 
+  /**  @var Array<URL> */
+  private $binaries = array();
+
   /**
    * @param OssIndexDocument $indexDocument
    * @param string $language ISO 639-1 format (en, de, fr, ...)
@@ -168,6 +171,15 @@ class OssIndexDocument_Document extends ArrayObject {
   }
 
   /**
+   * Add a binary entry for an external file to index
+   * @param URI $uri The URL to the file to index
+   * @param string $faultTolerant
+   */
+  public function newBinaryUrl($uri, $faultTolerant = true) {
+    $this->binaries[] = new OssIndexDocument_BinaryUrl($uri, $faultTolerant);
+  }
+
+  /**
    * Retrieve a field using his name
    * @param string $name The name of the field to retrieve
    * @return OssIndexDocument_Field If field don't exist, NULL is returned
@@ -217,6 +229,10 @@ class OssIndexDocument_Document extends ArrayObject {
       $field = $field->__toString();
       $data .= $field;
     }
+    foreach ($this->binaries as $binary) {
+      $data .= $binary->__toString();
+    }
+
     if (empty($data)) {
       return NULL;
     }
@@ -391,5 +407,27 @@ class OssIndexDocument_Value {
     return $return . '><![CDATA[' . $data . ']]></value>';
   }
 
+}
+
+/**
+ * @author Emmanuel Keller
+ * @package OpenSearchServer
+ */
+class OssIndexDocument_BinaryUrl  {
+
+  /**  @var The URL for retrieving the file to index */
+  private $uri;
+
+  /**  @var The behavior in case of error when indexing the file */
+  private $faultTolerant;
+
+  public function __construct($uri, $faultTolerant = true) {
+    $this->uri = $uri;
+    $this->faultTolerant = $faultTolerant;
+  }
+
+  public function __toString() {
+    return '<binary url="'.$this->uri.'" faultTolerant="'.($this->faultTolerant ? 'yes' : 'no').'"/>';
+  }
 }
 ?>
