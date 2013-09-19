@@ -113,7 +113,7 @@ class OssApi extends OssAbstract {
    * It's expected to be in the same directory as OssApi.class.php.
    */
   public function select() {
-    return new OssSearch($this->enginePath, NULL, NULL, $this->login, $this->apiKey);
+    return new OssSearch($this->enginePath, $this->index, NULL, NULL, $this->login, $this->apiKey);
   }
 
   /**
