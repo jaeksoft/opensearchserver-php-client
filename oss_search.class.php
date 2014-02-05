@@ -2,7 +2,7 @@
 /*
  *  This file is part of OpenSearchServer PHP Client.
 *
-*  Copyright (C) 2008-2013 Emmanuel Keller / Jaeksoft
+*  Copyright (C) 2008-2014 Emmanuel Keller / Jaeksoft
 *
 *  http://www.open-search-server.com
 *
@@ -194,11 +194,20 @@ class OssSearch extends OssSearchAbstract {
   }
 
   /**
+   * @param string $filter
+   * @return OssSearch
+   */
+  public function addJoin($key, $value) {
+  	$this->join[$key] = $value;
+  	return $this;
+  }
+  
+  /**
    * @return OssSearch
    */
   public function join($position, $value) {
     $intpos = (int) $position;
-    $this->join[$intpos] = $value;
+    $this->join['jq'.$intpos] = $value;
     return $this;
   }
 
@@ -295,8 +304,8 @@ class OssSearch extends OssSearchAbstract {
     }
 
     // Join query parameter
-    foreach ((array)$this->join as $position => $value) {
-      $queryChunks[] = 'jq'.$position.'='.urlencode($value);
+    foreach ((array)$this->join as $key => $value) {
+      $queryChunks[] = $key.'='.urlencode($value);
     }
 
     // Join filters
