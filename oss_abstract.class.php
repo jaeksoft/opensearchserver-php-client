@@ -130,19 +130,24 @@ abstract class OssAbstract {
    *
    * Will fail if more than 16 HTTP redirection
    */
-  protected function queryServer($url, $data = NULL, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT) {
+  protected function queryServer($url, $data = NULL, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT, $method = 'GET') {
 
     $this->lastQueryString = $url;
     // Use CURL to post the data
 
     $rcurl = curl_init($url);
-    curl_setopt($rcurl, CURLOPT_HTTP_VERSION, '1.0');
+  	if($method === 'GET') {
+      curl_setopt($rcurl, CURLOPT_HTTP_VERSION, '1.0');
+    }
     curl_setopt($rcurl, CURLOPT_BINARYTRANSFER, TRUE);
     curl_setopt($rcurl, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($rcurl, CURLOPT_FOLLOWLOCATION, FALSE);
     curl_setopt($rcurl, CURLOPT_MAXREDIRS, 16);
     curl_setopt($rcurl, CURLOPT_VERBOSE, FALSE);
 
+    if ($method === 'PUT') {
+    	curl_setopt($rcurl, CURLOPT_PUT, TRUE);
+    }
     if (is_integer($connexionTimeout) && $connexionTimeout >= 0) {
       curl_setopt($rcurl, CURLOPT_CONNECTTIMEOUT, $connexionTimeout);
     }
@@ -199,6 +204,10 @@ abstract class OssAbstract {
 
   protected function queryServerTXT($path, $params = null, $data = null, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT) {
     return $this->queryServer($this->getQueryURL($path, $params), $data, $connexionTimeout, $timeout);
+  }
+  
+  protected function queryServerREST($path, $params = null, $data = null, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT, $method = 'GET') {
+  		return $this->queryServer($this->getQueryURL($path, $params), $data, $connexionTimeout, $timeout, $method);
   }
 
   /**

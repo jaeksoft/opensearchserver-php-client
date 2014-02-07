@@ -60,9 +60,15 @@ class OssApi extends OssAbstract {
   const API_INDEX    = 'index';
   const API_ENGINE   = 'engine';
   const API_PATTERN  = 'pattern';
+  const API_MONITOR  = 'monitor';
   const INDEX_TEMPLATE_EMPTY  = 'empty_index';
 
   const API_AUTOCOMPLETION = 'autocompletion';
+  
+  /* The new REST API for autocompletion*/
+  const REST_API_AUTOCOMPLETION = 'services/rest/index/{index_name}/autocompletion/{autocompletion_name}?field={field_name}&rows={rows}';
+  const REST_API_AUTOCOMPLETION_BUILD = 'services/rest/index/{index_name}/autocompletion/{autocompletion_name}';
+  
 
   /** @var int Default timeout (specified in seconds) for CURLOPT_TIMEOUT option. See curl documentation */
   const DEFAULT_QUERY_TIMEOUT = 0;
