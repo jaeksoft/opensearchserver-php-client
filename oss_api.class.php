@@ -60,6 +60,7 @@ class OssApi extends OssAbstract {
   const API_INDEX    = 'index';
   const API_ENGINE   = 'engine';
   const API_PATTERN  = 'pattern';
+  const API_MONITOR  = 'monitor';
   const INDEX_TEMPLATE_EMPTY  = 'empty_index';
 
   const API_AUTOCOMPLETION = 'autocompletion';
