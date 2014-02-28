@@ -76,7 +76,7 @@ class OssSearchAbstract extends OssAbstract {
     $queryChunks = $this->addParams($queryChunks);
     $params = implode('&', $queryChunks);
 
-    $result = $this->queryServerXML(OssSearch::API_SELECT, $params, $connectTimeOut, $timeOut);
+    $result = $this->queryServerXML(OssSearch::API_SELECT, $params, null, $connectTimeOut, $timeOut);
     if ($result === FALSE) {
       return FALSE;
     }
