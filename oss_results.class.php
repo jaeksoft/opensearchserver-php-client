@@ -105,7 +105,6 @@ class OssResults {
       }
       if (!isset($value) || count($value) == 0) {
         $value =  $doc[0]->xpath('field[@name="' . $fieldName . '"]');
-        
       }
       if ($getMultipleValues && count($value)>1) {
       	$tempArray = array();
