@@ -84,7 +84,7 @@ class OssResults {
   /**
    *  GETTER
    */
-  public function getField($position, $fieldName, $modeSnippet = FALSE, $highlightedOnly = FALSE, $joinPosition = NULL) {
+  public function getField($position, $fieldName, $modeSnippet = FALSE, $highlightedOnly = FALSE, $joinPosition = NULL, $getMultipleValues = false) {
     $field = NULL;
     $joinPrefix = '';
 
@@ -106,11 +106,18 @@ class OssResults {
       if (!isset($value) || count($value) == 0) {
         $value =  $doc[0]->xpath('field[@name="' . $fieldName . '"]');
       }
-      if (isset($value[0])) {
+      if ($getMultipleValues && count($value)>1) {
+      	$tempArray = array();
+      	foreach($value as $key=>$elt) {
+      		$tempArray[] = $elt;
+      	}
+      	$field = $tempArray;
+      }
+      elseif (isset($value[0])) {
         $field = $value[0];
       }
     }
-
+    
     return $field;
   }
 
@@ -129,7 +136,7 @@ class OssResults {
   public function getFields($position, $modeSnippet = FALSE) {
     $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]');
 
-    $fields = $doc->xpath('field');
+    $fields = $doc[0]->xpath('field');
     foreach ($fields as $field) {
       $name = (string) $field[0]['name'];
       $current[(string)$name] = (string) $field;

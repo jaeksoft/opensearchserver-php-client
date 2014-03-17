@@ -51,9 +51,15 @@ $oss_result = new OssResults($xmlResult);
 $doc_found_number = $oss_result->getResultFound() - $oss_result->getResultCollapsedCount();
 print 'Documents found: '.$doc_found_number."\n";
 
-// Print the title of the documents
 for ($i = 0; $i < $doc_found_number; $i++) {
+  // Print the title of the documents
   $title = $oss_result->getField($i, 'title');
   print '#'.$i.' '.$title."\n";
+  
+  //Example for a multi-valued field : 
+  $categories = $oss_result->getField($i, 'category', false, false, null, true);
+  $categoriesText = (is_array($categories)) ? implode(', ', $categories) : $categories;
+  print 'Category: '.$categoriesText."\n";
+ 
 }
 
