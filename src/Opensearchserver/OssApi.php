@@ -29,9 +29,6 @@ if (!extension_loaded('SimpleXML')) {
   trigger_error("OssApi won't work whitout SimpleXML extension", E_USER_ERROR); die();
 }
 
-if (!class_exists('InvalidArgumentException')) {
-  class InvalidArgumentException extends LogicException {}
-}
 if (!class_exists('OutOfRangeException')) {
   class OutOfRangeException extends LogicException {}
 }

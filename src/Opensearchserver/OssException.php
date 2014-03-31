@@ -27,9 +27,6 @@
 
 namespace Opensearchserver;
 
-if (!class_exists('InvalidArgumentException')) {
-  class InvalidArgumentException extends LogicException {}
-}
 if (!class_exists('OutOfRangeException')) {
   class OutOfRangeException extends LogicException {}
 }
