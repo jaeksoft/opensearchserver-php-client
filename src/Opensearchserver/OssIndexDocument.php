@@ -135,7 +135,7 @@ class OssIndexDocument_Document extends ArrayObject {
     }
 
     if (isset($supportedLanguages[$language])) {
-      $this->language = (string)$language;
+      $this->language = (string) $language;
     }
     else {
       if (class_exists('OssException')) {
@@ -370,7 +370,7 @@ class OssIndexDocument_Value {
    */
   public function __construct(OssIndexDocument_Field $field, $value) {
     $this->field = $field;
-    $this->value = (string)$value;
+    $this->value = (string) $value;
   }
 
   /**
@@ -378,7 +378,7 @@ class OssIndexDocument_Value {
    * @param string $value The value
    */
   public function setValue($value) {
-    $this->value = (string)$value;
+    $this->value = (string) $value;
   }
 
   /**

@@ -71,7 +71,7 @@ class OssException extends RuntimeException {
 
     $data = array();
     foreach ($xmlDoc->entry as $entry)
-      $data[(string)$entry['key']] = (string)$entry;
+      $data[(string) $entry['key']] = (string) $entry;
 
     $this->status  = $data['Status'];
 
@@ -112,7 +112,7 @@ class TomcatException extends RuntimeException {
       $message = substr($message, strpos($message, ' '));
     }
 
-    parent::__construct($message, (int)$code);
+    parent::__construct($message, (int) $code);
 
   }
 

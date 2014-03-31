@@ -55,7 +55,7 @@ class OssSearchDocument extends OssSearchAbstract {
    * @return OssSearchDocument
    */
   public function field($fields) {
-    $this->field = array_unique(array_merge($this->field, (array)$fields));
+    $this->field = array_unique(array_merge($this->field, (array) $fields));
 
     return $this;
   }
@@ -83,7 +83,7 @@ class OssSearchDocument extends OssSearchAbstract {
     $queryChunks = parent::addParams($queryChunks);
 
     // Fields
-    foreach ((array)$this->field as $field) {
+    foreach ((array) $this->field as $field) {
       if (empty($field)) continue;
       $queryChunks[] = 'rf=' . $field;
     }

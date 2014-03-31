@@ -49,11 +49,11 @@ class OssResults {
    */
   public function __construct(\SimpleXMLElement $result, $model = NULL) {
     $this->result  = $result;
-    $this->resultFound = (int)$this->result->result['numFound'];
-    $this->resultTime = (float)$this->result->result['time'] / 1000;
-    $this->resultRows = (int)$this->result->result['rows'];
-    $this->resultStart = (int)$this->result->result['start'];
-    $this->resultCollapsedCount = (int)$this->result->result['collapsedDocCount'];
+    $this->resultFound = (int) $this->result->result['numFound'];
+    $this->resultTime = (float) $this->result->result['time'] / 1000;
+    $this->resultRows = (int) $this->result->result['rows'];
+    $this->resultStart = (int) $this->result->result['start'];
+    $this->resultCollapsedCount = (int) $this->result->result['collapsedDocCount'];
   }
   public function getResultCollapsedCount() {
     return $this->resultCollapsedCount;
@@ -87,7 +87,7 @@ class OssResults {
     $joinPrefix = '';
 
     if ($joinPosition != null) {
-      $joinPrefix = '/join[@paramPosition="jq' . (int)$joinPosition . '"]';
+      $joinPrefix = '/join[@paramPosition="jq' . (int) $joinPosition . '"]';
     }
 
     $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]' . $joinPrefix);
@@ -107,7 +107,7 @@ class OssResults {
       }
       if ($getMultipleValues && count($value)>1) {
           $tempArray = array();
-          foreach($value as $key=>$elt) {
+          foreach ($value as $key=>$elt) {
               $tempArray[] = $elt;
           }
           $field = $tempArray;
@@ -138,14 +138,14 @@ class OssResults {
     $fields = $doc->xpath('field');
     foreach ($fields as $field) {
       $name = (string) $field[0]['name'];
-      $current[(string)$name] = (string) $field;
+      $current[(string) $name] = (string) $field;
     }
 
     if ($modeSnippet) {
       $snippets = $doc->xpath('snippet');
       foreach ($snippets as $field) {
         $name = (string) $field[0]['name'];
-        $current[(string)$name] = (string) $field;
+        $current[(string) $name] = (string) $field;
       }
     }
 

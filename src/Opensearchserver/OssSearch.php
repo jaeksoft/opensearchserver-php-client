@@ -143,7 +143,7 @@ class OssSearch extends OssSearchAbstract {
    * @return OssSearch
    */
   public function field($fields) {
-    $this->field = array_unique(array_merge($this->field, (array)$fields));
+    $this->field = array_unique(array_merge($this->field, (array) $fields));
 
     return $this;
   }
@@ -152,7 +152,7 @@ class OssSearch extends OssSearchAbstract {
    * @return OssSearch
    */
   public function sort($fields) {
-    foreach ((array)$fields as $field)
+    foreach ((array) $fields as $field)
       $this->sort[] = $field;
 
     return $this;
@@ -286,13 +286,13 @@ class OssSearch extends OssSearchAbstract {
     }
 
     // Fields
-    foreach ((array)$this->field as $field) {
+    foreach ((array) $this->field as $field) {
       if (empty($field)) continue;
       $queryChunks[] = 'rf=' . $field;
     }
 
     // Facets
-    foreach ((array)$this->facet as $field => $options) {
+    foreach ((array) $this->facet as $field => $options) {
       if ($options['multi']) {
         $facet = 'facet.multi=';
       } elseif ($options['multi_collapse']) {
@@ -308,7 +308,7 @@ class OssSearch extends OssSearchAbstract {
     }
 
     // Join query parameter
-    foreach ((array)$this->join as $position => $value) {
+    foreach ((array) $this->join as $position => $value) {
       $queryChunks[] = 'jq'.$position.'='.urlencode($value);
     }
 
@@ -343,7 +343,7 @@ class OssSearch extends OssSearchAbstract {
       $queryChunks[] = 'collapse.mode=' . $this->collapse['mode'];
     }
     if ($this->collapse['max'] !== NULL) {
-      $queryChunks[] = 'collapse.max=' . (int)$this->collapse['max'];
+      $queryChunks[] = 'collapse.max=' . (int) $this->collapse['max'];
     }
 
     return $queryChunks;

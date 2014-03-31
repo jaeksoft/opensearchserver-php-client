@@ -199,11 +199,11 @@ class NewsFeedParser_RSS extends NewsFeedParser {
 
     // Misc informations
     $this->channelTitle    = (string) $xml->channel->title;
-    $this->channelSubtitle  = (string )$xml->channel->description;
+    $this->channelSubtitle  = (string) $xml->channel->description;
     $this->channelHome    = (string) $xml->channel->link;
 
     // Entries
-    $items = (array)$xml->xpath('channel/item');
+    $items = (array) $xml->xpath('channel/item');
     foreach ($items as $item) {
       $this->append(new NewsFeedParser_RSS_Entry($item));
     }
@@ -215,18 +215,18 @@ class NewsFeedParser_RSS_Entry extends NewsFeedParser_Feed_Entry {
 
   public function __construct(SimpleXMLElement $xml) {
 
-    $this->id = md5((string)$xml->guid);
+    $this->id = md5((string) $xml->guid);
     $this->link = $xml->link;
-    $this->published = date('Y-m-d\TH:i:sO', strtotime((string)$xml->pubDate));
-    $this->summary = (string)$xml->description;
+    $this->published = date('Y-m-d\TH:i:sO', strtotime((string) $xml->pubDate));
+    $this->summary = (string) $xml->description;
     $this->title = $xml->title;
 
     // Only RSSS2.0
-    $this->author  = (string)$xml->author;
+    $this->author  = (string) $xml->author;
     if (empty($this->author)) {
       $this->author  = $xml->children("http://purl.org/dc/elements/1.1/")->creator;
     }
-    $this->content = (string)$xml->children('http://purl.org/rss/1.0/modules/content/');
+    $this->content = (string) $xml->children('http://purl.org/rss/1.0/modules/content/');
 
   }
 
@@ -243,9 +243,9 @@ class NewsFeedParser_Atom extends NewsFeedParser {
     $this->feedFormat = 'ATOM';
 
     // Misc informations
-    $this->channelTitle    = (string)$xml->title;
-    $this->channelSubtitle  = (string)$xml->subtitle;
-    $this->channelHome    = preg_replace('/(\.\w+)\/.*$/', '$1', (string)$xml->id);
+    $this->channelTitle    = (string) $xml->title;
+    $this->channelSubtitle  = (string) $xml->subtitle;
+    $this->channelHome    = preg_replace('/(\.\w+)\/.*$/', '$1', (string) $xml->id);
 
     // Entries
     foreach ($xml->entry as $item) {
@@ -259,15 +259,15 @@ class NewsFeedParser_Atom_Entry extends NewsFeedParser_Feed_Entry {
 
   public function __construct(SimpleXMLElement $xml) {
 
-    $this->id = md5((string)$xml->id);
+    $this->id = md5((string) $xml->id);
     $this->link = $xml->link['href'];
-    $this->published = date('Y-m-d\TH:i:sO', strtotime((string)$xml->published));
-    $this->summary = (string)$xml->content;
+    $this->published = date('Y-m-d\TH:i:sO', strtotime((string) $xml->published));
+    $this->summary = (string) $xml->content;
     $this->title = $xml->title;
 
     // Only RSSS2.0
-    $this->author  = (string)$xml->author->name;
-    $this->content = (string)$xml->content;
+    $this->author  = (string) $xml->author->name;
+    $this->content = (string) $xml->content;
 
   }
 

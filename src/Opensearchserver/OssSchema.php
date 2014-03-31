@@ -50,7 +50,7 @@ class OssSchema extends OssAbstract {
     $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
     $indexes = array();
     foreach ($return->index as $index) {
-      $indexes[] = (string)$index['name'];
+      $indexes[] = (string) $index['name'];
     }
 
     return $indexes;
@@ -118,7 +118,7 @@ class OssSchema extends OssAbstract {
     if ($analyzer) {
       $params["field.analyzer"]   = $analyzer;
     }
-    if ($stored)  {
+    if ($stored) {
       $params["field.stored"]     = $stored;
     }
     if ($indexed) {

@@ -121,7 +121,7 @@ class OssPaging {
       $this->resultLow  = max($low, 0);
       $this->resultHigh = min($this->resultTotal, $high);
       $this->resultPrev = max($this->resultCurrentPage - 1, 0);
-      if($this->resultCurrentPage + 1 < $this->resultHigh) {
+      if ($this->resultCurrentPage + 1 < $this->resultHigh) {
         $this->resultNext = min($this->resultCurrentPage + 1, $this->resultTotal);
       }
       $this->pageBaseURI = preg_replace('/&(?:' . $this->pageParameter . '|' . $this->rowsParameter . ')=[\d]+/', '', $_SERVER['REQUEST_URI'])

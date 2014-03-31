@@ -144,7 +144,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function field($fields = NULL) {
     if ($fields != NULL) {
-      $this->field = array_unique(array_merge($this->field, (array)$fields));
+      $this->field = array_unique(array_merge($this->field, (array) $fields));
     }
 
     return $this;
@@ -240,7 +240,7 @@ class OssSearchMlt extends OssSearchAbstract {
     }
 
     // Fields
-    foreach ((array)$this->field as $field) {
+    foreach ((array) $this->field as $field) {
       if (empty($field)) continue;
       $queryChunks[] = 'rf=' . $field;
     }
@@ -252,19 +252,19 @@ class OssSearchMlt extends OssSearchAbstract {
       $queryChunks[] = 'mlt.docquery=' . urlencode($this->docQuery);
     }
     if ($this->minWordLen != NULL) {
-      $queryChunks[] = 'mlt.minwordlen=' . (int)$this->minWordLen;
+      $queryChunks[] = 'mlt.minwordlen=' . (int) $this->minWordLen;
     }
     if ($this->maxWordLen != NULL) {
-      $queryChunks[] = 'mlt.maxwordlen=' . (int)$this->maxWordLen;
+      $queryChunks[] = 'mlt.maxwordlen=' . (int) $this->maxWordLen;
     }
     if ($this->minDocFreq != NULL) {
-      $queryChunks[] = 'mlt.mindocfreq=' . (int)$this->minDocFreq;
+      $queryChunks[] = 'mlt.mindocfreq=' . (int) $this->minDocFreq;
     }
     if ($this->minTermFreq != NULL) {
-      $queryChunks[] = 'mlt.mintermfreq=' . (int)$this->minTermFreq;
+      $queryChunks[] = 'mlt.mintermfreq=' . (int) $this->minTermFreq;
     }
     if ($this->maxNumTokensParsed != NULL) {
-      $queryChunks[] = 'mlt.maxnumtokensparsed=' . (int)$this->maxNumTokensParsed;
+      $queryChunks[] = 'mlt.maxnumtokensparsed=' . (int) $this->maxNumTokensParsed;
     }
     if ($this->moreLikeThis['stopwords']) {
       $queryChunks[] = 'mlt.stopwords=' . urlencode($this->moreLikeThis['stopwords']);

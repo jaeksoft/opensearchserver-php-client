@@ -128,7 +128,7 @@ abstract class OssAbstract {
         $this->user = $value;
   }
   public function setGroups($groups) {
-        if(!is_array($groups)) {
+        if (!is_array($groups)) {
             $this->groups = array($groups);
         }
         else {
@@ -184,7 +184,7 @@ abstract class OssAbstract {
     // Send provided string as POST data. Must be encoded to meet POST specification
     if ($data !== NULL) {
       curl_setopt($rcurl, CURLOPT_POST, TRUE);
-      curl_setopt($rcurl, CURLOPT_POSTFIELDS, (string)$data);
+      curl_setopt($rcurl, CURLOPT_POSTFIELDS, (string) $data);
       curl_setopt($rcurl, CURLOPT_HTTPHEADER, array("Content-type: text/xml; charset=utf-8"));
     }
 
@@ -267,19 +267,19 @@ abstract class OssAbstract {
     // Cast $xml param to be a SimpleXMLElement
     // If we don't find the word 'Error' in the xml string, exit immediatly
     if ($xml instanceof \SimpleXMLElement) {
-      if (strpos((string)$xml, 'Error') === FALSE) {
+      if (strpos((string) $xml, 'Error') === FALSE) {
         return FALSE;
       }
       $xmlDoc = $xml;
     }
     elseif ($xml instanceof \DOMDocument) {
       $xmlDoc = simplexml_import_dom($xml);
-      if (strpos((string)$xmlDoc, 'Error') === FALSE) {
+      if (strpos((string) $xmlDoc, 'Error') === FALSE) {
         return FALSE;
       }
     }
     else {
-      if (strpos((string)$xml, 'Error') === FALSE) {
+      if (strpos((string) $xml, 'Error') === FALSE) {
         return FALSE;
       }
       $previous_error_level = error_reporting(0);

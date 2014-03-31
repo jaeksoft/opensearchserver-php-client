@@ -66,7 +66,7 @@ class OssSearchAbstract extends OssAbstract {
   }
 
   public function setCustomLog($pos, $log) {
-    $this->customLogs[(int)$pos] = $log;
+    $this->customLogs[(int) $pos] = $log;
   }
 
   /**
