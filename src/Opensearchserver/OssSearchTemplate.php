@@ -152,7 +152,8 @@ class OssSearchTemplate extends OssAbstract
     public function createMoreLikeThisTemplate(
         $qtname, $qtquery = null, $qtLike = null, $qtAnalyzer = null, $qtLang = null, $qtMinwordlen = null,
         $qtMaxwordlen = null, $qtMindocfreq = null, $qtMintermfreq = null, $qtMaxqueryTerms = null,
-        $qtMaxnumtokensparsed = null, $qtStopwords = null, $qtRows = null, $qtStart = null, $qtFields = null) {
+        $qtMaxnumtokensparsed = null, $qtStopwords = null, $qtRows = null, $qtStart = null, $qtFields = null)
+    {
 
         $params = array("qt.name" => $qtname);
         $params['qt.type'] = 'MoreLikeThisRequest';
