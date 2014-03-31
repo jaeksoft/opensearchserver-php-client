@@ -75,7 +75,7 @@ class OssSearchTemplate extends OssAbstract
     $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_CREATE;
     $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
 
-    return $return === false ? false : TRUE;
+    return $return === false ? false : true;
   }
 
   /**
@@ -114,7 +114,7 @@ class OssSearchTemplate extends OssAbstract
     $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_CREATE;
     $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
 
-    return $return === false ? false : TRUE;
+    return $return === false ? false : true;
   }
 
   public function setReturnField($qtname, $returnField)
@@ -124,7 +124,7 @@ class OssSearchTemplate extends OssAbstract
     $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_SETRETURNFIELD;
     $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
 
-    return $return === false ? false : TRUE;
+    return $return === false ? false : true;
   }
 
   public function setSnippetField($qtname, $snippetField, $maxSnippetSize=null, $tag=null, $maxSnippetNo=null, $fragmenter=null)
@@ -146,7 +146,7 @@ class OssSearchTemplate extends OssAbstract
     $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_SETSNIPPETFIELD;
     $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
 
-    return $return === false ? false : TRUE;
+    return $return === false ? false : true;
   }
 
   public function createMoreLikeThisTemplate(
@@ -201,7 +201,7 @@ class OssSearchTemplate extends OssAbstract
     $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_CREATE;
     $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
 
-    return $return === false ? false : TRUE;
+    return $return === false ? false : true;
   }
 
 }

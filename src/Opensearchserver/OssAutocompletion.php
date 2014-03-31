@@ -70,7 +70,7 @@ class OssAutocompletion extends OssAbstract
       return false;
     }
 
-    return TRUE;
+    return true;
   }
 
   /**
@@ -85,6 +85,6 @@ class OssAutocompletion extends OssAbstract
       return false;
     }
 
-    return TRUE;
+    return true;
   }
 }

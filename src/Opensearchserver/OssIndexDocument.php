@@ -148,7 +148,7 @@ class OssIndexDocument_Document extends \ArrayObject
       return false;
     }
 
-    return TRUE;
+    return true;
   }
 
   /**

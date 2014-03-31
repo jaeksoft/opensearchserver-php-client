@@ -170,8 +170,8 @@ abstract class OssAbstract
 
     $rcurl = curl_init($url);
     curl_setopt($rcurl, CURLOPT_HTTP_VERSION, '1.0');
-    curl_setopt($rcurl, CURLOPT_BINARYTRANSFER, TRUE);
-    curl_setopt($rcurl, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($rcurl, CURLOPT_BINARYTRANSFER, true);
+    curl_setopt($rcurl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($rcurl, CURLOPT_FOLLOWLOCATION, false);
     curl_setopt($rcurl, CURLOPT_MAXREDIRS, 16);
     curl_setopt($rcurl, CURLOPT_VERBOSE, false);
@@ -186,7 +186,7 @@ abstract class OssAbstract
 
     // Send provided string as POST data. Must be encoded to meet POST specification
     if ($data !== null) {
-      curl_setopt($rcurl, CURLOPT_POST, TRUE);
+      curl_setopt($rcurl, CURLOPT_POST, true);
       curl_setopt($rcurl, CURLOPT_POSTFIELDS, (string) $data);
       curl_setopt($rcurl, CURLOPT_HTTPHEADER, array("Content-type: text/xml; charset=utf-8"));
     }
@@ -299,7 +299,7 @@ abstract class OssAbstract
     // Make sure the Error we found was a Status Error
     foreach ($xmlDoc->entry as $entry) {
       if ($entry['key'] == 'Status' && $entry == 'Error') {
-        return TRUE;
+        return true;
       }
     }
 

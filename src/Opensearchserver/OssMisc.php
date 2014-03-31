@@ -57,9 +57,9 @@ function config_request_value($key, $default, $request_field = null)
 function retrieve_xml($url, &$curl_info = null)
 {
   $rcurl = curl_init($url);
-  curl_setopt($rcurl, CURLOPT_BINARYTRANSFER, TRUE);
-  curl_setopt($rcurl, CURLOPT_RETURNTRANSFER, TRUE);
-  curl_setopt($rcurl, CURLOPT_FOLLOWLOCATION, TRUE);
+  curl_setopt($rcurl, CURLOPT_BINARYTRANSFER, true);
+  curl_setopt($rcurl, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($rcurl, CURLOPT_FOLLOWLOCATION, true);
   curl_setopt($rcurl, CURLOPT_CONNECTTIMEOUT, 10);
   curl_setopt($rcurl, CURLOPT_TIMEOUT, 5);
   $content = curl_exec($rcurl);

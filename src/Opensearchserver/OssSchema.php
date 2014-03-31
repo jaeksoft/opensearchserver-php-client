@@ -76,7 +76,7 @@ class OssSchema extends OssAbstract
       return false;
     }
 
-    return TRUE;
+    return true;
   }
 
   /**
@@ -93,7 +93,7 @@ class OssSchema extends OssAbstract
       return false;
     }
 
-    return TRUE;
+    return true;
   }
 
   /**
@@ -147,7 +147,7 @@ class OssSchema extends OssAbstract
       return false;
     }
 
-    return TRUE;
+    return true;
   }
 
   /**
@@ -164,7 +164,7 @@ class OssSchema extends OssAbstract
       return false;
     }
 
-    return TRUE;
+    return true;
   }
 
 }

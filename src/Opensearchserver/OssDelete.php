@@ -42,7 +42,7 @@ class OssDelete extends OssAbstract
       return false;
     }
 
-    return TRUE;
+    return true;
   }
 
 }
