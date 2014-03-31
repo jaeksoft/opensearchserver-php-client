@@ -9,7 +9,7 @@ http://www.open-search-server.com/documentation
 
 ===========================
 OpenSearchServer PHP Client
-Copyright 2008-2013 Emmanuel Keller / Jaeksoft
+Copyright 2008-2014 Emmanuel Keller / Jaeksoft
 http://www.open-search-server.com
 
 OpenSearchServer PHP Client is free software: you can redistribute it and/or
@@ -26,6 +26,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenSearchServer PHP Client.
 If not, see <http://www.gnu.org/licenses/>.
 
+===========================
+
 ### How to install it
 
 Add the repository information in your `composer.json` file:
@@ -33,14 +35,14 @@ Add the repository information in your `composer.json` file:
 "repositories": [
   {
     "type": "git",
-    "url": "https://github.com/AlexandreToyer/opensearchserver-php-client"
+    "url": "https://github.com/jaeksoft/opensearchserver-php-client"
   }
 ],
 ```
 
 Add the require information in your `composer.json` file:
 ```
-"opensearchserver/opensearchserver": "~1.4-dev"
+"opensearchserver/opensearchserver": "~2.0-dev"
 ``` 
 
 Run `composer install` (or `php composer.phar install`).
