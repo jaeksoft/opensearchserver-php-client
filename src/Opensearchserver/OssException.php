@@ -27,9 +27,6 @@
 
 namespace Opensearchserver;
 
-if (!class_exists('RuntimeException')) {
-  class RuntimeException extends Exception {}
-}
 if (!class_exists('LogicException')) {
   class LogicException extends Exception {}
 }
