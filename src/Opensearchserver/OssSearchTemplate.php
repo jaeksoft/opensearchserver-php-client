@@ -68,7 +68,7 @@ class OssSearchTemplate extends OssAbstract
     }
     if ($qtlang) {
       if (strlen($qtlang) == 2) {
-        $qtlang = mb_strtoupper(OssAPI::getLanguage($qtlang));
+        $qtlang = mb_strtoupper(OssApi::getLanguage($qtlang));
       }
       $params['qt.lang'] = $qtlang;
     }
