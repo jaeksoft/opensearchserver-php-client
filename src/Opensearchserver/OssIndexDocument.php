@@ -27,10 +27,6 @@
 
 namespace Opensearchserver;
 
-if (!class_exists('ArrayObject')) {
-  trigger_error("OssIndexDocument won't work whitout SPL ArrayObject", E_USER_ERROR); die();
-}
-
 /**
  * @author pmercier <pmercier@open-search-server.com>
  * @package OpenSearchServer
