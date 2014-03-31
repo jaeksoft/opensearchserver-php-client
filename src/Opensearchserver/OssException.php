@@ -27,10 +27,6 @@
 
 namespace Opensearchserver;
 
-if (!class_exists('OutOfRangeException')) {
-  class OutOfRangeException extends LogicException {}
-}
-
 /**
  * Open Search Server Exception
  * @author pmercier <pmercier@open-search-server.com>
