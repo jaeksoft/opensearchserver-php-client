@@ -52,6 +52,7 @@ class OssSchema extends OssAbstract {
     foreach ($return->index as $index) {
       $indexes[] = (string)$index['name'];
     }
+
     return $indexes;
   }
 
@@ -71,6 +72,7 @@ class OssSchema extends OssAbstract {
     if ($return === FALSE) {
       return FALSE;
     }
+
     return TRUE;
   }
 
@@ -86,6 +88,7 @@ class OssSchema extends OssAbstract {
     if ($return === FALSE) {
       return FALSE;
     }
+
     return TRUE;
   }
 
@@ -97,6 +100,7 @@ class OssSchema extends OssAbstract {
    */
   public function getSchema() {
     $params = array('cmd' => OssSchema::API_SCHEMA_GET_SCHEMA);
+
     return $this->queryServerXML(OssSchema::API_SCHEMA, $params);
   }
 
@@ -136,6 +140,7 @@ class OssSchema extends OssAbstract {
     if ($return === FALSE) {
       return FALSE;
     }
+
     return TRUE;
   }
 
@@ -151,6 +156,7 @@ class OssSchema extends OssAbstract {
     if ($return === FALSE) {
       return FALSE;
     }
+
     return TRUE;
   }
 

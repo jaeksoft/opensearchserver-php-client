@@ -148,6 +148,7 @@ class OssApi extends OssAbstract {
    */
   public function optimize() {
     $return = $this->queryServerTXT(OssApi::API_OPTIMIZE);
+
     return ($return !== FALSE);
   }
 
@@ -160,6 +161,7 @@ class OssApi extends OssAbstract {
    */
   public function reload() {
     $return = $this->queryServerTXT(OssApi::API_RELOAD);
+
     return ($return !== FALSE);
   }
 
@@ -174,6 +176,7 @@ class OssApi extends OssAbstract {
       $patterns = implode("\n", $patterns);
     }
     $return = $this->queryServer($this->getQueryURL(OssApi::API_PATTERN) . ($deleteAll?'&deleteAll=yes':'&deleteAll=no'), $patterns);
+
     return ($return !== FALSE);
   }
 
@@ -206,10 +209,12 @@ class OssApi extends OssAbstract {
         throw new UnexpectedValueException('String, SimpleXMLElement or DOMDocument was expected for $xml.');
       }
       trigger_error(__CLASS__ . '::' . __METHOD__ . '($xml): String, SimpleXMLElement or DOMDocument was expected for $xml.', E_USER_ERROR);
+
       return FALSE;
     }
 
     $return = $this->queryServer($this->getQueryURL(OssApi::API_UPDATE), $xml);
+
     return ($return !== FALSE);
 
   }
@@ -220,6 +225,7 @@ class OssApi extends OssAbstract {
    */
   public function indexList() {
     $ossSchema = new OssSchema($this->enginePath, $this->index, $this->login, $this->apiKey);
+
     return $ossSchema->indexList();
   }
 
@@ -231,6 +237,7 @@ class OssApi extends OssAbstract {
    */
   public function createIndex($index, $template = FALSE) {
     $ossSchema = new OssSchema($this->enginePath, $this->index, $this->login, $this->apiKey);
+
     return $ossSchema->createIndex($index, $template);
   }
 
@@ -240,6 +247,7 @@ class OssApi extends OssAbstract {
    */
   public function deleteIndex($index) {
     $ossSchema = new OssSchema($this->enginePath, $this->index, $this->login, $this->apiKey);
+
     return $ossSchema->deleteIndex($index);
   }
 
@@ -251,6 +259,7 @@ class OssApi extends OssAbstract {
    */
   public function getSchema() {
     $ossSchema = new OssSchema($this->enginePath, $this->index, $this->login, $this->apiKey);
+
     return $ossSchema->getSchema();
   }
 
@@ -267,6 +276,7 @@ class OssApi extends OssAbstract {
    */
   public function setField($name, $analyzer = NULL, $stored = NULL, $indexed = NULL, $termVector = NULL, $default = NULL, $unique = NULL) {
     $ossSchema = new OssSchema($this->enginePath, $this->index, $this->login, $this->apiKey);
+
     return $ossSchema->setField($name, $analyzer, $stored, $indexed, $termVector, $default, $unique);
   }
 
@@ -288,6 +298,7 @@ class OssApi extends OssAbstract {
     if ($lang == NULL) {
       return OssApi::$supportedLanguages[''];
     }
+
     return $lang;
   }
 
@@ -301,6 +312,7 @@ class OssApi extends OssAbstract {
       array("+",   "-",   "&&",   "||",  "!",  "(",  ")",  "{",  "}",  "[",  "]",  "^", "\"",  "~",  "*",  "?",  ":", '\\'),
       array('\+', '\-', '\&\&', '\|\|', '\!', '\(', '\)', '\{', '\}', '\[', '\]', '\^', '\"', '\~', '\*', '\?', '\:', '\\\\')
     );
+
     return str_replace($escaping[0], $escaping[1], $string);
   }
 
@@ -317,6 +329,7 @@ class OssApi extends OssAbstract {
       "\x10", "\x11", "\x12", "\x13", "\x14", "\x15", "\x16", "\x17",
       "\x18", "\x19", "\x1A", "\x1B", "\x1C", "\x1D", "\x1E", "\x1F"
     );
+
     return str_replace($remove, $replacement, $string);
 
   }

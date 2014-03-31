@@ -44,6 +44,7 @@ class OssAutocompletion extends OssAbstract {
     if ($return === FALSE) {
       return FALSE;
     }
+
     return $return;
   }
 
@@ -64,6 +65,7 @@ class OssAutocompletion extends OssAbstract {
     if ($return === FALSE) {
       return FALSE;
     }
+
     return TRUE;
   }
 
@@ -77,6 +79,7 @@ class OssAutocompletion extends OssAbstract {
     if ($return === FALSE) {
       return FALSE;
     }
+
     return TRUE;
   }
 }

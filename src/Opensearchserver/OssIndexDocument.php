@@ -81,6 +81,7 @@ class OssIndexDocument extends ArrayObject {
     foreach ($this as $document) {
       $return .= $document->__toString();
     }
+
     return $return . '</index>';
   }
 
@@ -125,6 +126,7 @@ class OssIndexDocument_Document extends ArrayObject {
 
     if ($language === NULL) {
       $this->language = $language;
+
       return NULL;
     }
 
@@ -140,8 +142,10 @@ class OssIndexDocument_Document extends ArrayObject {
         throw new UnexpectedValueException('Language "' . $language . '" is not supported.');
       }
       trigger_error(__CLASS__ . '::' . __METHOD__ . '($lang): Language "' . $language . '" is not supported.', E_USER_ERROR);
+
       return FALSE;
     }
+
     return TRUE;
   }
 
@@ -169,6 +173,7 @@ class OssIndexDocument_Document extends ArrayObject {
     if ($values !== NULL) {
       $field->addValues($values);
     }
+
     return $field;
   }
 
@@ -190,6 +195,7 @@ class OssIndexDocument_Document extends ArrayObject {
     if (isset($this->fieldByName[$name])) {
       return $this->fieldByName[$name];
     }
+
     return NULL;
   }
 
@@ -289,6 +295,7 @@ class OssIndexDocument_Field extends ArrayObject {
     $value = new OssIndexDocument_Value($this, $value);
     $value->setRemoveTag($removeTag);
     $this->append($value);
+
     return $value;
   }
 
@@ -335,6 +342,7 @@ class OssIndexDocument_Field extends ArrayObject {
     if (empty($return)) {
       return NULL;
     }
+
     return '<field name="' . $this->name . '">' . $return . '</field>';
   }
 
@@ -406,6 +414,7 @@ class OssIndexDocument_Value {
     if ($this->removeTag) {
       $return .= ' removeTag="yes"';
     }
+
     return $return . '><![CDATA[' . $data . ']]></value>';
   }
 

@@ -39,6 +39,7 @@ class OssDelete extends OssAbstract {
     if ($return === FALSE) {
       return FALSE;
     }
+
     return TRUE;
   }
 

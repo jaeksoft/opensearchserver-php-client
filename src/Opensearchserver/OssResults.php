@@ -125,6 +125,7 @@ class OssResults {
     if (isset($doc[0]) && is_array($doc)) {
       return $doc[0]['score'];
     }
+
     return null;
   }
 
@@ -162,6 +163,7 @@ class OssResults {
     if (!isset($currentFacet) || ( isset($currentFacet) && $currentFacet === FALSE)) {
       $currentFacet = array();
     }
+
     return $currentFacet;
   }
 
@@ -175,6 +177,7 @@ class OssResults {
     foreach ($allFacets as $each) {
       $facets[] = $each[0]['name'];
     }
+
     return $facets;
   }
 
@@ -187,6 +190,7 @@ class OssResults {
     if (!isset($currentSpellCheck) || ( isset($currentSpellCheck) && $currentSpellCheck === FALSE)) {
       $currentSpellCheck = array();
     }
+
     return $currentSpellCheck;
   }
   /**
@@ -201,6 +205,7 @@ class OssResults {
         $queryExact .= $each[0]->suggest.' ';
       }
     }
+
     return $queryExact;
   }
 

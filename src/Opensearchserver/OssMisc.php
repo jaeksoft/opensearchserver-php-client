@@ -43,6 +43,7 @@ function config_request_value($key, $default, $request_field = NULL) {
   if (!$value) {
     $value = $default;
   }
+
   return $value;
 }
 
@@ -68,6 +69,7 @@ function retrieve_xml($url, &$curl_info = NULL) {
 
   if ($content === FALSE) {
     trigger_error('CURL failed to execute on URL "' . $url . '"');
+
     return FALSE;
   }
 
@@ -291,6 +293,7 @@ function indentXML($string) {
       $indent++;
       $pad = str_repeat(' ', max(0, $indent-1));
     }
+
     return $pad . $matches[0] . ($indent ? "\n" : "");
   }
 
@@ -302,6 +305,7 @@ function beautifulXML($string) {
 
   function beautifulXML_tagging($string) {
     $string = preg_replace('/^(\w+)/i', '<span class="nodeName">$1</span>', $string);
+
     return $string;
   }
 

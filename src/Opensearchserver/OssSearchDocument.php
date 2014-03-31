@@ -57,6 +57,7 @@ class OssSearchDocument extends OssSearchAbstract {
    */
   public function field($fields) {
     $this->field = array_unique(array_merge($this->field, (array)$fields));
+
     return $this;
   }
 
@@ -65,6 +66,7 @@ class OssSearchDocument extends OssSearchAbstract {
    */
   public function uniqueKey($uniqueKey = NULL) {
     $this->uniqueKeys[] = $uniqueKey;
+
     return $this;
   }
 
@@ -73,6 +75,7 @@ class OssSearchDocument extends OssSearchAbstract {
    */
   public function docId($docId = NULL) {
     $this->docIds[] = $docId;
+
     return $this;
   }
 
@@ -101,6 +104,7 @@ class OssSearchDocument extends OssSearchAbstract {
       }
       $queryChunks[] = 'uk=' . urlencode($uniqueKey);
     }
+
     return $queryChunks;
   }
 }

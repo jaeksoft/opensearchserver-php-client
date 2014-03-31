@@ -51,6 +51,7 @@ abstract class OssAbstract {
     if (empty($login)) {
       $this->login  = NULL;
       $this->apiKey  = NULL;
+
       return;
     }
 
@@ -60,6 +61,7 @@ abstract class OssAbstract {
         throw new UnexpectedValueException('You must provide a login and an api key to use credential.');
       }
       trigger_error(__CLASS__ . '::' . __METHOD__ . ': You must provide a login and an api key to use credential.', E_USER_ERROR);
+
       return FALSE;
     }
 
@@ -203,6 +205,7 @@ abstract class OssAbstract {
         throw new TomcatException($aResponse['http_code'], $content);
       }
       trigger_error('HTTP ERROR ' . $aResponse['http_code'] . ': "' . trim(strip_tags($content)) . '"', E_USER_WARNING);
+
       return FALSE;
     }
 
@@ -215,6 +218,7 @@ abstract class OssAbstract {
           throw new \Exception($content);
       }
       trigger_error('OSS Returned an error: "' . trim(strip_tags($content)) . '"', E_USER_WARNING);
+
       return FALSE;
     }
 
@@ -251,6 +255,7 @@ abstract class OssAbstract {
     if (!$xmlResult instanceof \SimpleXMLElement) {
         throw new \RuntimeException("The search engine didn't return a valid XML");
     }
+
     return $xmlResult;
   }
 

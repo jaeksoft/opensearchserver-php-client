@@ -58,6 +58,7 @@ class OssSearchAbstract extends OssAbstract {
    */
   public function template($template = NULL) {
     $this->template = $template;
+
     return $this;
   }
 
@@ -82,6 +83,7 @@ class OssSearchAbstract extends OssAbstract {
     if ($result === FALSE) {
       return FALSE;
     }
+
     return $result;
   }
 
@@ -109,6 +111,7 @@ class OssSearchAbstract extends OssAbstract {
         $queryChunks[] = 'group='.urlencode($group);
     }
     */
+
     return $queryChunks;
   }
 

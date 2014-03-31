@@ -54,6 +54,7 @@ class OssSearchSpellCheck extends OssSearchAbstract {
    */
   public function query($query = NULL) {
     $this->query = $query;
+
     return $this;
   }
 
@@ -64,6 +65,7 @@ class OssSearchSpellCheck extends OssSearchAbstract {
   protected function addParams($queryChunks = NULL) {
     $queryChunks = parent::addParams($queryChunks);
     $queryChunks[] = 'q=' . urlencode($this->query);
+
     return $queryChunks;
   }
 }

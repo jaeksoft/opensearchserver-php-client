@@ -78,6 +78,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function start($start = NULL) {
     $this->start = $start;
+
     return $this;
   }
 
@@ -86,6 +87,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function rows($rows = NULL) {
     $this->rows = $rows;
+
     return $this;
   }
 
@@ -96,6 +98,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function docQuery($docQuery = NULL) {
     $this->docQuery = $docQuery;
+
     return $this;
   }
 
@@ -106,6 +109,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function likeText($likeText = NULL) {
     $this->likeText = $likeText;
+
     return $this;
   }
 
@@ -115,6 +119,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function filter($filter = NULL) {
     $this->filter[] = $filter;
+
     return $this;
   }
 
@@ -123,6 +128,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function lang($lang = NULL) {
     $this->lang = $lang;
+
     return $this;
   }
 
@@ -131,6 +137,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function analyzer($analyzer = NULL) {
     $this->analyzer = $analyzer;
+
     return $this;
   }
 
@@ -141,6 +148,7 @@ class OssSearchMlt extends OssSearchAbstract {
     if ($fields != NULL) {
       $this->field = array_unique(array_merge($this->field, (array)$fields));
     }
+
     return $this;
   }
 
@@ -150,6 +158,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function minWordLen($minWordLen = NULL) {
     $this->minWordLen = $minWordLen;
+
     return $this;
   }
 
@@ -159,6 +168,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function maxWordLen($maxWordLen = NULL) {
     $this->maxWordLen = $maxWordLen;
+
     return $this;
   }
 
@@ -168,6 +178,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function minDocFreq($minDocFreq = NULL) {
     $this->minDocFreq = $minDocFreq;
+
     return $this;
   }
 
@@ -177,6 +188,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function minTermFreq($minTermFreq = NULL) {
     $this->minTermFreq = $minTermFreq;
+
     return $this;
   }
 
@@ -187,6 +199,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function maxNumTokensParsed($maxNumTokensParsed = NULL) {
     $this->maxNumTokensParsed = $maxNumTokensParsed;
+
     return $this;
   }
 
@@ -197,6 +210,7 @@ class OssSearchMlt extends OssSearchAbstract {
    */
   public function stopWords($stopWords = NULL) {
     $this->stopWords = $stopWords;
+
     return $this;
   }
 
