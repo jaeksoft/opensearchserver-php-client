@@ -86,7 +86,7 @@ class OssApi extends OssAbstract
    * @param $index The index name
    * @return OssApi
   */
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
   {
     $this->init($enginePath, $index, $login, $apiKey);
   }
@@ -100,7 +100,7 @@ class OssApi extends OssAbstract
    */
   public function select()
   {
-    return new OssSearch($this->enginePath, $this->index, NULL, NULL, $this->login, $this->apiKey);
+    return new OssSearch($this->enginePath, $this->index, null, null, $this->login, $this->apiKey);
   }
 
   /**
@@ -270,7 +270,7 @@ class OssApi extends OssAbstract
    * @param string $unique
    * @return boolean
    */
-  public function setField($name, $analyzer = NULL, $stored = NULL, $indexed = NULL, $termVector = NULL, $default = NULL, $unique = NULL)
+  public function setField($name, $analyzer = null, $stored = null, $indexed = null, $termVector = null, $default = null, $unique = null)
   {
     $ossSchema = new OssSchema($this->enginePath, $this->index, $this->login, $this->apiKey);
 
@@ -294,7 +294,7 @@ class OssApi extends OssAbstract
   public static function getLanguage($twoCharsLang)
   {
     $lang = OssApi::$supportedLanguages[mb_strtolower($twoCharsLang)];
-    if ($lang == NULL) {
+    if ($lang == null) {
       return OssApi::$supportedLanguages[''];
     }
 

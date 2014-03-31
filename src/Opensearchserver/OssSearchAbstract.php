@@ -46,7 +46,7 @@ class OssSearchAbstract extends OssAbstract
    * @param $index The index name
    * @return OssSearch
    */
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
   {
     $this->init($enginePath, $index, $login, $apiKey);
     $this->log = FALSE;
@@ -56,7 +56,7 @@ class OssSearchAbstract extends OssAbstract
   /**
    * @return OssSearch
    */
-  public function template($template = NULL)
+  public function template($template = null)
   {
     $this->template = $template;
 
@@ -77,7 +77,7 @@ class OssSearchAbstract extends OssAbstract
    * @return SimpleXMLElement False if the query produced an error
    * FIXME Must think about OssApi inteegration inside OssSearch
    */
-  public function execute($connectTimeOut = NULL, $timeOut = NULL)
+  public function execute($connectTimeOut = null, $timeOut = null)
   {
     $queryChunks = array();
     $queryChunks = $this->addParams($queryChunks);
@@ -91,7 +91,7 @@ class OssSearchAbstract extends OssAbstract
     return $result;
   }
 
-  protected function addParams($queryChunks = NULL)
+  protected function addParams($queryChunks = null)
   {
     if (!empty($this->template)) {
       $queryChunks[] = 'qt='   . $this->template;

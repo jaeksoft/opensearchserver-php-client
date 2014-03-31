@@ -52,7 +52,7 @@ class OssSearch extends OssSearchAbstract
    * @param $index The index name
    * @return OssSearch
    */
-  public function __construct($enginePath, $index = NULL, $rows = NULL, $start = NULL, $login = NULL, $apiKey = NULL)
+  public function __construct($enginePath, $index = null, $rows = null, $start = null, $login = null, $apiKey = null)
   {
     parent::__construct($enginePath, $index, $login, $apiKey);
 
@@ -67,10 +67,10 @@ class OssSearch extends OssSearchAbstract
     $this->join = array();
     $this->joinFilter  = array();
     $this->joinNegativeFilter  = array();
-    $this->query = NULL;
-    $this->lang = NULL;
-    $this->operator = NULL;
-    $this->collapse  = array('field' => NULL, 'max' => NULL, 'mode' => NULL, 'type' => NULL);
+    $this->query = null;
+    $this->lang = null;
+    $this->operator = null;
+    $this->collapse  = array('field' => null, 'max' => null, 'mode' => null, 'type' => null);
   }
 
   /**
@@ -78,7 +78,7 @@ class OssSearch extends OssSearchAbstract
    * @param $query string
    * @return OssSearch
    */
-  public function query($query = NULL)
+  public function query($query = null)
   {
     $this->query = $query;
 
@@ -88,7 +88,7 @@ class OssSearch extends OssSearchAbstract
   /**
    * @return OssSearch
    */
-  public function start($start = NULL)
+  public function start($start = null)
   {
     $this->start = $start;
 
@@ -98,7 +98,7 @@ class OssSearch extends OssSearchAbstract
   /**
    * @return OssSearch
    */
-  public function rows($rows = NULL)
+  public function rows($rows = null)
   {
     $this->rows = $rows;
 
@@ -110,7 +110,7 @@ class OssSearch extends OssSearchAbstract
    * @param unknown_type $start
    * @return OssSearch
    */
-  public function operator($operator = NULL)
+  public function operator($operator = null)
   {
     $this->operator = $operator;
 
@@ -120,7 +120,7 @@ class OssSearch extends OssSearchAbstract
   /**
    * @return OssSearch
    */
-  public function filter($filter = NULL)
+  public function filter($filter = null)
   {
     $this->filter[] = $filter;
 
@@ -130,7 +130,7 @@ class OssSearch extends OssSearchAbstract
   /**
    * @return OssSearch
    */
-  public function negativeFilter($negativeFilter = NULL)
+  public function negativeFilter($negativeFilter = null)
   {
     $this->negativeFilter[] = $negativeFilter;
 
@@ -140,7 +140,7 @@ class OssSearch extends OssSearchAbstract
   /**
    * @return OssSearch
    */
-  public function lang($lang = NULL)
+  public function lang($lang = null)
   {
     $this->lang = $lang;
 
@@ -211,7 +211,7 @@ class OssSearch extends OssSearchAbstract
   /**
    * @return OssSearch
    */
-  public function facet($field, $min = NULL, $multi = FALSE, $multi_collapse = FALSE)
+  public function facet($field, $min = null, $multi = FALSE, $multi_collapse = FALSE)
   {
     $this->facet[$field] = array('min' => $min, 'multi' => $multi, 'multi_collapse' => $multi_collapse);
 
@@ -232,7 +232,7 @@ class OssSearch extends OssSearchAbstract
   /**
    * @return OssSearch
    */
-  public function joinFilter($position, $filter = NULL)
+  public function joinFilter($position, $filter = null)
   {
     $intpos = (int) $position;
     if (!array_key_exists($intpos, $this->joinFilter)) {
@@ -246,7 +246,7 @@ class OssSearch extends OssSearchAbstract
   /**
    * @return OssSearch
    */
-  public function joinNegativeFilter($position, $negativeFilter = NULL)
+  public function joinNegativeFilter($position, $negativeFilter = null)
   {
     $intpos = (int) $position;
     if (!array_key_exists($intpos, $this->joinNegativeFilter)) {
@@ -257,7 +257,7 @@ class OssSearch extends OssSearchAbstract
     return $this;
   }
 
-  protected function addParams($queryChunks = NULL)
+  protected function addParams($queryChunks = null)
   {
     $queryChunks = parent::addParams($queryChunks);
 
@@ -267,15 +267,15 @@ class OssSearch extends OssSearchAbstract
       $queryChunks[] = 'lang=' . $this->lang;
     }
 
-    if ($this->rows   !== NULL) {
+    if ($this->rows   !== null) {
       $queryChunks[] = 'rows='  . (int) $this->rows;
     }
 
-    if ($this->start !== NULL) {
+    if ($this->start !== null) {
       $queryChunks[] = 'start=' . (int) $this->start;
     }
 
-    if ($this->operator !== NULL) {
+    if ($this->operator !== null) {
       $queryChunks[] = 'operator=' . $this->operator;
     }
 
@@ -319,7 +319,7 @@ class OssSearch extends OssSearchAbstract
         $facet = 'facet=';
       }
       $facet .= $field;
-      if ($options['min'] !== NULL) {
+      if ($options['min'] !== null) {
         $facet .= '(' . $options['min'] . ')';
       }
       $queryChunks[] = $facet;
@@ -357,10 +357,10 @@ class OssSearch extends OssSearchAbstract
     if ($this->collapse['type']) {
       $queryChunks[] = 'collapse.type=' . $this->collapse['type'];
     }
-    if ($this->collapse['mode'] !== NULL) {
+    if ($this->collapse['mode'] !== null) {
       $queryChunks[] = 'collapse.mode=' . $this->collapse['mode'];
     }
-    if ($this->collapse['max'] !== NULL) {
+    if ($this->collapse['max'] !== null) {
       $queryChunks[] = 'collapse.max=' . (int) $this->collapse['max'];
     }
 

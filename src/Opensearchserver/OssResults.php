@@ -47,7 +47,7 @@ class OssResults
    * @param $model The list of fields
    * @return OssApi
    */
-  public function __construct(\SimpleXMLElement $result, $model = NULL)
+  public function __construct(\SimpleXMLElement $result, $model = null)
   {
     $this->result  = $result;
     $this->resultFound = (int) $this->result->result['numFound'];
@@ -89,9 +89,9 @@ class OssResults
   /**
    *  GETTER
    */
-  public function getField($position, $fieldName, $modeSnippet = FALSE, $highlightedOnly = FALSE, $joinPosition = NULL, $getMultipleValues = false)
+  public function getField($position, $fieldName, $modeSnippet = FALSE, $highlightedOnly = FALSE, $joinPosition = null, $getMultipleValues = false)
   {
-    $field = NULL;
+    $field = null;
     $joinPrefix = '';
 
     if ($joinPosition != null) {
@@ -101,7 +101,7 @@ class OssResults
     $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]' . $joinPrefix);
 
     if (isset($doc[0]) && is_array($doc)) {
-      $value = NULL;
+      $value = null;
       if ($modeSnippet) {
         if ($highlightedOnly) {
           $value = $doc[0]->xpath('snippet[@name="' . $fieldName . '" and @highlighted="yes"]');
@@ -164,11 +164,11 @@ class OssResults
   /**
    *
    * @param unknown_type $fieldName
-   * @return Ambigous <multitype:, NULL>
+   * @return Ambigous <multitype:, null>
    */
   public function getFacet($fieldName)
   {
-    $currentFacet = isset($fieldName)? $this->result->xpath('faceting/field[@name="' . $fieldName . '"]/facet'):NULL;
+    $currentFacet = isset($fieldName)? $this->result->xpath('faceting/field[@name="' . $fieldName . '"]/facet'):null;
     if (!isset($currentFacet) || ( isset($currentFacet) && $currentFacet === FALSE)) {
       $currentFacet = array();
     }
@@ -197,7 +197,7 @@ class OssResults
    */
   public function getSpellSuggestions($fieldName)
   {
-    $currentSpellCheck = isset($fieldName)? $this->result->xpath('spellcheck/field[@name="' . $fieldName . '"]/word/suggest'):NULL;
+    $currentSpellCheck = isset($fieldName)? $this->result->xpath('spellcheck/field[@name="' . $fieldName . '"]/word/suggest'):null;
     if (!isset($currentSpellCheck) || ( isset($currentSpellCheck) && $currentSpellCheck === FALSE)) {
       $currentSpellCheck = array();
     }
@@ -210,7 +210,7 @@ class OssResults
    */
   public function getSpellSuggest($fieldName)
   {
-    $spellCheckWord = isset($fieldName)? $this->result->xpath('spellcheck/field[@name="' . $fieldName . '"]/word'):NULL;
+    $spellCheckWord = isset($fieldName)? $this->result->xpath('spellcheck/field[@name="' . $fieldName . '"]/word'):null;
     $queryExact = '';
     if (isset($spellCheckWord) && $spellCheckWord != null) {
       foreach ($spellCheckWord as $each) {

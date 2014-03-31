@@ -41,10 +41,10 @@ class OssSearchSpellCheck extends OssSearchAbstract
    * @param $index The index name
    * @return OssSearchSpellCheck
    */
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
   {
     parent::__construct($enginePath, $index, $login, $apiKey);
-    $this->query  = NULL;
+    $this->query  = null;
   }
 
   /**
@@ -52,7 +52,7 @@ class OssSearchSpellCheck extends OssSearchAbstract
    * @param $query string
    * @return OssSearch
    */
-  public function query($query = NULL)
+  public function query($query = null)
   {
     $this->query = $query;
 
@@ -63,7 +63,7 @@ class OssSearchSpellCheck extends OssSearchAbstract
    * @param array $queryChunks
    * @return array
    */
-  protected function addParams($queryChunks = NULL)
+  protected function addParams($queryChunks = null)
   {
     $queryChunks = parent::addParams($queryChunks);
     $queryChunks[] = 'q=' . urlencode($this->query);

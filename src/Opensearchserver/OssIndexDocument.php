@@ -98,7 +98,7 @@ class OssIndexDocument_Document extends \ArrayObject
   private $indexDocument;
 
   /** @var string */
-  private $language = NULL;
+  private $language = null;
 
   /** @var Array<OSS_DocumentField> */
   private $fieldByName = array();
@@ -125,15 +125,15 @@ class OssIndexDocument_Document extends \ArrayObject
    */
   public function setLanguage($language)
   {
-    static $supportedLanguages = NULL;
+    static $supportedLanguages = null;
 
-    if ($language === NULL) {
+    if ($language === null) {
       $this->language = $language;
 
-      return NULL;
+      return null;
     }
 
-    if ($supportedLanguages === NULL) {
+    if ($supportedLanguages === null) {
       $supportedLanguages = OssApi::supportedLanguages();
     }
 
@@ -167,14 +167,14 @@ class OssIndexDocument_Document extends \ArrayObject
    * @return OssIndexDocument_Field
    * Note: If the field by that name already exist, it'll be returned
    */
-  public function newField($name, $values = NULL)
+  public function newField($name, $values = null)
   {
     if (isset($this->fieldByName[$name])) {
       return $this->fieldByName[$name];
     }
     $field = new OssIndexDocument_Field($this, $name);
     $this->append($field);
-    if ($values !== NULL) {
+    if ($values !== null) {
       $field->addValues($values);
     }
 
@@ -194,7 +194,7 @@ class OssIndexDocument_Document extends \ArrayObject
   /**
    * Retrieve a field using his name
    * @param string $name The name of the field to retrieve
-   * @return OssIndexDocument_Field If field don't exist, NULL is returned
+   * @return OssIndexDocument_Field If field don't exist, null is returned
    */
   public function getField($name)
   {
@@ -202,7 +202,7 @@ class OssIndexDocument_Document extends \ArrayObject
       return $this->fieldByName[$name];
     }
 
-    return NULL;
+    return null;
   }
 
   /**
@@ -250,10 +250,10 @@ class OssIndexDocument_Document extends \ArrayObject
     }
 
     if (empty($data)) {
-      return NULL;
+      return null;
     }
     $return = '<document';
-    if ($this->language !== NULL) {
+    if ($this->language !== null) {
       $return .= ' lang="' . $this->language . '"';
     }
     $return .= '>';
@@ -355,7 +355,7 @@ class OssIndexDocument_Field extends \ArrayObject
       }
     }
     if (empty($return)) {
-      return NULL;
+      return null;
     }
 
     return '<field name="' . $this->name . '">' . $return . '</field>';
@@ -428,7 +428,7 @@ class OssIndexDocument_Value
   {
     $data = str_replace(']]>', ']]]]><![CDATA[>', $this->value);
     if (empty($data)) {
-      return NULL;
+      return null;
     }
     $return = '<value';
     if ($this->removeTag) {

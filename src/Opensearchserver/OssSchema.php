@@ -37,7 +37,7 @@ class OssSchema extends OssAbstract
   const API_SCHEMA_SET_FIELD    = "setField";
   const API_SCHEMA_DELETE_FIELD  = "deleteField";
 
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
   {
     $this->init($enginePath, $index, $login, $apiKey);
   }
@@ -118,7 +118,7 @@ class OssSchema extends OssAbstract
    * @param string $termVector
    * @return boolean
    */
-  public function setField($name, $analyzer = NULL, $stored = NULL, $indexed = NULL, $termVector = NULL, $default = NULL, $unique = NULL)
+  public function setField($name, $analyzer = null, $stored = null, $indexed = null, $termVector = null, $default = null, $unique = null)
   {
     $params = array("field.name" => $name);
     if ($analyzer) {

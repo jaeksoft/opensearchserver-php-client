@@ -29,7 +29,7 @@ namespace Opensearchserver;
 
 class OssAutocompletion extends OssAbstract
 {
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
   {
     $this->init($enginePath, $index, $login, $apiKey);
   }

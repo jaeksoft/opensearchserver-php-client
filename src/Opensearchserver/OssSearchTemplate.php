@@ -37,7 +37,7 @@ class OssSearchTemplate extends OssAbstract
   protected $query;
   protected $template;
 
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
   {
     $this->init($enginePath, $index, $login, $apiKey);
   }
@@ -51,7 +51,7 @@ class OssSearchTemplate extends OssAbstract
    * @param int $qtslop Phrase slop
    * @param string $qtlang Default language
    */
-  public function createSearchTemplate($qtname, $qtquery = NULL, $qtoperator = NULL, $qtrows = NULL, $qtslop = NULL, $qtlang = NULL)
+  public function createSearchTemplate($qtname, $qtquery = null, $qtoperator = null, $qtrows = null, $qtslop = null, $qtlang = null)
   {
     $params = array("qt.name" => $qtname);
     if ($qtquery) {
@@ -88,7 +88,7 @@ class OssSearchTemplate extends OssAbstract
    * @param string $qtlang
    * @param string $qtalgorithm LevensteinDistance, NGramDistance or JaroWinklerDistance
    */
-  public function createSpellCheckTemplate($qtname, $qtquery = NULL, $qtsuggestions = NULL, $qtfield = NULL, $qtscore = NULL, $qtlang = NULL, $qtalgorithm = NULL)
+  public function createSpellCheckTemplate($qtname, $qtquery = null, $qtsuggestions = null, $qtfield = null, $qtscore = null, $qtlang = null, $qtalgorithm = null)
   {
     $params = array("qt.name" => $qtname);
     $params['qt.type'] = 'SpellCheckRequest';
@@ -127,7 +127,7 @@ class OssSearchTemplate extends OssAbstract
     return $return === FALSE ? FALSE : TRUE;
   }
 
-  public function setSnippetField($qtname, $snippetField, $maxSnippetSize=NULL, $tag=NULL, $maxSnippetNo=NULL, $fragmenter=NULL)
+  public function setSnippetField($qtname, $snippetField, $maxSnippetSize=null, $tag=null, $maxSnippetNo=null, $fragmenter=null)
   {
     $params = array("qt.name" => $qtname);
     if ($maxSnippetSize) {
@@ -150,9 +150,9 @@ class OssSearchTemplate extends OssAbstract
   }
 
   public function createMoreLikeThisTemplate(
-    $qtname, $qtquery = NULL, $qtLike = NULL, $qtAnalyzer = NULL, $qtLang = NULL, $qtMinwordlen = NULL,
-    $qtMaxwordlen = NULL, $qtMindocfreq = NULL, $qtMintermfreq = NULL, $qtMaxqueryTerms = NULL,
-    $qtMaxnumtokensparsed = NULL, $qtStopwords = NULL, $qtRows = NULL, $qtStart = NULL, $qtFields = NULL) {
+    $qtname, $qtquery = null, $qtLike = null, $qtAnalyzer = null, $qtLang = null, $qtMinwordlen = null,
+    $qtMaxwordlen = null, $qtMindocfreq = null, $qtMintermfreq = null, $qtMaxqueryTerms = null,
+    $qtMaxnumtokensparsed = null, $qtStopwords = null, $qtRows = null, $qtStart = null, $qtFields = null) {
 
     $params = array("qt.name" => $qtname);
     $params['qt.type'] = 'MoreLikeThisRequest';

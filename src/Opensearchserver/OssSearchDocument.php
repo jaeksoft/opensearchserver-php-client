@@ -43,7 +43,7 @@ class OssSearchDocument extends OssSearchAbstract
    * @param $index The index name
    * @return OssSearchDocument
    */
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
   {
     parent::__construct($enginePath, $index, $login, $apiKey);
 
@@ -65,7 +65,7 @@ class OssSearchDocument extends OssSearchAbstract
   /**
    * @return OssSearchDocument
    */
-  public function uniqueKey($uniqueKey = NULL)
+  public function uniqueKey($uniqueKey = null)
   {
     $this->uniqueKeys[] = $uniqueKey;
 
@@ -75,14 +75,14 @@ class OssSearchDocument extends OssSearchAbstract
   /**
    * @return OssSearchDocument
    */
-  public function docId($docId = NULL)
+  public function docId($docId = null)
   {
     $this->docIds[] = $docId;
 
     return $this;
   }
 
-  protected function addParams($queryChunks = NULL)
+  protected function addParams($queryChunks = null)
   {
     $queryChunks = parent::addParams($queryChunks);
 

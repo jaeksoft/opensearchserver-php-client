@@ -34,7 +34,7 @@ abstract class OssAbstract
   protected $user = '';
   protected $groups = array();
 
-  public function init($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  public function init($enginePath, $index = null, $login = null, $apiKey = null)
   {
     $this->lastQueryString = null;
     $this->enginePath = $enginePath;
@@ -52,8 +52,8 @@ abstract class OssAbstract
   {
     // Remove credentials
     if (empty($login)) {
-      $this->login  = NULL;
-      $this->apiKey  = NULL;
+      $this->login  = null;
+      $this->apiKey  = null;
 
       return;
     }
@@ -83,7 +83,7 @@ abstract class OssAbstract
    *   "arg2" => "value2"
    * )
    */
-  protected function getQueryURL($apiCall, $options = NULL)
+  protected function getQueryURL($apiCall, $options = null)
   {
     $path = $this->enginePath . '/' . $apiCall;
     $chunks = array();
@@ -146,7 +146,7 @@ abstract class OssAbstract
   }
 
   /**
-   * @return string The parsed index (NULL if not specified)
+   * @return string The parsed index (null if not specified)
    */
   public function getIndex()
   {
@@ -163,7 +163,7 @@ abstract class OssAbstract
    *
    * Will fail if more than 16 HTTP redirection
    */
-  protected function queryServer($url, $data = NULL, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT)
+  protected function queryServer($url, $data = null, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT)
   {
     $this->lastQueryString = $url;
     // Use CURL to post the data
@@ -185,7 +185,7 @@ abstract class OssAbstract
     }
 
     // Send provided string as POST data. Must be encoded to meet POST specification
-    if ($data !== NULL) {
+    if ($data !== null) {
       curl_setopt($rcurl, CURLOPT_POST, TRUE);
       curl_setopt($rcurl, CURLOPT_POSTFIELDS, (string) $data);
       curl_setopt($rcurl, CURLOPT_HTTPHEADER, array("Content-type: text/xml; charset=utf-8"));
@@ -245,7 +245,7 @@ abstract class OssAbstract
    * @return SimpleXMLElement
    * Use queryServer to retrieve an XML and check its validity
    */
-  protected function queryServerXML($path, $params, $data = NULL, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT)
+  protected function queryServerXML($path, $params, $data = null, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT)
   {
     $result = $this->queryServerTXT($path, $params, $data, $connexionTimeout, $timeout);
     if ($result === FALSE) {

@@ -31,9 +31,9 @@ namespace Opensearchserver;
  * Store and retrieve a value from the browser (In order REQUEST, COOKIE, DEFAULT)
 * @return unknown_type
 */
-function config_request_value($key, $default, $request_field = NULL)
+function config_request_value($key, $default, $request_field = null)
 {
-  $value = NULL;
+  $value = null;
   if (!empty($_REQUEST[$request_field])) {
     $value = $_REQUEST[$request_field];
     setcookie($key, $value, time() + 3600 * 365, '/');
@@ -54,7 +54,7 @@ function config_request_value($key, $default, $request_field = NULL)
  * @param array $curl_info By Reference. If given, the informations provided by curl will be returned using the provided array
  * @return SimpleXMLElement Will return FALSE if something gone wrong
  */
-function retrieve_xml($url, &$curl_info = NULL)
+function retrieve_xml($url, &$curl_info = null)
 {
   $rcurl = curl_init($url);
   curl_setopt($rcurl, CURLOPT_BINARYTRANSFER, TRUE);
@@ -64,7 +64,7 @@ function retrieve_xml($url, &$curl_info = NULL)
   curl_setopt($rcurl, CURLOPT_TIMEOUT, 5);
   $content = curl_exec($rcurl);
 
-  if ($curl_info !== NULL) {
+  if ($curl_info !== null) {
     $curl_info = curl_getinfo($rcurl);
   }
 
