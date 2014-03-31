@@ -48,7 +48,7 @@ if (!class_exists('OutOfRangeException')) {
  * @author pmercier <pmercier@open-search-server.com>
  * @package OpenSearchServer
  */
- 
+
 
 class OssApi extends OssAbstract {
 
@@ -131,7 +131,7 @@ class OssApi extends OssAbstract {
   public function autocomplete() {
     return new OssAutocompletion($this->enginePath, $this->index, $this->login, $this->apiKey);
   }
-  
+
   /**
    * Returns an OssSearchSpellCheck instance
    * @return OssSearchSpellCheck

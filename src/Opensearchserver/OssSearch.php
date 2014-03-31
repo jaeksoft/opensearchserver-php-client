@@ -227,7 +227,7 @@ class OssSearch extends OssSearchAbstract {
   protected function addParams($queryChunks = NULL) {
 
     $queryChunks = parent::addParams($queryChunks);
-     
+
     $queryChunks[] = 'q=' . urlencode($this->query);
 
     if (!empty($this->lang)) {

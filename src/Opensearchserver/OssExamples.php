@@ -20,7 +20,7 @@
 *  along with OpenSearchServer PHP Client.  If not, see <http://www.gnu.org/licenses/>.
 */
 
- 
+
 /**
  * @file
  * Examples using the OpenSearchServer PHP API

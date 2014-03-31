@@ -38,7 +38,7 @@ class OssSearchAbstract extends OssAbstract {
   protected $template;
   protected $log;
   protected $customLogs;
-  
+
   protected $user = '';
   protected $groups = array();
 
@@ -98,11 +98,11 @@ class OssSearchAbstract extends OssAbstract {
     foreach ($this->customLogs as $pos => $customLog) {
       $queryChunks[] = 'log' . $pos . '=' . urlencode($customLog);
     }
-    
+
     /*
     //User
     $queryChunks[] = 'user='.urlencode($this->user);
-    
+
     //Groups
     foreach($this->groups as $group)
     {
@@ -111,6 +111,6 @@ class OssSearchAbstract extends OssAbstract {
     */
     return $queryChunks;
   }
-  
+
 }
 ?>

@@ -32,7 +32,7 @@ abstract class OssAbstract {
 
   protected $user = '';
   protected $groups = array();
-  
+
   public function init($enginePath, $index = NULL, $login = NULL, $apiKey = NULL) {
     $this->lastQueryString = null;
     $this->enginePath = $enginePath;
@@ -101,14 +101,14 @@ abstract class OssAbstract {
     } else if ($options != null) {
       $chunks[] = $options;
     }
-    
-  
+
+
     //User
     if(!empty($this->user))
     {
         $chunks[] = 'user='.urlencode($this->user);
     }
-    
+
     //Groups
     if(!empty($this->groups))
     {
@@ -122,7 +122,7 @@ abstract class OssAbstract {
 
     return $path;
   }
-  
+
   public function setUser($value) {
         $this->user = $value;
   }
@@ -190,7 +190,7 @@ abstract class OssAbstract {
     set_error_handler(function() {}, E_ALL);
     $content = curl_exec($rcurl);
     restore_error_handler();
-    
+
     if ($content === FALSE) {
         throw new \RuntimeException('CURL failed to execute on URL "' . $url . '"');
     }
@@ -286,7 +286,7 @@ abstract class OssAbstract {
     if (!$xmlDoc instanceof \SimpleXMLElement) {
       return FALSE;
     }
-    
+
 
     // Make sure the Error we found was a Status Error
     foreach ($xmlDoc->entry as $entry) {
