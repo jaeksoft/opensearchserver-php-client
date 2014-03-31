@@ -264,7 +264,7 @@ abstract class OssAbstract {
    * @param $xml string, DOMDocument or SimpleXMLElement
    * @return boolean True if error success
    */
-  protected  function isOSSError($xml) {
+  protected function isOSSError($xml) {
     // Cast $xml param to be a SimpleXMLElement
     // If we don't find the word 'Error' in the xml string, exit immediatly
     if ($xml instanceof \SimpleXMLElement) {

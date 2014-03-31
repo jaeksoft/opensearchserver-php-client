@@ -97,7 +97,7 @@ class OssException extends RuntimeException {
  */
 class TomcatException extends RuntimeException {
 
-  private   $status;
+  private $status;
   protected $message;
 
   public function __construct($code, $html) {
