@@ -106,9 +106,9 @@ class OssSearchAbstract extends OssAbstract {
     //Groups
     foreach($this->groups as $group)
     {
-    	$queryChunks[] = 'group='.urlencode($group);
+        $queryChunks[] = 'group='.urlencode($group);
     }
-	*/
+    */
     return $queryChunks;
   }
   

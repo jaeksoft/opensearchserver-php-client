@@ -106,16 +106,16 @@ abstract class OssAbstract {
     //User
     if(!empty($this->user))
     {
-    	$chunks[] = 'user='.urlencode($this->user);
+        $chunks[] = 'user='.urlencode($this->user);
     }
     
     //Groups
     if(!empty($this->groups))
     {
-    	foreach($this->groups as $group)
-	    {
-    		$chunks[] = 'group='.urlencode($group);
-    	}
+        foreach($this->groups as $group)
+        {
+            $chunks[] = 'group='.urlencode($group);
+        }
     }
 
     $path .= (strpos($path, '?') !== FALSE ? '&' : '?') . implode('&', $chunks);
@@ -124,15 +124,15 @@ abstract class OssAbstract {
   }
   
   public function setUser($value) {
-  		$this->user = $value;
+        $this->user = $value;
   }
   public function setGroups($groups) {
-  		if(!is_array($groups)) {
-  			$this->groups = array($groups);
-  		}	
-  		else {
-		  	$this->groups = $groups;
-  		}
+        if(!is_array($groups)) {
+            $this->groups = array($groups);
+        }
+        else {
+            $this->groups = $groups;
+        }
   }
 
   /**
@@ -212,7 +212,7 @@ abstract class OssAbstract {
         throw new OssException($content);
       }
       else {
-      	throw new \Exception($content);
+          throw new \Exception($content);
       }
       trigger_error('OSS Returned an error: "' . trim(strip_tags($content)) . '"', E_USER_WARNING);
       return FALSE;

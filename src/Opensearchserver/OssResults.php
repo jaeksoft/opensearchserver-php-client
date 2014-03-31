@@ -106,11 +106,11 @@ class OssResults {
         
       }
       if ($getMultipleValues && count($value)>1) {
-      	$tempArray = array();
-      	foreach($value as $key=>$elt) {
-      		$tempArray[] = $elt;
-      	}
-      	$field = $tempArray;
+          $tempArray = array();
+          foreach($value as $key=>$elt) {
+              $tempArray[] = $elt;
+          }
+          $field = $tempArray;
       }
       elseif (isset($value[0])) {
         $field = $value[0];
