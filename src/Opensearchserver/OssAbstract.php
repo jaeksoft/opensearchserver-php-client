@@ -61,7 +61,7 @@ abstract class OssAbstract
     // Else parse and affect new credentials
     if (empty($login) || empty($apiKey)) {
       if (class_exists('OssException')) {
-        throw new UnexpectedValueException('You must provide a login and an api key to use credential.');
+        throw new \UnexpectedValueException('You must provide a login and an api key to use credential.');
       }
       trigger_error(__CLASS__ . '::' . __METHOD__ . ': You must provide a login and an api key to use credential.', E_USER_ERROR);
 

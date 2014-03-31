@@ -33,7 +33,7 @@ namespace Opensearchserver;
  * @package OpenSearchServer
  * FIXME Complete this documentation
  */
-class OssException extends RuntimeException
+class OssException extends \RuntimeException
 {
   private $status;
   protected $message;
@@ -50,7 +50,7 @@ class OssException extends RuntimeException
       error_reporting($previous_error_level);
 
       if (!$xmlDoc) {
-        throw new RuntimeException('The provided parameter is not a valid XML data. Please use OSSAPI::isOSSError before throwing this exception.');
+        throw new \RuntimeException('The provided parameter is not a valid XML data. Please use OSSAPI::isOSSError before throwing this exception.');
       }
     }
 
@@ -81,7 +81,7 @@ class OssException extends RuntimeException
  * @package OpenSearchServer
  * FIXME Complete this documentation
  */
-class TomcatException extends RuntimeException
+class TomcatException extends \RuntimeException
 {
   private $status;
   protected $message;

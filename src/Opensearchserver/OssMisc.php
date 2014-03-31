@@ -105,7 +105,7 @@ function array_last($array)
 /**
  * Misc classes to parse and simplify usage of different feed format during the indexation
  */
-abstract class NewsFeedParser extends ArrayObject
+abstract class NewsFeedParser extends \ArrayObject
 {
   protected $feedFormat;
   protected $channelTitle;
@@ -116,7 +116,7 @@ abstract class NewsFeedParser extends ArrayObject
    * @param SimpleXMLElement $xml
    * @return NewsFeedParser
    */
-  public static function factory(SimpleXMLElement $xml)
+  public static function factory(\SimpleXMLElement $xml)
   {
     // Determine the format of the xml
     // RSS
@@ -209,7 +209,7 @@ class NewsFeedParser_RSS extends NewsFeedParser
    * @param SimpleXMLElement $xml
    * @return NewsFeedParser
    */
-  public function __construct(SimpleXMLElement $xml)
+  public function __construct(\SimpleXMLElement $xml)
   {
     $this->feedFormat = 'RSS';
 
@@ -229,7 +229,7 @@ class NewsFeedParser_RSS extends NewsFeedParser
 
 class NewsFeedParser_RSS_Entry extends NewsFeedParser_Feed_Entry
 {
-  public function __construct(SimpleXMLElement $xml)
+  public function __construct(\SimpleXMLElement $xml)
   {
     $this->id = md5((string) $xml->guid);
     $this->link = $xml->link;
@@ -254,7 +254,7 @@ class NewsFeedParser_Atom extends NewsFeedParser
    * @param SimpleXMLElement $xml
    * @return NewsFeedParser
    */
-  public function __construct(SimpleXMLElement $xml)
+  public function __construct(\SimpleXMLElement $xml)
   {
     $this->feedFormat = 'ATOM';
 
@@ -273,7 +273,7 @@ class NewsFeedParser_Atom extends NewsFeedParser
 
 class NewsFeedParser_Atom_Entry extends NewsFeedParser_Feed_Entry
 {
-  public function __construct(SimpleXMLElement $xml)
+  public function __construct(\SimpleXMLElement $xml)
   {
     $this->id = md5((string) $xml->id);
     $this->link = $xml->link['href'];

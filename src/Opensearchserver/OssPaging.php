@@ -55,7 +55,7 @@ class OssPaging
    * @param $model The list of fields
    * @return OssApi
    */
-  public function __construct(SimpleXMLElement $result, $rowsParam = 'rows', $pageParam = 'p', $paramSeparator = '&amp;')
+  public function __construct(\SimpleXMLElement $result, $rowsParam = 'rows', $pageParam = 'p', $paramSeparator = '&amp;')
   {
     $this->oss_result  = $result;
     $this->rowsParameter = $rowsParam;

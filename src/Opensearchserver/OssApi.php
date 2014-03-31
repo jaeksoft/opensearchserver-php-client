@@ -198,7 +198,7 @@ class OssApi extends OssAbstract
 
     if (!is_string($xml)) {
       if (class_exists('OssException')) {
-        throw new UnexpectedValueException('String, SimpleXMLElement or DOMDocument was expected for $xml.');
+        throw new \UnexpectedValueException('String, SimpleXMLElement or DOMDocument was expected for $xml.');
       }
       trigger_error(__CLASS__ . '::' . __METHOD__ . '($xml): String, SimpleXMLElement or DOMDocument was expected for $xml.', E_USER_ERROR);
 

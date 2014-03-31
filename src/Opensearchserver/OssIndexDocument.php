@@ -31,7 +31,7 @@ namespace Opensearchserver;
  * @author pmercier <pmercier@open-search-server.com>
  * @package OpenSearchServer
  */
-class OssIndexDocument extends ArrayObject
+class OssIndexDocument extends \ArrayObject
 {
   /**
    * @param string $language ISO 639-1 format (en, de, fr, ...)
@@ -52,7 +52,7 @@ class OssIndexDocument extends ArrayObject
   public function offsetSet($offset, $document)
   {
     if (!$document instanceof OssIndexDocument_Document) {
-      throw new UnexpectedValueException("OssIndexDocument_Document was expected.");
+      throw new \UnexpectedValueException("OssIndexDocument_Document was expected.");
     }
     parent::offsetSet($offset, $document);
   }
@@ -63,7 +63,7 @@ class OssIndexDocument extends ArrayObject
   public function append($document)
   {
     if (!$document instanceof OssIndexDocument_Document) {
-      throw new UnexpectedValueException("OssIndexDocument_Document was expected.");
+      throw new \UnexpectedValueException("OssIndexDocument_Document was expected.");
     }
     parent::append($document);
   }
@@ -92,7 +92,7 @@ class OssIndexDocument extends ArrayObject
  * @author pmercier <pmercier@open-search-server.com>
  * @package OpenSearchServer
  */
-class OssIndexDocument_Document extends ArrayObject
+class OssIndexDocument_Document extends \ArrayObject
 {
   /** @var OssIndexDocument */
   private $indexDocument;
@@ -141,7 +141,7 @@ class OssIndexDocument_Document extends ArrayObject
       $this->language = (string) $language;
     } else {
       if (class_exists('OssException')) {
-        throw new UnexpectedValueException('Language "' . $language . '" is not supported.');
+        throw new \UnexpectedValueException('Language "' . $language . '" is not supported.');
       }
       trigger_error(__CLASS__ . '::' . __METHOD__ . '($lang): Language "' . $language . '" is not supported.', E_USER_ERROR);
 
@@ -212,7 +212,7 @@ class OssIndexDocument_Document extends ArrayObject
   public function offsetSet($offset, $field)
   {
     if (!$field instanceof OssIndexDocument_Field) {
-      throw new UnexpectedValueException("OssIndexDocument_Field was expected.");
+      throw new \UnexpectedValueException("OssIndexDocument_Field was expected.");
     }
     parent::offsetSet($offset, $field);
     $this->fieldByName[$field->getName()] = $field;
@@ -224,7 +224,7 @@ class OssIndexDocument_Document extends ArrayObject
   public function append($field)
   {
     if (!$field instanceof OssIndexDocument_Field) {
-      throw new UnexpectedValueException("OssIndexDocument_Field was expected.");
+      throw new \UnexpectedValueException("OssIndexDocument_Field was expected.");
     }
     $fieldName = $field->getName();
     if (isset($this->fieldByName[$fieldName])) {
@@ -267,7 +267,7 @@ class OssIndexDocument_Document extends ArrayObject
  * @author pmercier <pmercier@open-search-server.com>
  * @package OpenSearchServer
  */
-class OssIndexDocument_Field extends ArrayObject
+class OssIndexDocument_Field extends \ArrayObject
 {
   /** @var OssIndexDocument_Document */
   protected $document;
@@ -328,7 +328,7 @@ class OssIndexDocument_Field extends ArrayObject
   public function offsetSet($offset, $value)
   {
     if (!$value instanceof OssIndexDocument_Value) {
-      throw new UnexpectedValueException("OssIndexDocument_Value was expected.");
+      throw new \UnexpectedValueException("OssIndexDocument_Value was expected.");
     }
     parent::offsetSet($offset, $value);
   }
@@ -340,7 +340,7 @@ class OssIndexDocument_Field extends ArrayObject
   public function append($value)
   {
     if (!$value instanceof OssIndexDocument_Value) {
-      throw new UnexpectedValueException("OssIndexDocument_Value was expected.");
+      throw new \UnexpectedValueException("OssIndexDocument_Value was expected.");
     }
     parent::append($value);
   }
