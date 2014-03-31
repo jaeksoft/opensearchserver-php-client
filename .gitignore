@@ -1,0 +1,9 @@
+# Composer files
+composer.phar
+composer.lock
+vendor/
+
+# Eclipse files
+.buildpath
+.project
+.settings/
