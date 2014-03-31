@@ -25,7 +25,7 @@
  * Class to access OpenSearchServer API
  */
 
-require_once(dirname(__FILE__).'/oss_abstract.class.php');
+namespace Opensearchserver;
 
 class OssAutocompletion extends OssAbstract {
 
@@ -78,44 +78,6 @@ class OssAutocompletion extends OssAbstract {
       return FALSE;
     }
     return TRUE;
-  }
-  
-  /**
-   * Create new autocompletion instance
-   * @param string $autocompletion_name the name of the autocompletion instance
-   * @param string $field_name the name of the autocompletion instance
-   * @param int $rows the name of the autocompletion instance
-   */
-  public function createAutocompletion($autocompletion_name, $field_name = 'autocomplete', $rows = 10) {
-  	$path_parameters = array(
-  			"{index_name}" => $this->index,
-  			"{autocompletion_name}" => $autocompletion_name,
-  			"{rows}" => $rows,
-  			"{field_name}" => $field_name
-  	);
-  	$path = strtr(OssApi::REST_API_AUTOCOMPLETION, $path_parameters);
-  	$return = $this->queryServerREST($path,NULL,NULL, OssApi::DEFAULT_CONNEXION_TIMEOUT, OssApi::DEFAULT_QUERY_TIMEOUT,'PUT');
-  	if ($return === FALSE) {
-  		return FALSE;
-  	}
-  	return TRUE;
-  }
-  
-  /**
-   * Build the autocompletion index with REST API
-   * @param string $autocompletion_name the name of the autocompletion instance
-   */
-  public function autocompletionBuildREST($autocompletion_name) {
-  	$path_parameters = array(
-  			"{index_name}" => $this->index,
-  			"{autocompletion_name}" => $autocompletion_name
-  	);
-  	$path = strtr(OssApi::REST_API_AUTOCOMPLETION_BUILD, $path_parameters);
-  	$return = $this->queryServerREST($path,NULL,NULL, OssApi::DEFAULT_CONNEXION_TIMEOUT, OssApi::DEFAULT_QUERY_TIMEOUT,'PUT');
-  	if ($return === FALSE) {
-  		return FALSE;
-  	}
-  	return TRUE;
   }
 }
 ?>

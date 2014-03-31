@@ -25,6 +25,8 @@
  * @package OpenSearchServer
  */
 
+namespace Opensearchserver;
+
 /**
  * Store and retrieve a value from the browser (In order REQUEST, COOKIE, DEFAULT)
 * @return unknown_type

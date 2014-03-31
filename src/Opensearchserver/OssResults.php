@@ -20,6 +20,8 @@
 *  along with OpenSearchServer PHP Client.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace Opensearchserver;
+
 if (!extension_loaded('SimpleXML')) {
   trigger_error("OssApi won't work whitout SimpleXML extension", E_USER_ERROR); die();
 }
@@ -45,17 +47,13 @@ class OssResults {
    * @param $model The list of fields
    * @return OssApi
    */
-  public function __construct(SimpleXMLElement $result, $model = NULL) {
+  public function __construct(\SimpleXMLElement $result, $model = NULL) {
     $this->result  = $result;
     $this->resultFound = (int)$this->result->result['numFound'];
     $this->resultTime = (float)$this->result->result['time'] / 1000;
     $this->resultRows = (int)$this->result->result['rows'];
     $this->resultStart = (int)$this->result->result['start'];
     $this->resultCollapsedCount = (int)$this->result->result['collapsedDocCount'];
-    if (!function_exists('OssApi_Dummy_Function')) {
-      function OssApi_Dummy_Function() {
-      }
-    }
   }
   public function getResultCollapsedCount() {
     return $this->resultCollapsedCount;
@@ -105,6 +103,7 @@ class OssResults {
       }
       if (!isset($value) || count($value) == 0) {
         $value =  $doc[0]->xpath('field[@name="' . $fieldName . '"]');
+        
       }
       if ($getMultipleValues && count($value)>1) {
       	$tempArray = array();
@@ -136,7 +135,7 @@ class OssResults {
   public function getFields($position, $modeSnippet = FALSE) {
     $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]');
 
-    $fields = $doc[0]->xpath('field');
+    $fields = $doc->xpath('field');
     foreach ($fields as $field) {
       $name = (string) $field[0]['name'];
       $current[(string)$name] = (string) $field;

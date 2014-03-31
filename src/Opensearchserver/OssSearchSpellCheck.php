@@ -20,28 +20,51 @@
 *  along with OpenSearchServer PHP Client.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 /**
  * @file
  * Class to access OpenSearchServer API
  */
 
-require_once(dirname(__FILE__).'/oss_abstract.class.php');
+namespace Opensearchserver;
 
-class OssDelete extends OssAbstract {
+/**
+ * @package OpenSearchServer
+ * FIXME Complete this documentations
+ * FIXME Clean this class and use facilities provided by OssApi
+*/
+class OssSearchSpellCheck extends OssSearchAbstract {
 
+  protected $query;
+
+  /**
+   * @param $enginePath The URL to access the OSS Engine
+   * @param $index The index name
+   * @return OssSearchSpellCheck
+   */
   public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL) {
-    $this->init($enginePath, $index, $login, $apiKey);
+    parent::__construct($enginePath, $index, $login, $apiKey);
+    $this->query  = NULL;
   }
 
-  public function delete($query) {
-    $params = array('q' => $query);
-    $return = $this->queryServerXML(OssApi::API_DELETE, $params);
-    if ($return === FALSE) {
-      return FALSE;
-    }
-    return TRUE;
+  /**
+   * Specify the query
+   * @param $query string
+   * @return OssSearch
+   */
+  public function query($query = NULL) {
+    $this->query = $query;
+    return $this;
   }
 
-
+  /**
+   * @param array $queryChunks
+   * @return array
+   */
+  protected function addParams($queryChunks = NULL) {
+    $queryChunks = parent::addParams($queryChunks);
+    $queryChunks[] = 'q=' . urlencode($this->query);
+    return $queryChunks;
+  }
 }
 ?>

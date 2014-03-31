@@ -19,6 +19,9 @@
 *  You should have received a copy of the GNU Lesser General Public License
 *  along with OpenSearchServer PHP Client.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+namespace Opensearchserver;
+
 if (!extension_loaded('curl')) {
   trigger_error("OssApi won't work whitout curl extension", E_USER_ERROR); die();
 }
@@ -45,11 +48,7 @@ if (!class_exists('OutOfRangeException')) {
  * @author pmercier <pmercier@open-search-server.com>
  * @package OpenSearchServer
  */
-
-require_once(dirname(__FILE__).'/oss_abstract.class.php');
-require_once(dirname(__FILE__).'/oss_schema.class.php');
-require_once(dirname(__FILE__) . '/oss_search.class.php');
-
+ 
 
 class OssApi extends OssAbstract {
 
@@ -60,15 +59,9 @@ class OssApi extends OssAbstract {
   const API_INDEX    = 'index';
   const API_ENGINE   = 'engine';
   const API_PATTERN  = 'pattern';
-  const API_MONITOR  = 'monitor';
   const INDEX_TEMPLATE_EMPTY  = 'empty_index';
 
   const API_AUTOCOMPLETION = 'autocompletion';
-  
-  /* The new REST API for autocompletion*/
-  const REST_API_AUTOCOMPLETION = 'services/rest/index/{index_name}/autocompletion/{autocompletion_name}?field={field_name}&rows={rows}';
-  const REST_API_AUTOCOMPLETION_BUILD = 'services/rest/index/{index_name}/autocompletion/{autocompletion_name}';
-  
 
   /** @var int Default timeout (specified in seconds) for CURLOPT_TIMEOUT option. See curl documentation */
   const DEFAULT_QUERY_TIMEOUT = 0;
@@ -129,6 +122,22 @@ class OssApi extends OssAbstract {
    */
   public function search() {
     return $this->select();
+  }
+
+  /**
+   * Returns an OssAutocompletion instance
+   * @return OssAutocompletion
+   */
+  public function autocomplete() {
+    return new OssAutocompletion($this->enginePath, $this->index, $this->login, $this->apiKey);
+  }
+  
+  /**
+   * Returns an OssSearchSpellCheck instance
+   * @return OssSearchSpellCheck
+   */
+  public function searchSpellCheck() {
+    return new OssSearchSpellCheck($this->enginePath, $this->index, $this->login, $this->apiKey);
   }
 
   /**
