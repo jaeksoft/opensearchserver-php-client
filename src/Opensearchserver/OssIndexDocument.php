@@ -145,7 +145,7 @@ class OssIndexDocument_Document extends \ArrayObject
       }
       trigger_error(__CLASS__ . '::' . __METHOD__ . '($lang): Language "' . $language . '" is not supported.', E_USER_ERROR);
 
-      return FALSE;
+      return false;
     }
 
     return TRUE;
@@ -301,7 +301,7 @@ class OssIndexDocument_Field extends \ArrayObject
    * @param boolean $removeTag Ask the indexator to remove the tags
    * @return OssIndexDocument_Value
    */
-  public function newValue($value, $removeTag = FALSE)
+  public function newValue($value, $removeTag = false)
   {
     $value = new OssIndexDocument_Value($this, $value);
     $value->setRemoveTag($removeTag);
@@ -350,7 +350,7 @@ class OssIndexDocument_Field extends \ArrayObject
     $return = '';
     foreach ($this as $value) {
       $value = $value->__toString();
-      if ($value !== FALSE) {
+      if ($value !== false) {
         $return .= $value;
       }
     }
@@ -373,7 +373,7 @@ class OssIndexDocument_Value
   private $field;
 
   /** @var boolean */
-  private $removeTag = FALSE;
+  private $removeTag = false;
 
   /** @var string */
   private $value = '';

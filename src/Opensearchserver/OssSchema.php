@@ -64,7 +64,7 @@ class OssSchema extends OssAbstract
    * @param string $template Optional. The name of the template to use
    * @return boolean
    */
-  public function createIndex($index, $template = FALSE)
+  public function createIndex($index, $template = false)
   {
     $params = array('index.name' => $index);
     if ($template) {
@@ -72,8 +72,8 @@ class OssSchema extends OssAbstract
     }
     $params['cmd'] = OssSchema::API_SCHEMA_CREATE_INDEX;
     $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
-    if ($return === FALSE) {
-      return FALSE;
+    if ($return === false) {
+      return false;
     }
 
     return TRUE;
@@ -89,8 +89,8 @@ class OssSchema extends OssAbstract
     $params['index.delete.name'] = $index;
     $params['index.name'] = $index;
     $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
-    if ($return === FALSE) {
-      return FALSE;
+    if ($return === false) {
+      return false;
     }
 
     return TRUE;
@@ -143,8 +143,8 @@ class OssSchema extends OssAbstract
     $params['cmd'] = OssSchema::API_SCHEMA_SET_FIELD;
     $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
 
-    if ($return === FALSE) {
-      return FALSE;
+    if ($return === false) {
+      return false;
     }
 
     return TRUE;
@@ -160,8 +160,8 @@ class OssSchema extends OssAbstract
     $params['field.name'] = $name;
     $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
 
-    if ($return === FALSE) {
-      return FALSE;
+    if ($return === false) {
+      return false;
     }
 
     return TRUE;

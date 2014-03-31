@@ -43,8 +43,8 @@ class OssAutocompletion extends OssAbstract
   {
     $params = array('query' => $query, 'rows' => $rows);
     $return = $this->queryServerTXT(OssApi::API_AUTOCOMPLETION, $params);
-    if ($return === FALSE) {
-      return FALSE;
+    if ($return === false) {
+      return false;
     }
 
     return $return;
@@ -66,8 +66,8 @@ class OssAutocompletion extends OssAbstract
   {
     $params = array('cmd' => 'build', 'bufferSize' => $bufferSize);
     $return = $this->queryServerXML(OssApi::API_AUTOCOMPLETION, $params);
-    if ($return === FALSE) {
-      return FALSE;
+    if ($return === false) {
+      return false;
     }
 
     return TRUE;
@@ -81,8 +81,8 @@ class OssAutocompletion extends OssAbstract
   {
     $params = array('cmd' => 'set', 'field' => $field);
     $return = $this->queryServerXML(OssApi::API_AUTOCOMPLETION, $params);
-    if ($return === FALSE) {
-      return FALSE;
+    if ($return === false) {
+      return false;
     }
 
     return TRUE;

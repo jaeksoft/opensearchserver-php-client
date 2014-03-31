@@ -89,7 +89,7 @@ class OssResults
   /**
    *  GETTER
    */
-  public function getField($position, $fieldName, $modeSnippet = FALSE, $highlightedOnly = FALSE, $joinPosition = null, $getMultipleValues = false)
+  public function getField($position, $fieldName, $modeSnippet = false, $highlightedOnly = false, $joinPosition = null, $getMultipleValues = false)
   {
     $field = null;
     $joinPrefix = '';
@@ -140,7 +140,7 @@ class OssResults
   /**
    *
    */
-  public function getFields($position, $modeSnippet = FALSE)
+  public function getFields($position, $modeSnippet = false)
   {
     $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]');
 
@@ -169,7 +169,7 @@ class OssResults
   public function getFacet($fieldName)
   {
     $currentFacet = isset($fieldName)? $this->result->xpath('faceting/field[@name="' . $fieldName . '"]/facet'):null;
-    if (!isset($currentFacet) || ( isset($currentFacet) && $currentFacet === FALSE)) {
+    if (!isset($currentFacet) || ( isset($currentFacet) && $currentFacet === false)) {
       $currentFacet = array();
     }
 
@@ -198,7 +198,7 @@ class OssResults
   public function getSpellSuggestions($fieldName)
   {
     $currentSpellCheck = isset($fieldName)? $this->result->xpath('spellcheck/field[@name="' . $fieldName . '"]/word/suggest'):null;
-    if (!isset($currentSpellCheck) || ( isset($currentSpellCheck) && $currentSpellCheck === FALSE)) {
+    if (!isset($currentSpellCheck) || ( isset($currentSpellCheck) && $currentSpellCheck === false)) {
       $currentSpellCheck = array();
     }
 

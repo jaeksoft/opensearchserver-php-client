@@ -65,7 +65,7 @@ abstract class OssAbstract
       }
       trigger_error(__CLASS__ . '::' . __METHOD__ . ': You must provide a login and an api key to use credential.', E_USER_ERROR);
 
-      return FALSE;
+      return false;
     }
 
     $this->login  = $login;
@@ -119,7 +119,7 @@ abstract class OssAbstract
         }
     }
 
-    $path .= (strpos($path, '?') !== FALSE ? '&' : '?') . implode('&', $chunks);
+    $path .= (strpos($path, '?') !== false ? '&' : '?') . implode('&', $chunks);
 
     return $path;
   }
@@ -159,7 +159,7 @@ abstract class OssAbstract
    * @param string $data Optional. If provided will use a POST method. Only accept
    *                     data as POST encoded string or raw XML string.
    * @param int $timeout Optional. Number of seconds before the query fail
-   * @return FALSE|string
+   * @return false|string
    *
    * Will fail if more than 16 HTTP redirection
    */
@@ -172,9 +172,9 @@ abstract class OssAbstract
     curl_setopt($rcurl, CURLOPT_HTTP_VERSION, '1.0');
     curl_setopt($rcurl, CURLOPT_BINARYTRANSFER, TRUE);
     curl_setopt($rcurl, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($rcurl, CURLOPT_FOLLOWLOCATION, FALSE);
+    curl_setopt($rcurl, CURLOPT_FOLLOWLOCATION, false);
     curl_setopt($rcurl, CURLOPT_MAXREDIRS, 16);
-    curl_setopt($rcurl, CURLOPT_VERBOSE, FALSE);
+    curl_setopt($rcurl, CURLOPT_VERBOSE, false);
 
     if (is_integer($connexionTimeout) && $connexionTimeout >= 0) {
       curl_setopt($rcurl, CURLOPT_CONNECTTIMEOUT, $connexionTimeout);
@@ -195,7 +195,7 @@ abstract class OssAbstract
     $content = curl_exec($rcurl);
     restore_error_handler();
 
-    if ($content === FALSE) {
+    if ($content === false) {
         throw new \RuntimeException('CURL failed to execute on URL "' . $url . '"');
     }
 
@@ -208,7 +208,7 @@ abstract class OssAbstract
       }
       trigger_error('HTTP ERROR ' . $aResponse['http_code'] . ': "' . trim(strip_tags($content)) . '"', E_USER_WARNING);
 
-      return FALSE;
+      return false;
     }
 
     // FIXME Possible problem to identify Locked Index message. Must set a lock on an index to check this
@@ -220,7 +220,7 @@ abstract class OssAbstract
       }
       trigger_error('OSS Returned an error: "' . trim(strip_tags($content)) . '"', E_USER_WARNING);
 
-      return FALSE;
+      return false;
     }
 
     return $content;
@@ -248,8 +248,8 @@ abstract class OssAbstract
   protected function queryServerXML($path, $params, $data = null, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT)
   {
     $result = $this->queryServerTXT($path, $params, $data, $connexionTimeout, $timeout);
-    if ($result === FALSE) {
-      return FALSE;
+    if ($result === false) {
+      return false;
     }
 
     // Check if we have a valid XML string from the engine
@@ -273,18 +273,18 @@ abstract class OssAbstract
     // Cast $xml param to be a SimpleXMLElement
     // If we don't find the word 'Error' in the xml string, exit immediatly
     if ($xml instanceof \SimpleXMLElement) {
-      if (strpos((string) $xml, 'Error') === FALSE) {
-        return FALSE;
+      if (strpos((string) $xml, 'Error') === false) {
+        return false;
       }
       $xmlDoc = $xml;
     } elseif ($xml instanceof \DOMDocument) {
       $xmlDoc = simplexml_import_dom($xml);
-      if (strpos((string) $xmlDoc, 'Error') === FALSE) {
-        return FALSE;
+      if (strpos((string) $xmlDoc, 'Error') === false) {
+        return false;
       }
     } else {
-      if (strpos((string) $xml, 'Error') === FALSE) {
-        return FALSE;
+      if (strpos((string) $xml, 'Error') === false) {
+        return false;
       }
       $previous_error_level = error_reporting(0);
       $xmlDoc = simplexml_load_string($xml);
@@ -292,7 +292,7 @@ abstract class OssAbstract
     }
 
     if (!$xmlDoc instanceof \SimpleXMLElement) {
-      return FALSE;
+      return false;
     }
 
 
@@ -303,7 +303,7 @@ abstract class OssAbstract
       }
     }
 
-    return FALSE;
+    return false;
   }
 
 }

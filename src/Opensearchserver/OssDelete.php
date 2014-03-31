@@ -38,8 +38,8 @@ class OssDelete extends OssAbstract
   {
     $params = array('q' => $query);
     $return = $this->queryServerXML(OssApi::API_DELETE, $params);
-    if ($return === FALSE) {
-      return FALSE;
+    if ($return === false) {
+      return false;
     }
 
     return TRUE;

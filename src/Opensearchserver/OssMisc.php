@@ -52,7 +52,7 @@ function config_request_value($key, $default, $request_field = null)
  * Retrieve an XML feed
  * @param string $url The feed URL
  * @param array $curl_info By Reference. If given, the informations provided by curl will be returned using the provided array
- * @return SimpleXMLElement Will return FALSE if something gone wrong
+ * @return SimpleXMLElement Will return false if something gone wrong
  */
 function retrieve_xml($url, &$curl_info = null)
 {
@@ -68,17 +68,17 @@ function retrieve_xml($url, &$curl_info = null)
     $curl_info = curl_getinfo($rcurl);
   }
 
-  if ($content === FALSE) {
+  if ($content === false) {
     trigger_error('CURL failed to execute on URL "' . $url . '"');
 
-    return FALSE;
+    return false;
   }
 
   $previous_error_level = error_reporting(0);
   $xml = simplexml_load_string($content);
   error_reporting($previous_error_level);
 
-  return (!$xml instanceof SimpleXMLElement) ? FALSE : $xml;
+  return (!$xml instanceof SimpleXMLElement) ? false : $xml;
 
 }
 

@@ -49,7 +49,7 @@ class OssSearchAbstract extends OssAbstract
   public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
   {
     $this->init($enginePath, $index, $login, $apiKey);
-    $this->log = FALSE;
+    $this->log = false;
     $this->customLogs = array();
   }
 
@@ -63,7 +63,7 @@ class OssSearchAbstract extends OssAbstract
     return $this;
   }
 
-  public function setLog($log = FALSE)
+  public function setLog($log = false)
   {
     $this->log = $log;
   }
@@ -84,8 +84,8 @@ class OssSearchAbstract extends OssAbstract
     $params = implode('&', $queryChunks);
 
     $result = $this->queryServerXML(OssSearch::API_SELECT, $params, $connectTimeOut, $timeOut);
-    if ($result === FALSE) {
-      return FALSE;
+    if ($result === false) {
+      return false;
     }
 
     return $result;

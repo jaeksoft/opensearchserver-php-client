@@ -141,7 +141,7 @@ class OssApi extends OssAbstract
   {
     $return = $this->queryServerTXT(OssApi::API_OPTIMIZE);
 
-    return ($return !== FALSE);
+    return ($return !== false);
   }
 
   /**
@@ -155,7 +155,7 @@ class OssApi extends OssAbstract
   {
     $return = $this->queryServerTXT(OssApi::API_RELOAD);
 
-    return ($return !== FALSE);
+    return ($return !== false);
   }
 
   /**
@@ -164,14 +164,14 @@ class OssApi extends OssAbstract
    * param boolean $deleteAll The provided patterns will replace the patterns already in the search engine
    * return boolean True on success
    */
-  public function pattern($patterns, $deleteAll = FALSE)
+  public function pattern($patterns, $deleteAll = false)
   {
     if (is_array($patterns)) {
       $patterns = implode("\n", $patterns);
     }
     $return = $this->queryServer($this->getQueryURL(OssApi::API_PATTERN) . ($deleteAll?'&deleteAll=yes':'&deleteAll=no'), $patterns);
 
-    return ($return !== FALSE);
+    return ($return !== false);
   }
 
   /**
@@ -202,12 +202,12 @@ class OssApi extends OssAbstract
       }
       trigger_error(__CLASS__ . '::' . __METHOD__ . '($xml): String, SimpleXMLElement or DOMDocument was expected for $xml.', E_USER_ERROR);
 
-      return FALSE;
+      return false;
     }
 
     $return = $this->queryServer($this->getQueryURL(OssApi::API_UPDATE), $xml);
 
-    return ($return !== FALSE);
+    return ($return !== false);
 
   }
 
@@ -228,7 +228,7 @@ class OssApi extends OssAbstract
    * @param string $template Optional. The name of the template to use
    * @return boolean
    */
-  public function createIndex($index, $template = FALSE)
+  public function createIndex($index, $template = false)
   {
     $ossSchema = new OssSchema($this->enginePath, $this->index, $this->login, $this->apiKey);
 

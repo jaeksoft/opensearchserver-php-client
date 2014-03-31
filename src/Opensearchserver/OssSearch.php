@@ -211,7 +211,7 @@ class OssSearch extends OssSearchAbstract
   /**
    * @return OssSearch
    */
-  public function facet($field, $min = null, $multi = FALSE, $multi_collapse = FALSE)
+  public function facet($field, $min = null, $multi = false, $multi_collapse = false)
   {
     $this->facet[$field] = array('min' => $min, 'multi' => $multi, 'multi_collapse' => $multi_collapse);
 
