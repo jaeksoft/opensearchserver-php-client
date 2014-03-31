@@ -1,8 +1,8 @@
 <?php
 /*
- *  This file is part of OpenSearchServer PHP Client.
+*  This file is part of OpenSearchServer PHP Client.
 *
-*  Copyright (C) 2008-2013 Emmanuel Keller / Jaeksoft
+*  Copyright (C) 2013 Emmanuel Keller / Jaeksoft
 *
 *  http://www.open-search-server.com
 *
@@ -35,43 +35,43 @@ namespace Opensearchserver;
  */
 class OssException extends \RuntimeException
 {
-  private $status;
-  protected $message;
+    private $status;
+    protected $message;
 
-  public function __construct($xml)
-  {
-    if ($xml instanceof SimpleXMLElement) {
-      $xmlDoc = $xml;
-    } elseif ($xml instanceof DOMDocument) {
-      $xmlDoc = simplexml_import_dom($xml);
-    } else {
-      $previous_error_level = error_reporting(0);
-      $xmlDoc = simplexml_load_string($xml);
-      error_reporting($previous_error_level);
+    public function __construct($xml)
+    {
+        if ($xml instanceof SimpleXMLElement) {
+            $xmlDoc = $xml;
+        } elseif ($xml instanceof DOMDocument) {
+            $xmlDoc = simplexml_import_dom($xml);
+        } else {
+            $previous_error_level = error_reporting(0);
+            $xmlDoc = simplexml_load_string($xml);
+            error_reporting($previous_error_level);
 
-      if (!$xmlDoc) {
-        throw new \RuntimeException('The provided parameter is not a valid XML data. Please use OSSAPI::isOSSError before throwing this exception.');
-      }
+            if (!$xmlDoc) {
+                throw new \RuntimeException('The provided parameter is not a valid XML data. Please use OSSAPI::isOSSError before throwing this exception.');
+            }
+        }
+
+        $data = array();
+        foreach ($xmlDoc->entry as $entry)
+            $data[(string) $entry['key']] = (string) $entry;
+
+        $this->status = $data['Status'];
+
+        parent::__construct($data['Exception'], 0);
+
     }
 
-    $data = array();
-    foreach ($xmlDoc->entry as $entry)
-      $data[(string) $entry['key']] = (string) $entry;
-
-    $this->status  = $data['Status'];
-
-    parent::__construct($data['Exception'], 0);
-
-  }
-
-  /**
-   * Return the error status from the search engine
-   * @return string
-   */
-  public function getStatus()
-  {
-    return $this->status;
-  }
+    /**
+     * Return the error status from the search engine
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
 
 }
 
@@ -83,22 +83,20 @@ class OssException extends \RuntimeException
  */
 class TomcatException extends \RuntimeException
 {
-  private $status;
-  protected $message;
+    private $status;
+    protected $message;
 
-  public function __construct($code, $html)
-  {
-    // Tomcat don't return a valid XHTML document, so we use preg_match
-    $matches = array();
-    if (!preg_match_all('/<p>(?:(?:(?!<\/p>).)*)<\/p>/mi', $html, $matches)) {
-      $message = "Tomcat returned an unknown error.";
-    } else {
-      $message = strip_tags(end($matches[0]));
-      $message = substr($message, strpos($message, ' '));
+    public function __construct($code, $html)
+    {
+        // Tomcat don't return a valid XHTML document, so we use preg_match
+        $matches = array();
+        if (!preg_match_all('/<p>(?:(?:(?!<\/p>).)*)<\/p>/mi', $html, $matches)) {
+            $message = "Tomcat returned an unknown error.";
+        } else {
+            $message = strip_tags(end($matches[0]));
+            $message = substr($message, strpos($message, ' '));
+        }
+
+        parent::__construct($message, (int) $code);
     }
-
-    parent::__construct($message, (int) $code);
-
-  }
-
 }

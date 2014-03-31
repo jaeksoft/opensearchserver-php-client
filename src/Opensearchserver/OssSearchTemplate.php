@@ -1,8 +1,8 @@
 <?php
 /*
- *  This file is part of OpenSearchServer PHP Client.
+*  This file is part of OpenSearchServer PHP Client.
 *
-*  Copyright (C) 2008-2013 Emmanuel Keller / Jaeksoft
+*  Copyright (C) 2013 Emmanuel Keller / Jaeksoft
 *
 *  http://www.open-search-server.com
 *
@@ -29,179 +29,178 @@ namespace Opensearchserver;
 
 class OssSearchTemplate extends OssAbstract
 {
-  const API_SEARCH_TEMPLATE='searchtemplate';
-  const API_SEARCH_TEMPLATE_CREATE='create';
-  const API_SEARCH_TEMPLATE_SETRETURNFIELD='setreturnfield';
-  const API_SEARCH_TEMPLATE_SETSNIPPETFIELD='setsnippetfield';
+    const API_SEARCH_TEMPLATE='searchtemplate';
+    const API_SEARCH_TEMPLATE_CREATE='create';
+    const API_SEARCH_TEMPLATE_SETRETURNFIELD='setreturnfield';
+    const API_SEARCH_TEMPLATE_SETSNIPPETFIELD='setsnippetfield';
 
-  protected $query;
-  protected $template;
+    protected $query;
+    protected $template;
 
-  public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
-  {
-    $this->init($enginePath, $index, $login, $apiKey);
-  }
-
-  /**
-   * Create a query template
-   * @param string $qtname Name of the template
-   * @param string $qtquery Query
-   * @param string $qtoperator Default operator
-   * @param int $qtrows Number of rows
-   * @param int $qtslop Phrase slop
-   * @param string $qtlang Default language
-   */
-  public function createSearchTemplate($qtname, $qtquery = null, $qtoperator = null, $qtrows = null, $qtslop = null, $qtlang = null)
-  {
-    $params = array("qt.name" => $qtname);
-    if ($qtquery) {
-      $params['qt.query'] = $qtquery;
-    }
-    if ($qtoperator) {
-      $params['qt.operator'] = $qtoperator;
-    }
-    if ($qtrows) {
-      $params['qt.rows'] = $qtrows;
-    }
-    if ($qtslop) {
-      $params['qt.slop'] = $qtslop;
-    }
-    if ($qtlang) {
-      if (strlen($qtlang) == 2) {
-        $qtlang = mb_strtoupper(OssApi::getLanguage($qtlang));
-      }
-      $params['qt.lang'] = $qtlang;
-    }
-    $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_CREATE;
-    $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
-
-    return $return === false ? false : true;
-  }
-
-  /**
-   * Function to create spell check Query Template
-   * @param string $qtname
-   * @param string $qtquery
-   * @param int $qtsuggestions
-   * @param stringarray $qtfield
-   * @param float $qtscore
-   * @param string $qtlang
-   * @param string $qtalgorithm LevensteinDistance, NGramDistance or JaroWinklerDistance
-   */
-  public function createSpellCheckTemplate($qtname, $qtquery = null, $qtsuggestions = null, $qtfield = null, $qtscore = null, $qtlang = null, $qtalgorithm = null)
-  {
-    $params = array("qt.name" => $qtname);
-    $params['qt.type'] = 'SpellCheckRequest';
-    if ($qtquery) {
-      $params['qt.query'] = $qtquery;
-    }
-    if ($qtsuggestions) {
-      $params['qt.suggestions'] = $qtsuggestions;
-    }
-    if ($qtfield) {
-      $params['qt.field'] = $qtfield;
-    }
-    if ($qtscore) {
-      $params['qt.score'] = $qtscore;
+    public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
+    {
+        $this->init($enginePath, $index, $login, $apiKey);
     }
 
-    if ($qtlang) {
-      $params['qt.lang'] = $qtlang;
-    }
-    if ($qtalgorithm) {
-      $params['qt.algorithm'] = $qtalgorithm;
-    }
-    $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_CREATE;
-    $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
+    /**
+     * Create a query template
+     * @param string $qtname Name of the template
+     * @param string $qtquery Query
+     * @param string $qtoperator Default operator
+     * @param int $qtrows Number of rows
+     * @param int $qtslop Phrase slop
+     * @param string $qtlang Default language
+     */
+    public function createSearchTemplate($qtname, $qtquery = null, $qtoperator = null, $qtrows = null, $qtslop = null, $qtlang = null)
+    {
+        $params = array("qt.name" => $qtname);
+        if ($qtquery) {
+            $params['qt.query'] = $qtquery;
+        }
+        if ($qtoperator) {
+            $params['qt.operator'] = $qtoperator;
+        }
+        if ($qtrows) {
+            $params['qt.rows'] = $qtrows;
+        }
+        if ($qtslop) {
+            $params['qt.slop'] = $qtslop;
+        }
+        if ($qtlang) {
+            if (strlen($qtlang) == 2) {
+                $qtlang = mb_strtoupper(OssApi::getLanguage($qtlang));
+            }
+            $params['qt.lang'] = $qtlang;
+        }
+        $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_CREATE;
+        $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
 
-    return $return === false ? false : true;
-  }
+        return $return === false ? false : true;
+    }
 
-  public function setReturnField($qtname, $returnField)
-  {
-    $params = array("qt.name" => $qtname);
-    $params['returnfield']=$returnField;
-    $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_SETRETURNFIELD;
-    $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
+    /**
+     * Function to create spell check Query Template
+     * @param string $qtname
+     * @param string $qtquery
+     * @param int $qtsuggestions
+     * @param stringarray $qtfield
+     * @param float $qtscore
+     * @param string $qtlang
+     * @param string $qtalgorithm LevensteinDistance, NGramDistance or JaroWinklerDistance
+     */
+    public function createSpellCheckTemplate($qtname, $qtquery = null, $qtsuggestions = null, $qtfield = null, $qtscore = null, $qtlang = null, $qtalgorithm = null)
+    {
+        $params = array("qt.name" => $qtname);
+        $params['qt.type'] = 'SpellCheckRequest';
+        if ($qtquery) {
+            $params['qt.query'] = $qtquery;
+        }
+        if ($qtsuggestions) {
+            $params['qt.suggestions'] = $qtsuggestions;
+        }
+        if ($qtfield) {
+            $params['qt.field'] = $qtfield;
+        }
+        if ($qtscore) {
+            $params['qt.score'] = $qtscore;
+        }
 
-    return $return === false ? false : true;
-  }
+        if ($qtlang) {
+            $params['qt.lang'] = $qtlang;
+        }
+        if ($qtalgorithm) {
+            $params['qt.algorithm'] = $qtalgorithm;
+        }
+        $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_CREATE;
+        $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
 
-  public function setSnippetField($qtname, $snippetField, $maxSnippetSize=null, $tag=null, $maxSnippetNo=null, $fragmenter=null)
-  {
-    $params = array("qt.name" => $qtname);
-    if ($maxSnippetSize) {
-      $params['qt.maxSnippetSize'] = $maxSnippetSize;
+        return $return === false ? false : true;
     }
-    if ($tag) {
-      $params['qt.tag']=$tag;
-    }
-    if ($maxSnippetNo) {
-      $params['qt.maxSnippetNo'] = $maxSnippetNo;
-    }
-    if ($fragmenter) {
-      $params['qt.fragmenter'] = $fragmenter;
-    }
-    $params['snippetfield'] = $snippetField;
-    $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_SETSNIPPETFIELD;
-    $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
 
-    return $return === false ? false : true;
-  }
+    public function setReturnField($qtname, $returnField)
+    {
+        $params = array("qt.name" => $qtname);
+        $params['returnfield']=$returnField;
+        $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_SETRETURNFIELD;
+        $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
 
-  public function createMoreLikeThisTemplate(
-    $qtname, $qtquery = null, $qtLike = null, $qtAnalyzer = null, $qtLang = null, $qtMinwordlen = null,
-    $qtMaxwordlen = null, $qtMindocfreq = null, $qtMintermfreq = null, $qtMaxqueryTerms = null,
-    $qtMaxnumtokensparsed = null, $qtStopwords = null, $qtRows = null, $qtStart = null, $qtFields = null) {
+        return $return === false ? false : true;
+    }
 
-    $params = array("qt.name" => $qtname);
-    $params['qt.type'] = 'MoreLikeThisRequest';
-    if ($qtquery) {
-      $params['qt.query'] = $qtquery;
-    }
-    if ($qtLike) {
-      $params['qt.like'] = $qtLike;
-    }
-    if ($qtAnalyzer) {
-      $params['qt.analyzer'] = $qtAnalyzer;
-    }
-    if ($qtLang) {
-      $params['qt.lang'] = $qtLang;
-    }
-    if ($qtMinwordlen) {
-      $params['qt.minwordlen'] = $qtMinwordlen;
-    }
-    if ($qtMaxwordlen) {
-      $params['qt.maxwordlen'] = $qtMaxwordlen;
-    }
-    if ($qtMindocfreq) {
-      $params['qt.mindocfreq'] = $qtMindocfreq;
-    }
-    if ($qtMintermfreq) {
-      $params['qt.mintermfreq'] = $qtMintermfreq;
-    }
-    if ($qtMaxqueryTerms) {
-      $params['qt.maxqueryTerms'] = $qtMaxqueryTerms;
-    }
-    if ($qtMaxnumtokensparsed) {
-      $params['qt.maxnumtokensparsed'] = $qtMaxnumtokensparsed;
-    }
-    if ($qtStopwords) {
-      $params['qt.stopwords'] = $qtStopwords;
-    }
-    if ($qtRows) {
-      $params['qt.rows'] = $qtRows;
-    }
-    if ($qtStart) {
-      $params['qt.start'] = $qtStart;
-    }
-    if ($qtFields) {
-      $params['qt.fields'] = $qtFields;
-    }
-    $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_CREATE;
-    $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
+    public function setSnippetField($qtname, $snippetField, $maxSnippetSize=null, $tag=null, $maxSnippetNo=null, $fragmenter=null)
+    {
+        $params = array("qt.name" => $qtname);
+        if ($maxSnippetSize) {
+            $params['qt.maxSnippetSize'] = $maxSnippetSize;
+        }
+        if ($tag) {
+            $params['qt.tag']=$tag;
+        }
+        if ($maxSnippetNo) {
+            $params['qt.maxSnippetNo'] = $maxSnippetNo;
+        }
+        if ($fragmenter) {
+            $params['qt.fragmenter'] = $fragmenter;
+        }
+        $params['snippetfield'] = $snippetField;
+        $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_SETSNIPPETFIELD;
+        $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
 
-    return $return === false ? false : true;
-  }
+        return $return === false ? false : true;
+    }
 
+    public function createMoreLikeThisTemplate(
+        $qtname, $qtquery = null, $qtLike = null, $qtAnalyzer = null, $qtLang = null, $qtMinwordlen = null,
+        $qtMaxwordlen = null, $qtMindocfreq = null, $qtMintermfreq = null, $qtMaxqueryTerms = null,
+        $qtMaxnumtokensparsed = null, $qtStopwords = null, $qtRows = null, $qtStart = null, $qtFields = null) {
+
+        $params = array("qt.name" => $qtname);
+        $params['qt.type'] = 'MoreLikeThisRequest';
+        if ($qtquery) {
+            $params['qt.query'] = $qtquery;
+        }
+        if ($qtLike) {
+            $params['qt.like'] = $qtLike;
+        }
+        if ($qtAnalyzer) {
+            $params['qt.analyzer'] = $qtAnalyzer;
+        }
+        if ($qtLang) {
+            $params['qt.lang'] = $qtLang;
+        }
+        if ($qtMinwordlen) {
+            $params['qt.minwordlen'] = $qtMinwordlen;
+        }
+        if ($qtMaxwordlen) {
+            $params['qt.maxwordlen'] = $qtMaxwordlen;
+        }
+        if ($qtMindocfreq) {
+            $params['qt.mindocfreq'] = $qtMindocfreq;
+        }
+        if ($qtMintermfreq) {
+            $params['qt.mintermfreq'] = $qtMintermfreq;
+        }
+        if ($qtMaxqueryTerms) {
+            $params['qt.maxqueryTerms'] = $qtMaxqueryTerms;
+        }
+        if ($qtMaxnumtokensparsed) {
+            $params['qt.maxnumtokensparsed'] = $qtMaxnumtokensparsed;
+        }
+        if ($qtStopwords) {
+            $params['qt.stopwords'] = $qtStopwords;
+        }
+        if ($qtRows) {
+            $params['qt.rows'] = $qtRows;
+        }
+        if ($qtStart) {
+            $params['qt.start'] = $qtStart;
+        }
+        if ($qtFields) {
+            $params['qt.fields'] = $qtFields;
+        }
+        $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_CREATE;
+        $return = $this->queryServerXML(OssSearchTemplate::API_SEARCH_TEMPLATE, $params);
+
+        return $return === false ? false : true;
+    }
 }

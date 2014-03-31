@@ -1,6 +1,6 @@
 <?php
 /*
- *  This file is part of OpenSearchServer PHP Client.
+*  This file is part of OpenSearchServer PHP Client.
 *
 *  Copyright (C) 2013 Emmanuel Keller / Jaeksoft
 *
@@ -41,8 +41,8 @@ $oss_search = $oss_api->search();
 
 // Searching the keyword "open", using the search template called "search"
 $xmlResult = $oss_search->query('open')
-->template('search')
-->execute(60);
+    ->template('search')
+    ->execute(60);
 
 // Print the number of documents found
 $oss_result = new OssResults($xmlResult);
@@ -51,6 +51,6 @@ print 'Documents found: '.$doc_found_number."\n";
 
 // Print the title of the documents
 for ($i = 0; $i < $doc_found_number; $i++) {
-  $title = $oss_result->getField($i, 'title');
-  print '#'.$i.' '.$title."\n";
+    $title = $oss_result->getField($i, 'title');
+    print '#'.$i.' '.$title."\n";
 }

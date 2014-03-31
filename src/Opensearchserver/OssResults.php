@@ -1,8 +1,8 @@
 <?php
 /*
- *  This file is part of OpenSearchServer PHP Client.
+*  This file is part of OpenSearchServer PHP Client.
 *
-*  Copyright (C) 2008-2013 Emmanuel Keller / Jaeksoft
+*  Copyright (C) 2013 Emmanuel Keller / Jaeksoft
 *
 *  http://www.open-search-server.com
 *
@@ -23,7 +23,7 @@
 namespace Opensearchserver;
 
 if (!extension_loaded('SimpleXML')) {
-  trigger_error("OssApi won't work whitout SimpleXML extension", E_USER_ERROR); die();
+    trigger_error("OssApi won't work whitout SimpleXML extension", E_USER_ERROR); die();
 }
 
 /**
@@ -34,191 +34,189 @@ if (!extension_loaded('SimpleXML')) {
  */
 class OssResults
 {
-  /* @var SimpleXMLElement */
-  protected $result;
-  protected $resultFound;
-  protected $resultTime;
-  protected $resultRows;
-  protected $resultStart;
-  protected $resultCollapsedCount;
+    /* @var SimpleXMLElement */
+    protected $result;
+    protected $resultFound;
+    protected $resultTime;
+    protected $resultRows;
+    protected $resultStart;
+    protected $resultCollapsedCount;
 
-  /**
-   * @param $result The data
-   * @param $model The list of fields
-   * @return OssApi
-   */
-  public function __construct(\SimpleXMLElement $result, $model = null)
-  {
-    $this->result  = $result;
-    $this->resultFound = (int) $this->result->result['numFound'];
-    $this->resultTime = (float) $this->result->result['time'] / 1000;
-    $this->resultRows = (int) $this->result->result['rows'];
-    $this->resultStart = (int) $this->result->result['start'];
-    $this->resultCollapsedCount = (int) $this->result->result['collapsedDocCount'];
-  }
-  public function getResultCollapsedCount()
-  {
-    return $this->resultCollapsedCount;
-  }
-
-  public function getResult()
-  {
-    return $this->result;
-  }
-
-  public function getResultFound()
-  {
-    return $this->resultFound;
-  }
-
-  public function getResultTime()
-  {
-    return $this->resultTime;
-  }
-
-  public function getResultRows()
-  {
-    return $this->resultRows;
-  }
-
-  public function getResultStart()
-  {
-    return $this->resultStart;
-  }
-
-  /**
-   *  GETTER
-   */
-  public function getField($position, $fieldName, $modeSnippet = false, $highlightedOnly = false, $joinPosition = null, $getMultipleValues = false)
-  {
-    $field = null;
-    $joinPrefix = '';
-
-    if ($joinPosition != null) {
-      $joinPrefix = '/join[@paramPosition="jq' . (int) $joinPosition . '"]';
+    /**
+     * @param $result The data
+     * @param $model The list of fields
+     * @return OssApi
+     */
+    public function __construct(\SimpleXMLElement $result, $model = null)
+    {
+        $this->result    = $result;
+        $this->resultFound = (int) $this->result->result['numFound'];
+        $this->resultTime = (float) $this->result->result['time'] / 1000;
+        $this->resultRows = (int) $this->result->result['rows'];
+        $this->resultStart = (int) $this->result->result['start'];
+        $this->resultCollapsedCount = (int) $this->result->result['collapsedDocCount'];
+    }
+    public function getResultCollapsedCount()
+    {
+        return $this->resultCollapsedCount;
     }
 
-    $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]' . $joinPrefix);
+    public function getResult()
+    {
+        return $this->result;
+    }
 
-    if (isset($doc[0]) && is_array($doc)) {
-      $value = null;
-      if ($modeSnippet) {
-        if ($highlightedOnly) {
-          $value = $doc[0]->xpath('snippet[@name="' . $fieldName . '" and @highlighted="yes"]');
-        } else {
-          $value = $doc[0]->xpath('snippet[@name="' . $fieldName . '"]');
+    public function getResultFound()
+    {
+        return $this->resultFound;
+    }
+
+    public function getResultTime()
+    {
+        return $this->resultTime;
+    }
+
+    public function getResultRows()
+    {
+        return $this->resultRows;
+    }
+
+    public function getResultStart()
+    {
+        return $this->resultStart;
+    }
+
+    /**
+     *    GETTER
+     */
+    public function getField($position, $fieldName, $modeSnippet = false, $highlightedOnly = false, $joinPosition = null, $getMultipleValues = false)
+    {
+        $field = null;
+        $joinPrefix = '';
+
+        if ($joinPosition != null) {
+            $joinPrefix = '/join[@paramPosition="jq' . (int) $joinPosition . '"]';
         }
-      }
-      if (!isset($value) || count($value) == 0) {
-        $value =  $doc[0]->xpath('field[@name="' . $fieldName . '"]');
 
-      }
-      if ($getMultipleValues && count($value)>1) {
-          $tempArray = array();
-          foreach ($value as $key=>$elt) {
-              $tempArray[] = $elt;
-          }
-          $field = $tempArray;
-      } elseif (isset($value[0])) {
-        $field = $value[0];
-      }
+        $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]' . $joinPrefix);
+
+        if (isset($doc[0]) && is_array($doc)) {
+            $value = null;
+            if ($modeSnippet) {
+                if ($highlightedOnly) {
+                    $value = $doc[0]->xpath('snippet[@name="' . $fieldName . '" and @highlighted="yes"]');
+                } else {
+                    $value = $doc[0]->xpath('snippet[@name="' . $fieldName . '"]');
+                }
+            }
+            if (!isset($value) || count($value) == 0) {
+                $value = $doc[0]->xpath('field[@name="' . $fieldName . '"]');
+            }
+            if ($getMultipleValues && count($value)>1) {
+                $tempArray = array();
+                foreach ($value as $key=>$elt) {
+                        $tempArray[] = $elt;
+                }
+                $field = $tempArray;
+            } elseif (isset($value[0])) {
+                $field = $value[0];
+            }
+        }
+
+        return $field;
     }
 
-    return $field;
-  }
+    public function getScore($position)
+    {
+        $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]');
+        if (isset($doc[0]) && is_array($doc)) {
+            return $doc[0]['score'];
+        }
 
-  public function getScore($position)
-  {
-    $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]');
-    if (isset($doc[0]) && is_array($doc)) {
-      return $doc[0]['score'];
+        return null;
     }
 
-    return null;
-  }
+    /**
+     *
+     */
+    public function getFields($position, $modeSnippet = false)
+    {
+        $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]');
 
-  /**
-   *
-   */
-  public function getFields($position, $modeSnippet = false)
-  {
-    $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]');
+        $fields = $doc->xpath('field');
+        foreach ($fields as $field) {
+            $name = (string) $field[0]['name'];
+            $current[(string) $name] = (string) $field;
+        }
 
-    $fields = $doc->xpath('field');
-    foreach ($fields as $field) {
-      $name = (string) $field[0]['name'];
-      $current[(string) $name] = (string) $field;
+        if ($modeSnippet) {
+            $snippets = $doc->xpath('snippet');
+            foreach ($snippets as $field) {
+                $name = (string) $field[0]['name'];
+                $current[(string) $name] = (string) $field;
+            }
+        }
+
+        return $current;
     }
 
-    if ($modeSnippet) {
-      $snippets = $doc->xpath('snippet');
-      foreach ($snippets as $field) {
-        $name = (string) $field[0]['name'];
-        $current[(string) $name] = (string) $field;
-      }
+    /**
+     *
+     * @param unknown_type $fieldName
+     * @return Ambigous <multitype:, null>
+     */
+    public function getFacet($fieldName)
+    {
+        $currentFacet = isset($fieldName)? $this->result->xpath('faceting/field[@name="' . $fieldName . '"]/facet'):null;
+        if (!isset($currentFacet) || ( isset($currentFacet) && $currentFacet === false)) {
+            $currentFacet = array();
+        }
+
+        return $currentFacet;
     }
 
-    return $current;
-  }
+    /**
+     *
+     * @return unknown_type
+     */
+    public function getFacets()
+    {
+        $facets = array();
+        $allFacets = $this->result->xpath('faceting/field');
+        foreach ($allFacets as $each) {
+            $facets[] = $each[0]['name'];
+        }
 
-  /**
-   *
-   * @param unknown_type $fieldName
-   * @return Ambigous <multitype:, null>
-   */
-  public function getFacet($fieldName)
-  {
-    $currentFacet = isset($fieldName)? $this->result->xpath('faceting/field[@name="' . $fieldName . '"]/facet'):null;
-    if (!isset($currentFacet) || ( isset($currentFacet) && $currentFacet === false)) {
-      $currentFacet = array();
+        return $facets;
     }
 
-    return $currentFacet;
-  }
+    /**
+     *
+     * @return Return the spellsuggest array.
+     */
+    public function getSpellSuggestions($fieldName)
+    {
+        $currentSpellCheck = isset($fieldName)? $this->result->xpath('spellcheck/field[@name="' . $fieldName . '"]/word/suggest'):null;
+        if (!isset($currentSpellCheck) || ( isset($currentSpellCheck) && $currentSpellCheck === false)) {
+            $currentSpellCheck = array();
+        }
 
-  /**
-   *
-   * @return unknown_type
-   */
-  public function getFacets()
-  {
-    $facets = array();
-    $allFacets = $this->result->xpath('faceting/field');
-    foreach ($allFacets as $each) {
-      $facets[] = $each[0]['name'];
+        return $currentSpellCheck;
     }
+    /**
+     *
+     * @return Return the spellsuggest terms.
+     */
+    public function getSpellSuggest($fieldName)
+    {
+        $spellCheckWord = isset($fieldName)? $this->result->xpath('spellcheck/field[@name="' . $fieldName . '"]/word'):null;
+        $queryExact = '';
+        if (isset($spellCheckWord) && $spellCheckWord != null) {
+            foreach ($spellCheckWord as $each) {
+                $queryExact .= $each[0]->suggest.' ';
+            }
+        }
 
-    return $facets;
-  }
-
-  /**
-   *
-   * @return Return the spellsuggest array.
-   */
-  public function getSpellSuggestions($fieldName)
-  {
-    $currentSpellCheck = isset($fieldName)? $this->result->xpath('spellcheck/field[@name="' . $fieldName . '"]/word/suggest'):null;
-    if (!isset($currentSpellCheck) || ( isset($currentSpellCheck) && $currentSpellCheck === false)) {
-      $currentSpellCheck = array();
+        return $queryExact;
     }
-
-    return $currentSpellCheck;
-  }
-  /**
-   *
-   * @return Return the spellsuggest terms.
-   */
-  public function getSpellSuggest($fieldName)
-  {
-    $spellCheckWord = isset($fieldName)? $this->result->xpath('spellcheck/field[@name="' . $fieldName . '"]/word'):null;
-    $queryExact = '';
-    if (isset($spellCheckWord) && $spellCheckWord != null) {
-      foreach ($spellCheckWord as $each) {
-        $queryExact .= $each[0]->suggest.' ';
-      }
-    }
-
-    return $queryExact;
-  }
-
 }

@@ -1,8 +1,8 @@
 <?php
 /*
- *  This file is part of OpenSearchServer PHP Client.
+*  This file is part of OpenSearchServer PHP Client.
 *
-*  Copyright (C) 2008-2013 Emmanuel Keller / Jaeksoft
+*  Copyright (C) 2013 Emmanuel Keller / Jaeksoft
 *
 *  http://www.open-search-server.com
 *
@@ -29,20 +29,19 @@ namespace Opensearchserver;
 
 class OssDelete extends OssAbstract
 {
-  public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
-  {
-    $this->init($enginePath, $index, $login, $apiKey);
-  }
-
-  public function delete($query)
-  {
-    $params = array('q' => $query);
-    $return = $this->queryServerXML(OssApi::API_DELETE, $params);
-    if ($return === false) {
-      return false;
+    public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
+    {
+        $this->init($enginePath, $index, $login, $apiKey);
     }
 
-    return true;
-  }
+    public function delete($query)
+    {
+        $params = array('q' => $query);
+        $return = $this->queryServerXML(OssApi::API_DELETE, $params);
+        if ($return === false) {
+            return false;
+        }
 
+        return true;
+    }
 }

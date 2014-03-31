@@ -1,8 +1,8 @@
 <?php
 /*
- *  This file is part of OpenSearchServer PHP Client.
+*  This file is part of OpenSearchServer PHP Client.
 *
-*  Copyright (C) 2008-2013 Emmanuel Keller / Jaeksoft
+*  Copyright (C) 2013 Emmanuel Keller / Jaeksoft
 *
 *  http://www.open-search-server.com
 *
@@ -29,142 +29,141 @@ namespace Opensearchserver;
 
 class OssSchema extends OssAbstract
 {
-  const API_SCHEMA   = 'schema';
-  const API_SCHEMA_INDEX_LIST    = 'indexList';
-  const API_SCHEMA_CREATE_INDEX  = 'createIndex';
-  const API_SCHEMA_DELETE_INDEX  = 'deleteIndex';
-  const API_SCHEMA_GET_SCHEMA    = 'getSchema';
-  const API_SCHEMA_SET_FIELD    = "setField";
-  const API_SCHEMA_DELETE_FIELD  = "deleteField";
+    const API_SCHEMA     = 'schema';
+    const API_SCHEMA_INDEX_LIST        = 'indexList';
+    const API_SCHEMA_CREATE_INDEX    = 'createIndex';
+    const API_SCHEMA_DELETE_INDEX    = 'deleteIndex';
+    const API_SCHEMA_GET_SCHEMA        = 'getSchema';
+    const API_SCHEMA_SET_FIELD        = "setField";
+    const API_SCHEMA_DELETE_FIELD    = "deleteField";
 
-  public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
-  {
-    $this->init($enginePath, $index, $login, $apiKey);
-  }
-
-  /**
-   * Return the list of indexes usable by the current credential
-   * @return string[]
-   */
-  public function indexList()
-  {
-    $params = array('cmd' => OssSchema::API_SCHEMA_INDEX_LIST);
-    $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
-    $indexes = array();
-    foreach ($return->index as $index) {
-      $indexes[] = (string) $index['name'];
+    public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
+    {
+        $this->init($enginePath, $index, $login, $apiKey);
     }
 
-    return $indexes;
-  }
+    /**
+     * Return the list of indexes usable by the current credential
+     * @return string[]
+     */
+    public function indexList()
+    {
+        $params = array('cmd' => OssSchema::API_SCHEMA_INDEX_LIST);
+        $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
+        $indexes = array();
+        foreach ($return->index as $index) {
+            $indexes[] = (string) $index['name'];
+        }
 
-  /**
-   * Create a new index using a template
-   * @param string $index The name of the new index
-   * @param string $template Optional. The name of the template to use
-   * @return boolean
-   */
-  public function createIndex($index, $template = false)
-  {
-    $params = array('index.name' => $index);
-    if ($template) {
-      $params['index.template'] = $template;
-    }
-    $params['cmd'] = OssSchema::API_SCHEMA_CREATE_INDEX;
-    $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
-    if ($return === false) {
-      return false;
+        return $indexes;
     }
 
-    return true;
-  }
+    /**
+     * Create a new index using a template
+     * @param string $index The name of the new index
+     * @param string $template Optional. The name of the template to use
+     * @return boolean
+     */
+    public function createIndex($index, $template = false)
+    {
+        $params = array('index.name' => $index);
+        if ($template) {
+            $params['index.template'] = $template;
+        }
+        $params['cmd'] = OssSchema::API_SCHEMA_CREATE_INDEX;
+        $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
+        if ($return === false) {
+            return false;
+        }
 
-  /**
-   * Delete an index
-   * @param string $index The name of the index to delete
-   */
-  public function deleteIndex($index)
-  {
-    $params = array('cmd' => OssSchema::API_SCHEMA_DELETE_INDEX);
-    $params['index.delete.name'] = $index;
-    $params['index.name'] = $index;
-    $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
-    if ($return === false) {
-      return false;
+        return true;
     }
 
-    return true;
-  }
+    /**
+     * Delete an index
+     * @param string $index The name of the index to delete
+     */
+    public function deleteIndex($index)
+    {
+        $params = array('cmd' => OssSchema::API_SCHEMA_DELETE_INDEX);
+        $params['index.delete.name'] = $index;
+        $params['index.name'] = $index;
+        $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
+        if ($return === false) {
+            return false;
+        }
 
-  /**
-   * Retreive the complete schema of the index
-   * @return SimpleXMLElement|OSS_Schema
-   * The schema is provided by the OSS engine as an xml. This xml is actualy the complete configuration of the schema.
-   * If you want to manipulate the schema, pass it to OSS_Schema::factoryFromXML(...) for easier access.
-   */
-  public function getSchema()
-  {
-    $params = array('cmd' => OssSchema::API_SCHEMA_GET_SCHEMA);
-
-    return $this->queryServerXML(OssSchema::API_SCHEMA, $params);
-  }
-
-  /**
-   * Create or alter a field
-   * @param string $name
-   * @param string $analyzer
-   * @param string $stored
-   * @param string $indexed
-   * @param string $termVector
-   * @return boolean
-   */
-  public function setField($name, $analyzer = null, $stored = null, $indexed = null, $termVector = null, $default = null, $unique = null)
-  {
-    $params = array("field.name" => $name);
-    if ($analyzer) {
-      $params["field.analyzer"]   = $analyzer;
-    }
-    if ($stored) {
-      $params["field.stored"]     = $stored;
-    }
-    if ($indexed) {
-      $params["field.indexed"]    = $indexed;
-    }
-    if ($termVector) {
-      $params["field.termVector"] = $termVector;
-    }
-    if ($default) {
-      $params["field.default"] = $default;
-    }
-    if ($unique) {
-      $params["field.unique"] = $unique;
+        return true;
     }
 
-    $params['cmd'] = OssSchema::API_SCHEMA_SET_FIELD;
-    $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
+    /**
+     * Retreive the complete schema of the index
+     * @return SimpleXMLElement|OSS_Schema
+     * The schema is provided by the OSS engine as an xml. This xml is actualy the complete configuration of the schema.
+     * If you want to manipulate the schema, pass it to OSS_Schema::factoryFromXML(...) for easier access.
+     */
+    public function getSchema()
+    {
+        $params = array('cmd' => OssSchema::API_SCHEMA_GET_SCHEMA);
 
-    if ($return === false) {
-      return false;
+        return $this->queryServerXML(OssSchema::API_SCHEMA, $params);
     }
 
-    return true;
-  }
+    /**
+     * Create or alter a field
+     * @param string $name
+     * @param string $analyzer
+     * @param string $stored
+     * @param string $indexed
+     * @param string $termVector
+     * @return boolean
+     */
+    public function setField($name, $analyzer = null, $stored = null, $indexed = null, $termVector = null, $default = null, $unique = null)
+    {
+        $params = array("field.name" => $name);
+        if ($analyzer) {
+            $params["field.analyzer"] = $analyzer;
+        }
+        if ($stored) {
+            $params["field.stored"] = $stored;
+        }
+        if ($indexed) {
+            $params["field.indexed"] = $indexed;
+        }
+        if ($termVector) {
+            $params["field.termVector"] = $termVector;
+        }
+        if ($default) {
+            $params["field.default"] = $default;
+        }
+        if ($unique) {
+            $params["field.unique"] = $unique;
+        }
 
-  /**
-   * Delete a field
-   * @param string $name The name of the field to delete
-   */
-  public function deleteField($name)
-  {
-    $params = array("cmd" => OssSchema::API_SCHEMA_DELETE_FIELD);
-    $params['field.name'] = $name;
-    $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
+        $params['cmd'] = OssSchema::API_SCHEMA_SET_FIELD;
+        $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
 
-    if ($return === false) {
-      return false;
+        if ($return === false) {
+            return false;
+        }
+
+        return true;
     }
 
-    return true;
-  }
+    /**
+     * Delete a field
+     * @param string $name The name of the field to delete
+     */
+    public function deleteField($name)
+    {
+        $params = array("cmd" => OssSchema::API_SCHEMA_DELETE_FIELD);
+        $params['field.name'] = $name;
+        $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
 
+        if ($return === false) {
+            return false;
+        }
+
+        return true;
+    }
 }

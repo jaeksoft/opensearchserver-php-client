@@ -1,8 +1,8 @@
 <?php
 /*
- *  This file is part of OpenSearchServer PHP Client.
+*  This file is part of OpenSearchServer PHP Client.
 *
-*  Copyright (C) 2008-2013 Emmanuel Keller / Jaeksoft
+*  Copyright (C) 2013 Emmanuel Keller / Jaeksoft
 *
 *  http://www.open-search-server.com
 *
@@ -34,80 +34,80 @@ namespace Opensearchserver;
 */
 class OssSearchDocument extends OssSearchAbstract
 {
-  protected $field;
-  protected $uniqueKeys;
-  protected $docIds;
+    protected $field;
+    protected $uniqueKeys;
+    protected $docIds;
 
-  /**
-   * @param $enginePath The URL to access the OSS Engine
-   * @param $index The index name
-   * @return OssSearchDocument
-   */
-  public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
-  {
-    parent::__construct($enginePath, $index, $login, $apiKey);
+    /**
+     * @param $enginePath The URL to access the OSS Engine
+     * @param $index The index name
+     * @return OssSearchDocument
+     */
+    public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
+    {
+        parent::__construct($enginePath, $index, $login, $apiKey);
 
-    $this->field  = array();
-    $this->uniqueKey = array();
-    $this->docIds = array();
-  }
-
-  /**
-   * @return OssSearchDocument
-   */
-  public function field($fields)
-  {
-    $this->field = array_unique(array_merge($this->field, (array) $fields));
-
-    return $this;
-  }
-
-  /**
-   * @return OssSearchDocument
-   */
-  public function uniqueKey($uniqueKey = null)
-  {
-    $this->uniqueKeys[] = $uniqueKey;
-
-    return $this;
-  }
-
-  /**
-   * @return OssSearchDocument
-   */
-  public function docId($docId = null)
-  {
-    $this->docIds[] = $docId;
-
-    return $this;
-  }
-
-  protected function addParams($queryChunks = null)
-  {
-    $queryChunks = parent::addParams($queryChunks);
-
-    // Fields
-    foreach ((array) $this->field as $field) {
-      if (empty($field)) continue;
-      $queryChunks[] = 'rf=' . $field;
+        $this->field    = array();
+        $this->uniqueKey = array();
+        $this->docIds = array();
     }
 
-    // DocID
-    foreach ((array) $this->docIds as $docId) {
-      if (empty($docId)) {
-        continue;
-      }
-      $queryChunks[] = 'id=' . urlencode($docId);
+    /**
+     * @return OssSearchDocument
+     */
+    public function field($fields)
+    {
+        $this->field = array_unique(array_merge($this->field, (array) $fields));
+
+        return $this;
     }
 
-    // UniqueKey
-    foreach ((array) $this->uniqueKeys as $uniqueKey) {
-      if (empty($uniqueKey)) {
-        continue;
-      }
-      $queryChunks[] = 'uk=' . urlencode($uniqueKey);
+    /**
+     * @return OssSearchDocument
+     */
+    public function uniqueKey($uniqueKey = null)
+    {
+        $this->uniqueKeys[] = $uniqueKey;
+
+        return $this;
     }
 
-    return $queryChunks;
-  }
+    /**
+     * @return OssSearchDocument
+     */
+    public function docId($docId = null)
+    {
+        $this->docIds[] = $docId;
+
+        return $this;
+    }
+
+    protected function addParams($queryChunks = null)
+    {
+        $queryChunks = parent::addParams($queryChunks);
+
+        // Fields
+        foreach ((array) $this->field as $field) {
+            if (empty($field)) continue;
+            $queryChunks[] = 'rf=' . $field;
+        }
+
+        // DocID
+        foreach ((array) $this->docIds as $docId) {
+            if (empty($docId)) {
+                continue;
+            }
+            $queryChunks[] = 'id=' . urlencode($docId);
+        }
+
+        // UniqueKey
+        foreach ((array) $this->uniqueKeys as $uniqueKey) {
+            if (empty($uniqueKey)) {
+                continue;
+            }
+            $queryChunks[] = 'uk=' . urlencode($uniqueKey);
+        }
+
+        return $queryChunks;
+    }
 }

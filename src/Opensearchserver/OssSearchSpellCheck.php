@@ -1,8 +1,8 @@
 <?php
 /*
- *  This file is part of OpenSearchServer PHP Client.
+*  This file is part of OpenSearchServer PHP Client.
 *
-*  Copyright (C) 2008-2013 Emmanuel Keller / Jaeksoft
+*  Copyright (C) 2013 Emmanuel Keller / Jaeksoft
 *
 *  http://www.open-search-server.com
 *
@@ -34,40 +34,40 @@ namespace Opensearchserver;
 */
 class OssSearchSpellCheck extends OssSearchAbstract
 {
-  protected $query;
+    protected $query;
 
-  /**
-   * @param $enginePath The URL to access the OSS Engine
-   * @param $index The index name
-   * @return OssSearchSpellCheck
-   */
-  public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
-  {
-    parent::__construct($enginePath, $index, $login, $apiKey);
-    $this->query  = null;
-  }
+    /**
+     * @param $enginePath The URL to access the OSS Engine
+     * @param $index The index name
+     * @return OssSearchSpellCheck
+     */
+    public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
+    {
+        parent::__construct($enginePath, $index, $login, $apiKey);
+        $this->query = null;
+    }
 
-  /**
-   * Specify the query
-   * @param $query string
-   * @return OssSearch
-   */
-  public function query($query = null)
-  {
-    $this->query = $query;
+    /**
+     * Specify the query
+     * @param $query string
+     * @return OssSearch
+     */
+    public function query($query = null)
+    {
+        $this->query = $query;
 
-    return $this;
-  }
+        return $this;
+    }
 
-  /**
-   * @param array $queryChunks
-   * @return array
-   */
-  protected function addParams($queryChunks = null)
-  {
-    $queryChunks = parent::addParams($queryChunks);
-    $queryChunks[] = 'q=' . urlencode($this->query);
+    /**
+     * @param array $queryChunks
+     * @return array
+     */
+    protected function addParams($queryChunks = null)
+    {
+        $queryChunks = parent::addParams($queryChunks);
+        $queryChunks[] = 'q=' . urlencode($this->query);
 
-    return $queryChunks;
-  }
+        return $queryChunks;
+    }
 }
