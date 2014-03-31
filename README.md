@@ -1,6 +1,8 @@
 OpenSearchServer PHP Client
 ===========================
 
+**Warning**: this new version of PHP client for OpenSearchServer is still under development.
+
 This API connector is intended to be used with PHP 5 (any version >= 5.3) and [Composer](http://getcomposer.org/).
 It is based on the v1 API of OpenSearchServer.
 
