@@ -33,20 +33,18 @@ namespace Opensearchserver;
  * @package OpenSearchServer
  * FIXME Complete this documentation
  */
-class OssException extends RuntimeException {
-
+class OssException extends RuntimeException
+{
   private $status;
   protected $message;
 
-  public function __construct($xml) {
-
+  public function __construct($xml)
+  {
     if ($xml instanceof SimpleXMLElement) {
       $xmlDoc = $xml;
-    }
-    elseif ($xml instanceof DOMDocument) {
+    } elseif ($xml instanceof DOMDocument) {
       $xmlDoc = simplexml_import_dom($xml);
-    }
-    else {
+    } else {
       $previous_error_level = error_reporting(0);
       $xmlDoc = simplexml_load_string($xml);
       error_reporting($previous_error_level);
@@ -70,7 +68,8 @@ class OssException extends RuntimeException {
    * Return the error status from the search engine
    * @return string
    */
-  public function getStatus() {
+  public function getStatus()
+  {
     return $this->status;
   }
 
@@ -82,19 +81,18 @@ class OssException extends RuntimeException {
  * @package OpenSearchServer
  * FIXME Complete this documentation
  */
-class TomcatException extends RuntimeException {
-
+class TomcatException extends RuntimeException
+{
   private $status;
   protected $message;
 
-  public function __construct($code, $html) {
-
+  public function __construct($code, $html)
+  {
     // Tomcat don't return a valid XHTML document, so we use preg_match
     $matches = array();
     if (!preg_match_all('/<p>(?:(?:(?!<\/p>).)*)<\/p>/mi', $html, $matches)) {
       $message = "Tomcat returned an unknown error.";
-    }
-    else {
+    } else {
       $message = strip_tags(end($matches[0]));
       $message = substr($message, strpos($message, ' '));
     }

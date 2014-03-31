@@ -31,7 +31,8 @@ namespace Opensearchserver;
  * Store and retrieve a value from the browser (In order REQUEST, COOKIE, DEFAULT)
 * @return unknown_type
 */
-function config_request_value($key, $default, $request_field = NULL) {
+function config_request_value($key, $default, $request_field = NULL)
+{
   $value = NULL;
   if (!empty($_REQUEST[$request_field])) {
     $value = $_REQUEST[$request_field];
@@ -53,8 +54,8 @@ function config_request_value($key, $default, $request_field = NULL) {
  * @param array $curl_info By Reference. If given, the informations provided by curl will be returned using the provided array
  * @return SimpleXMLElement Will return FALSE if something gone wrong
  */
-function retrieve_xml($url, &$curl_info = NULL) {
-
+function retrieve_xml($url, &$curl_info = NULL)
+{
   $rcurl = curl_init($url);
   curl_setopt($rcurl, CURLOPT_BINARYTRANSFER, TRUE);
   curl_setopt($rcurl, CURLOPT_RETURNTRANSFER, TRUE);
@@ -86,7 +87,8 @@ function retrieve_xml($url, &$curl_info = NULL) {
  * @param $array
  * @return mixed
  */
-function array_first($array) {
+function array_first($array)
+{
   return reset($array);
 }
 
@@ -95,15 +97,16 @@ function array_first($array) {
  * @param $array
  * @return mixed
  */
-function array_last($array) {
+function array_last($array)
+{
   return end($array);
 }
 
 /**
  * Misc classes to parse and simplify usage of different feed format during the indexation
  */
-abstract class NewsFeedParser extends ArrayObject {
-
+abstract class NewsFeedParser extends ArrayObject
+{
   protected $feedFormat;
   protected $channelTitle;
   protected $channelSubtitle;
@@ -113,7 +116,8 @@ abstract class NewsFeedParser extends ArrayObject {
    * @param SimpleXMLElement $xml
    * @return NewsFeedParser
    */
-  public static function factory(SimpleXMLElement $xml) {
+  public static function factory(SimpleXMLElement $xml)
+  {
     // Determine the format of the xml
     // RSS
     if (isset($xml->channel->item[0])) {
@@ -125,26 +129,30 @@ abstract class NewsFeedParser extends ArrayObject {
     }
   }
 
-  public function getFeedFormat() {
+  public function getFeedFormat()
+  {
     return $this->feedFormat;
   }
 
-  public function getChannelTitle() {
+  public function getChannelTitle()
+  {
     return $this->channelTitle;
   }
 
-  public function getChannelSubtitle() {
+  public function getChannelSubtitle()
+  {
     return $this->channelSubtitle;
   }
 
-  public function getChannelHome() {
+  public function getChannelHome()
+  {
     return $this->channelHome;
   }
 
 }
 
-abstract class NewsFeedParser_Feed_Entry {
-
+abstract class NewsFeedParser_Feed_Entry
+{
   protected $author;
   protected $content;
   protected $id;
@@ -154,47 +162,55 @@ abstract class NewsFeedParser_Feed_Entry {
   protected $title;
   protected $language;
 
-  public function getLanguage() {
+  public function getLanguage()
+  {
     return $this->language;
   }
 
-  public function getAuthor() {
+  public function getAuthor()
+  {
     return $this->author;
   }
 
-  public function getContent() {
+  public function getContent()
+  {
     return $this->content;
   }
 
-  public function getId() {
+  public function getId()
+  {
     return $this->id;
   }
 
-  public function getLink() {
+  public function getLink()
+  {
     return $this->link;
   }
 
-  public function getPublished() {
+  public function getPublished()
+  {
     return $this->published;
   }
 
-  public function getSummary() {
+  public function getSummary()
+  {
     return $this->summary;
   }
 
-  public function getTitle() {
+  public function getTitle()
+  {
     return $this->title;
   }
 }
 
-class NewsFeedParser_RSS extends NewsFeedParser {
-
+class NewsFeedParser_RSS extends NewsFeedParser
+{
   /**
    * @param SimpleXMLElement $xml
    * @return NewsFeedParser
    */
-  public function __construct(SimpleXMLElement $xml) {
-
+  public function __construct(SimpleXMLElement $xml)
+  {
     $this->feedFormat = 'RSS';
 
     // Misc informations
@@ -211,10 +227,10 @@ class NewsFeedParser_RSS extends NewsFeedParser {
 
 }
 
-class NewsFeedParser_RSS_Entry extends NewsFeedParser_Feed_Entry {
-
-  public function __construct(SimpleXMLElement $xml) {
-
+class NewsFeedParser_RSS_Entry extends NewsFeedParser_Feed_Entry
+{
+  public function __construct(SimpleXMLElement $xml)
+  {
     $this->id = md5((string) $xml->guid);
     $this->link = $xml->link;
     $this->published = date('Y-m-d\TH:i:sO', strtotime((string) $xml->pubDate));
@@ -232,14 +248,14 @@ class NewsFeedParser_RSS_Entry extends NewsFeedParser_Feed_Entry {
 
 }
 
-class NewsFeedParser_Atom extends NewsFeedParser {
-
+class NewsFeedParser_Atom extends NewsFeedParser
+{
   /**
    * @param SimpleXMLElement $xml
    * @return NewsFeedParser
    */
-  public function __construct(SimpleXMLElement $xml) {
-
+  public function __construct(SimpleXMLElement $xml)
+  {
     $this->feedFormat = 'ATOM';
 
     // Misc informations
@@ -255,10 +271,10 @@ class NewsFeedParser_Atom extends NewsFeedParser {
 
 }
 
-class NewsFeedParser_Atom_Entry extends NewsFeedParser_Feed_Entry {
-
-  public function __construct(SimpleXMLElement $xml) {
-
+class NewsFeedParser_Atom_Entry extends NewsFeedParser_Feed_Entry
+{
+  public function __construct(SimpleXMLElement $xml)
+  {
     $this->id = md5((string) $xml->id);
     $this->link = $xml->link['href'];
     $this->published = date('Y-m-d\TH:i:sO', strtotime((string) $xml->published));
@@ -273,22 +289,20 @@ class NewsFeedParser_Atom_Entry extends NewsFeedParser_Feed_Entry {
 
 }
 
-function indentXML($string) {
-
-  function indentXML_pregCallback($matches) {
+function indentXML($string)
+{
+  function indentXML_pregCallback($matches)
+  {
     static $indent = 0;
     static $indentExclusion = array('?');
     if (substr($matches[0], 0, 9) == "<[CDATA[!") {
       $pad = str_repeat(' ', max(0, $indent));
-    }
-    elseif ($matches[0][1] == '?') {
+    } elseif ($matches[0][1] == '?') {
       $pad = str_repeat(' ', max(0, $indent));
-    }
-    elseif ($matches[0][1] == '/') {
+    } elseif ($matches[0][1] == '/') {
       $indent--;
       $pad = str_repeat(' ', max(0, $indent));
-    }
-    elseif (substr($matches[0], -2, 1) != '/') {
+    } elseif (substr($matches[0], -2, 1) != '/') {
       $indent++;
       $pad = str_repeat(' ', max(0, $indent-1));
     }
@@ -300,33 +314,32 @@ function indentXML($string) {
 
 }
 
-function beautifulXML($string) {
-
-  function beautifulXML_tagging($string) {
+function beautifulXML($string)
+{
+  function beautifulXML_tagging($string)
+  {
     $string = preg_replace('/^(\w+)/i', '<span class="nodeName">$1</span>', $string);
 
     return $string;
   }
 
-  function beautifulXML_pregCallback($matches) {
+  function beautifulXML_pregCallback($matches)
+  {
     $before = '';
     $after  = '';
     if (substr($matches[0], 0, 9) == "<![CDATA[") {
       $before  = '<div class="node"><span class="delimiter">&lt;[!CDATA[</span><span class="cdata">';
       $content = substr($matches[0], 9, -3);
       $after   = '</span><span class="delimiter">]]&gt;</span></div>';
-    }
-    elseif ($matches[0][1] == '?') {
+    } elseif ($matches[0][1] == '?') {
       $before = '<div class="node"><span class="delimiter">&lt;?</span>';
       $content = beautifulXML_tagging(substr($matches[0], 2, -2));
       $after  = '<span class="delimiter">?&gt;</span></div>';
-    }
-    elseif ($matches[0][1] == '/') {
+    } elseif ($matches[0][1] == '/') {
       $before = '<span class="delimiter">&lt;/</span>';
       $content = beautifulXML_tagging(substr($matches[0], 2, -1));
       $after  = '<span class="delimiter">&gt;</span></div>';
-    }
-    elseif (substr($matches[0], -2, 1) != '/') {
+    } elseif (substr($matches[0], -2, 1) != '/') {
       $before = '<div class="node"><span class="delimiter">&lt;</span>';
       $content = beautifulXML_tagging(substr($matches[0], 1, -1));
       $after  = '<span class="delimiter">&gt;</span>';

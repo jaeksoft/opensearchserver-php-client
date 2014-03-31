@@ -36,8 +36,8 @@ if (!extension_loaded('SimpleXML')) {
  * @author philcube <egosse@open-search-server.com>
  * @package OpenSearchServer
  */
-class OssPaging {
-
+class OssPaging
+{
   protected $oss_result;
   protected $resultTotal;
   protected $resultLow;
@@ -55,7 +55,8 @@ class OssPaging {
    * @param $model The list of fields
    * @return OssApi
    */
-  public function __construct(SimpleXMLElement $result, $rowsParam = 'rows', $pageParam = 'p', $paramSeparator = '&amp;') {
+  public function __construct(SimpleXMLElement $result, $rowsParam = 'rows', $pageParam = 'p', $paramSeparator = '&amp;')
+  {
     $this->oss_result  = $result;
     $this->rowsParameter = $rowsParam;
     $this->pageParameter = $pageParam;
@@ -63,7 +64,8 @@ class OssPaging {
     self::compute();
 
     if (!function_exists('OssApi_Dummy_Function')) {
-      function OssApi_Dummy_Function() {
+      function OssApi_Dummy_Function()
+      {
       }
     }
   }
@@ -71,35 +73,43 @@ class OssPaging {
   /**
    * GETTER
    */
-  public function getResultCurrentPage() {
+  public function getResultCurrentPage()
+  {
     return $this->resultCurrentPage;
   }
 
-  public function getResultTotal() {
+  public function getResultTotal()
+  {
     return $this->resultTotal;
   }
 
-  public function getResultLow() {
+  public function getResultLow()
+  {
     return $this->resultLow;
   }
 
-  public function getResultHigh() {
+  public function getResultHigh()
+  {
     return $this->resultHigh;
   }
 
-  public function getResultPrev() {
+  public function getResultPrev()
+  {
     return $this->resultPrev;
   }
 
-  public function getResultNext() {
+  public function getResultNext()
+  {
     return $this->resultNext;
   }
 
-  public function getPageBaseURI() {
+  public function getPageBaseURI()
+  {
     return $this->pageBaseURI;
   }
 
-  public function compute() {
+  public function compute()
+  {
     $this->resultFound   = ((int) $this->oss_result->result['numFound'] - (int) $this->oss_result->result['collapsedDocCount']);
     $this->resultTime    = (float) $this->oss_result->result['time'] / 1000;
     $this->resultRows    = (int) $this->oss_result->result['rows'];

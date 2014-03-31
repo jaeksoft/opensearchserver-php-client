@@ -27,13 +27,15 @@
 
 namespace Opensearchserver;
 
-class OssDelete extends OssAbstract {
-
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL) {
+class OssDelete extends OssAbstract
+{
+  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  {
     $this->init($enginePath, $index, $login, $apiKey);
   }
 
-  public function delete($query) {
+  public function delete($query)
+  {
     $params = array('q' => $query);
     $return = $this->queryServerXML(OssApi::API_DELETE, $params);
     if ($return === FALSE) {

@@ -30,8 +30,8 @@ namespace Opensearchserver;
 /**
  * @package OpenSearchServer
 */
-class OssSearchAbstract extends OssAbstract {
-
+class OssSearchAbstract extends OssAbstract
+{
   const API_SELECT   = 'select';
 
   protected $template;
@@ -46,7 +46,8 @@ class OssSearchAbstract extends OssAbstract {
    * @param $index The index name
    * @return OssSearch
    */
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL) {
+  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  {
     $this->init($enginePath, $index, $login, $apiKey);
     $this->log = FALSE;
     $this->customLogs = array();
@@ -55,17 +56,20 @@ class OssSearchAbstract extends OssAbstract {
   /**
    * @return OssSearch
    */
-  public function template($template = NULL) {
+  public function template($template = NULL)
+  {
     $this->template = $template;
 
     return $this;
   }
 
-  public function setLog($log = FALSE) {
+  public function setLog($log = FALSE)
+  {
     $this->log = $log;
   }
 
-  public function setCustomLog($pos, $log) {
+  public function setCustomLog($pos, $log)
+  {
     $this->customLogs[(int) $pos] = $log;
   }
 
@@ -73,7 +77,8 @@ class OssSearchAbstract extends OssAbstract {
    * @return SimpleXMLElement False if the query produced an error
    * FIXME Must think about OssApi inteegration inside OssSearch
    */
-  public function execute($connectTimeOut = NULL, $timeOut = NULL) {
+  public function execute($connectTimeOut = NULL, $timeOut = NULL)
+  {
     $queryChunks = array();
     $queryChunks = $this->addParams($queryChunks);
     $params = implode('&', $queryChunks);
@@ -86,8 +91,8 @@ class OssSearchAbstract extends OssAbstract {
     return $result;
   }
 
-  protected function addParams($queryChunks = NULL) {
-
+  protected function addParams($queryChunks = NULL)
+  {
     if (!empty($this->template)) {
       $queryChunks[] = 'qt='   . $this->template;
     }
@@ -105,8 +110,7 @@ class OssSearchAbstract extends OssAbstract {
     $queryChunks[] = 'user='.urlencode($this->user);
 
     //Groups
-    foreach($this->groups as $group)
-    {
+    foreach($this->groups as $group) {
         $queryChunks[] = 'group='.urlencode($group);
     }
     */

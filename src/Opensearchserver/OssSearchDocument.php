@@ -32,8 +32,8 @@ namespace Opensearchserver;
  * FIXME Complete this documentations
  * FIXME Clean this class and use facilities provided by OssApi
 */
-class OssSearchDocument extends OssSearchAbstract {
-
+class OssSearchDocument extends OssSearchAbstract
+{
   protected $field;
   protected $uniqueKeys;
   protected $docIds;
@@ -43,7 +43,8 @@ class OssSearchDocument extends OssSearchAbstract {
    * @param $index The index name
    * @return OssSearchDocument
    */
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL) {
+  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  {
     parent::__construct($enginePath, $index, $login, $apiKey);
 
     $this->field  = array();
@@ -54,7 +55,8 @@ class OssSearchDocument extends OssSearchAbstract {
   /**
    * @return OssSearchDocument
    */
-  public function field($fields) {
+  public function field($fields)
+  {
     $this->field = array_unique(array_merge($this->field, (array) $fields));
 
     return $this;
@@ -63,7 +65,8 @@ class OssSearchDocument extends OssSearchAbstract {
   /**
    * @return OssSearchDocument
    */
-  public function uniqueKey($uniqueKey = NULL) {
+  public function uniqueKey($uniqueKey = NULL)
+  {
     $this->uniqueKeys[] = $uniqueKey;
 
     return $this;
@@ -72,14 +75,15 @@ class OssSearchDocument extends OssSearchAbstract {
   /**
    * @return OssSearchDocument
    */
-  public function docId($docId = NULL) {
+  public function docId($docId = NULL)
+  {
     $this->docIds[] = $docId;
 
     return $this;
   }
 
-  protected function addParams($queryChunks = NULL) {
-
+  protected function addParams($queryChunks = NULL)
+  {
     $queryChunks = parent::addParams($queryChunks);
 
     // Fields

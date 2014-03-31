@@ -22,7 +22,8 @@
 
 namespace Opensearchserver;
 
-abstract class OssAbstract {
+abstract class OssAbstract
+{
 
   protected $enginePath;
   protected $index;
@@ -33,7 +34,8 @@ abstract class OssAbstract {
   protected $user = '';
   protected $groups = array();
 
-  public function init($enginePath, $index = NULL, $login = NULL, $apiKey = NULL) {
+  public function init($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  {
     $this->lastQueryString = null;
     $this->enginePath = $enginePath;
     $this->index = $index;
@@ -46,7 +48,8 @@ abstract class OssAbstract {
    * @param $apiKey string
    * If $login is empty, credential is removed
    */
-  public function credential($login, $apiKey) {
+  public function credential($login, $apiKey)
+  {
     // Remove credentials
     if (empty($login)) {
       $this->login  = NULL;
@@ -80,8 +83,8 @@ abstract class OssAbstract {
    *   "arg2" => "value2"
    * )
    */
-  protected function getQueryURL($apiCall, $options = NULL) {
-
+  protected function getQueryURL($apiCall, $options = NULL)
+  {
     $path = $this->enginePath . '/' . $apiCall;
     $chunks = array();
 
@@ -105,16 +108,13 @@ abstract class OssAbstract {
     }
 
     //User
-    if(!empty($this->user))
-    {
+    if(!empty($this->user)) {
         $chunks[] = 'user='.urlencode($this->user);
     }
 
     //Groups
-    if(!empty($this->groups))
-    {
-        foreach($this->groups as $group)
-        {
+    if(!empty($this->groups)) {
+        foreach($this->groups as $group) {
             $chunks[] = 'group='.urlencode($group);
         }
     }
@@ -124,14 +124,15 @@ abstract class OssAbstract {
     return $path;
   }
 
-  public function setUser($value) {
+  public function setUser($value)
+  {
         $this->user = $value;
   }
-  public function setGroups($groups) {
+  public function setGroups($groups)
+  {
         if (!is_array($groups)) {
             $this->groups = array($groups);
-        }
-        else {
+        } else {
             $this->groups = $groups;
         }
   }
@@ -139,14 +140,16 @@ abstract class OssAbstract {
   /**
    * @return string The parsed engine path
    */
-  public function getEnginePath() {
+  public function getEnginePath()
+  {
     return $this->enginePath;
   }
 
   /**
    * @return string The parsed index (NULL if not specified)
    */
-  public function getIndex() {
+  public function getIndex()
+  {
     return $this->index;
   }
 
@@ -160,8 +163,8 @@ abstract class OssAbstract {
    *
    * Will fail if more than 16 HTTP redirection
    */
-  protected function queryServer($url, $data = NULL, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT) {
-
+  protected function queryServer($url, $data = NULL, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT)
+  {
     $this->lastQueryString = $url;
     // Use CURL to post the data
 
@@ -212,8 +215,7 @@ abstract class OssAbstract {
     if ($this->isOSSError($content)) {
       if (class_exists('OssException')) {
         throw new OssException($content);
-      }
-      else {
+      } else {
           throw new \Exception($content);
       }
       trigger_error('OSS Returned an error: "' . trim(strip_tags($content)) . '"', E_USER_WARNING);
@@ -224,11 +226,13 @@ abstract class OssAbstract {
     return $content;
   }
 
-  public function getLastQueryString() {
+  public function getLastQueryString()
+  {
     return $this->lastQueryString;
   }
 
-  protected function queryServerTXT($path, $params = null, $data = null, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT) {
+  protected function queryServerTXT($path, $params = null, $data = null, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT)
+  {
     return $this->queryServer($this->getQueryURL($path, $params), $data, $connexionTimeout, $timeout);
   }
 
@@ -241,7 +245,8 @@ abstract class OssAbstract {
    * @return SimpleXMLElement
    * Use queryServer to retrieve an XML and check its validity
    */
-  protected function queryServerXML($path, $params, $data = NULL, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT) {
+  protected function queryServerXML($path, $params, $data = NULL, $connexionTimeout = OssApi::DEFAULT_CONNEXION_TIMEOUT, $timeout = OssApi::DEFAULT_QUERY_TIMEOUT)
+  {
     $result = $this->queryServerTXT($path, $params, $data, $connexionTimeout, $timeout);
     if ($result === FALSE) {
       return FALSE;
@@ -263,7 +268,8 @@ abstract class OssAbstract {
    * @param $xml string, DOMDocument or SimpleXMLElement
    * @return boolean True if error success
    */
-  protected function isOSSError($xml) {
+  protected function isOSSError($xml)
+  {
     // Cast $xml param to be a SimpleXMLElement
     // If we don't find the word 'Error' in the xml string, exit immediatly
     if ($xml instanceof \SimpleXMLElement) {
@@ -271,14 +277,12 @@ abstract class OssAbstract {
         return FALSE;
       }
       $xmlDoc = $xml;
-    }
-    elseif ($xml instanceof \DOMDocument) {
+    } elseif ($xml instanceof \DOMDocument) {
       $xmlDoc = simplexml_import_dom($xml);
       if (strpos((string) $xmlDoc, 'Error') === FALSE) {
         return FALSE;
       }
-    }
-    else {
+    } else {
       if (strpos((string) $xml, 'Error') === FALSE) {
         return FALSE;
       }

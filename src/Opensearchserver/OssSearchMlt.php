@@ -30,8 +30,8 @@ namespace Opensearchserver;
 /**
  * @package OpenSearchServer
 */
-class OssSearchMlt extends OssSearchAbstract {
-
+class OssSearchMlt extends OssSearchAbstract
+{
   protected $start;
   protected $rows;
   protected $lang;
@@ -52,7 +52,8 @@ class OssSearchMlt extends OssSearchAbstract {
    * @param $index The index name
    * @return OssSearchMlt
    */
-  public function __construct($enginePath, $index = NULL, $rows = NULL, $start = NULL, $login = NULL, $apiKey = NULL) {
+  public function __construct($enginePath, $index = NULL, $rows = NULL, $start = NULL, $login = NULL, $apiKey = NULL)
+  {
     parent::__construct($enginePath, $index, $login, $apiKey);
 
     $this->rows($rows);
@@ -75,7 +76,8 @@ class OssSearchMlt extends OssSearchAbstract {
   /**
    * @return OssSearchMlt
    */
-  public function start($start = NULL) {
+  public function start($start = NULL)
+  {
     $this->start = $start;
 
     return $this;
@@ -84,7 +86,8 @@ class OssSearchMlt extends OssSearchAbstract {
   /**
    * @return OssSearchMlt
    */
-  public function rows($rows = NULL) {
+  public function rows($rows = NULL)
+  {
     $this->rows = $rows;
 
     return $this;
@@ -95,7 +98,8 @@ class OssSearchMlt extends OssSearchAbstract {
    * @param string $query string
    * @return OssSearchMlt
    */
-  public function docQuery($docQuery = NULL) {
+  public function docQuery($docQuery = NULL)
+  {
     $this->docQuery = $docQuery;
 
     return $this;
@@ -106,7 +110,8 @@ class OssSearchMlt extends OssSearchAbstract {
    * @param string $likeText
    * @return OssSearchMlt
    */
-  public function likeText($likeText = NULL) {
+  public function likeText($likeText = NULL)
+  {
     $this->likeText = $likeText;
 
     return $this;
@@ -115,7 +120,8 @@ class OssSearchMlt extends OssSearchAbstract {
   /**
    * @return OssSearchMlt
    */
-  public function filter($filter = NULL) {
+  public function filter($filter = NULL)
+  {
     $this->filter[] = $filter;
 
     return $this;
@@ -124,7 +130,8 @@ class OssSearchMlt extends OssSearchAbstract {
   /**
    * @return OssSearchMlt
    */
-  public function lang($lang = NULL) {
+  public function lang($lang = NULL)
+  {
     $this->lang = $lang;
 
     return $this;
@@ -133,7 +140,8 @@ class OssSearchMlt extends OssSearchAbstract {
   /**
    * @return OssSearchMlt
    */
-  public function analyzer($analyzer = NULL) {
+  public function analyzer($analyzer = NULL)
+  {
     $this->analyzer = $analyzer;
 
     return $this;
@@ -142,7 +150,8 @@ class OssSearchMlt extends OssSearchAbstract {
   /**
    * @return OssSearchMlt
    */
-  public function field($fields = NULL) {
+  public function field($fields = NULL)
+  {
     if ($fields != NULL) {
       $this->field = array_unique(array_merge($this->field, (array) $fields));
     }
@@ -154,7 +163,8 @@ class OssSearchMlt extends OssSearchAbstract {
    * @param int $minWordLen
    * @return OssSearchMlt
    */
-  public function minWordLen($minWordLen = NULL) {
+  public function minWordLen($minWordLen = NULL)
+  {
     $this->minWordLen = $minWordLen;
 
     return $this;
@@ -164,7 +174,8 @@ class OssSearchMlt extends OssSearchAbstract {
    * @param int $maxWordLen
    * @return OssSearchMlt
    */
-  public function maxWordLen($maxWordLen = NULL) {
+  public function maxWordLen($maxWordLen = NULL)
+  {
     $this->maxWordLen = $maxWordLen;
 
     return $this;
@@ -174,7 +185,8 @@ class OssSearchMlt extends OssSearchAbstract {
    * @param int $minDocFreq
    * @return OssSearchMlt
    */
-  public function minDocFreq($minDocFreq = NULL) {
+  public function minDocFreq($minDocFreq = NULL)
+  {
     $this->minDocFreq = $minDocFreq;
 
     return $this;
@@ -184,7 +196,8 @@ class OssSearchMlt extends OssSearchAbstract {
    * @param int $minTermFreq
    * @return OssSearchMlt
    */
-  public function minTermFreq($minTermFreq = NULL) {
+  public function minTermFreq($minTermFreq = NULL)
+  {
     $this->minTermFreq = $minTermFreq;
 
     return $this;
@@ -194,7 +207,8 @@ class OssSearchMlt extends OssSearchAbstract {
    * @param int $maxNumTokensParsed
    * @return OssSearchMlt
    */
-  public function maxNumTokensParsed($maxNumTokensParsed = NULL) {
+  public function maxNumTokensParsed($maxNumTokensParsed = NULL)
+  {
     $this->maxNumTokensParsed = $maxNumTokensParsed;
 
     return $this;
@@ -205,7 +219,8 @@ class OssSearchMlt extends OssSearchAbstract {
    * @param string $stopWords
    * @return OssSearchMlt
    */
-  public function stopWords($stopWords = NULL) {
+  public function stopWords($stopWords = NULL)
+  {
     $this->stopWords = $stopWords;
 
     return $this;
@@ -215,8 +230,8 @@ class OssSearchMlt extends OssSearchAbstract {
    *
    * @param array $queryChunks
    */
-  protected function addParams($queryChunks = NULL) {
-
+  protected function addParams($queryChunks = NULL)
+  {
     $queryChunks = parent::addParams($queryChunks);
 
     if (!empty($this->lang)) {

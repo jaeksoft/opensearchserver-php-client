@@ -36,8 +36,8 @@ if (!extension_loaded('SimpleXML')) {
  * @package OpenSearchServer
  */
 
-class OssApi extends OssAbstract {
-
+class OssApi extends OssAbstract
+{
   const API_UPDATE   = 'update';
   const API_DELETE   = 'delete';
   const API_OPTIMIZE = 'optimize';
@@ -86,7 +86,8 @@ class OssApi extends OssAbstract {
    * @param $index The index name
    * @return OssApi
   */
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL) {
+  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  {
     $this->init($enginePath, $index, $login, $apiKey);
   }
 
@@ -97,7 +98,8 @@ class OssApi extends OssAbstract {
    * This method require the file OssSearch.class.php. It'll be included if the OssSearch class don't exist.
    * It's expected to be in the same directory as OssApi.class.php.
    */
-  public function select() {
+  public function select()
+  {
     return new OssSearch($this->enginePath, $this->index, NULL, NULL, $this->login, $this->apiKey);
   }
 
@@ -106,7 +108,8 @@ class OssApi extends OssAbstract {
    * @return OssSearch
    * @deprecated Use OssApi::select
    */
-  public function search() {
+  public function search()
+  {
     return $this->select();
   }
 
@@ -114,7 +117,8 @@ class OssApi extends OssAbstract {
    * Returns an OssAutocompletion instance
    * @return OssAutocompletion
    */
-  public function autocomplete() {
+  public function autocomplete()
+  {
     return new OssAutocompletion($this->enginePath, $this->index, $this->login, $this->apiKey);
   }
 
@@ -122,7 +126,8 @@ class OssApi extends OssAbstract {
    * Returns an OssSearchSpellCheck instance
    * @return OssSearchSpellCheck
    */
-  public function searchSpellCheck() {
+  public function searchSpellCheck()
+  {
     return new OssSearchSpellCheck($this->enginePath, $this->index, $this->login, $this->apiKey);
   }
 
@@ -132,7 +137,8 @@ class OssApi extends OssAbstract {
    * see OSS Wiki [Web API optimize] documentation before using this method
    * FIXME Provide a link to the OSS WiKi
    */
-  public function optimize() {
+  public function optimize()
+  {
     $return = $this->queryServerTXT(OssApi::API_OPTIMIZE);
 
     return ($return !== FALSE);
@@ -145,7 +151,8 @@ class OssApi extends OssAbstract {
    * see OSS Wiki [Web API reload] documentation before using this method
    * FIXME See why API have been removed
    */
-  public function reload() {
+  public function reload()
+  {
     $return = $this->queryServerTXT(OssApi::API_RELOAD);
 
     return ($return !== FALSE);
@@ -157,7 +164,8 @@ class OssApi extends OssAbstract {
    * param boolean $deleteAll The provided patterns will replace the patterns already in the search engine
    * return boolean True on success
    */
-  public function pattern($patterns, $deleteAll = FALSE) {
+  public function pattern($patterns, $deleteAll = FALSE)
+  {
     if (is_array($patterns)) {
       $patterns = implode("\n", $patterns);
     }
@@ -173,17 +181,15 @@ class OssApi extends OssAbstract {
    *                   magic method
    * @return boolean True on success
    */
-  public function update($xml) {
-
+  public function update($xml)
+  {
     // Cast $xml to a string
     if (!is_string($xml)) {
       if ($xml instanceof DOMDocument) {
         $xml = $xml->saveXML();
-      }
-      elseif ($xml instanceof SimpleXMLElement) {
+      } elseif ($xml instanceof SimpleXMLElement) {
         $xml = $xml->asXML();
-      }
-      elseif (is_object($xml)) {
+      } elseif (is_object($xml)) {
         if (method_exists($xml, '__toString') || $xml instanceof SimpleXMLElement) {
           $xml = $xml->__toString();
         }
@@ -209,7 +215,8 @@ class OssApi extends OssAbstract {
    * Return the list of indexes usable by the current credential
    * @return string[]
    */
-  public function indexList() {
+  public function indexList()
+  {
     $ossSchema = new OssSchema($this->enginePath, $this->index, $this->login, $this->apiKey);
 
     return $ossSchema->indexList();
@@ -221,7 +228,8 @@ class OssApi extends OssAbstract {
    * @param string $template Optional. The name of the template to use
    * @return boolean
    */
-  public function createIndex($index, $template = FALSE) {
+  public function createIndex($index, $template = FALSE)
+  {
     $ossSchema = new OssSchema($this->enginePath, $this->index, $this->login, $this->apiKey);
 
     return $ossSchema->createIndex($index, $template);
@@ -231,7 +239,8 @@ class OssApi extends OssAbstract {
    * Delete an index
    * @param string $index The name of the index to delete
    */
-  public function deleteIndex($index) {
+  public function deleteIndex($index)
+  {
     $ossSchema = new OssSchema($this->enginePath, $this->index, $this->login, $this->apiKey);
 
     return $ossSchema->deleteIndex($index);
@@ -243,7 +252,8 @@ class OssApi extends OssAbstract {
    * The schema is provided by the OSS engine as an xml. This xml is actualy the complete configuration of the schema.
    * If you want to manipulate the schema, pass it to OSS_Schema::factoryFromXML(...) for easier access.
    */
-  public function getSchema() {
+  public function getSchema()
+  {
     $ossSchema = new OssSchema($this->enginePath, $this->index, $this->login, $this->apiKey);
 
     return $ossSchema->getSchema();
@@ -260,7 +270,8 @@ class OssApi extends OssAbstract {
    * @param string $unique
    * @return boolean
    */
-  public function setField($name, $analyzer = NULL, $stored = NULL, $indexed = NULL, $termVector = NULL, $default = NULL, $unique = NULL) {
+  public function setField($name, $analyzer = NULL, $stored = NULL, $indexed = NULL, $termVector = NULL, $default = NULL, $unique = NULL)
+  {
     $ossSchema = new OssSchema($this->enginePath, $this->index, $this->login, $this->apiKey);
 
     return $ossSchema->setField($name, $analyzer, $stored, $indexed, $termVector, $default, $unique);
@@ -271,7 +282,8 @@ class OssApi extends OssAbstract {
    * return Array<String>
    * see OssApi::$supportedLanguages
    */
-  public static function supportedLanguages() {
+  public static function supportedLanguages()
+  {
     return OssApi::$supportedLanguages;
   }
 
@@ -279,7 +291,8 @@ class OssApi extends OssAbstract {
    * Return the language constant from a 2 characters language code
    * @param string $twoCharsLang Two characters language
    */
-  public static function getLanguage($twoCharsLang) {
+  public static function getLanguage($twoCharsLang)
+  {
     $lang = OssApi::$supportedLanguages[mb_strtolower($twoCharsLang)];
     if ($lang == NULL) {
       return OssApi::$supportedLanguages[''];
@@ -293,7 +306,8 @@ class OssApi extends OssAbstract {
    * param string $string
    * return string
    */
-  public static function escape($string) {
+  public static function escape($string)
+  {
     static $escaping = array(
       array("+",   "-",   "&&",   "||",  "!",  "(",  ")",  "{",  "}",  "[",  "]",  "^", "\"",  "~",  "*",  "?",  ":", '\\'),
       array('\+', '\-', '\&\&', '\|\|', '\!', '\(', '\)', '\{', '\}', '\[', '\]', '\^', '\"', '\~', '\*', '\?', '\:', '\\\\')
@@ -307,8 +321,8 @@ class OssApi extends OssAbstract {
    * @param string $string
    * @return string
    */
-  public static function cleanUTF8($string, $replacement = '') {
-
+  public static function cleanUTF8($string, $replacement = '')
+  {
     static $remove = array(
       "\x00", "\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07",
       "\x08",                 "\x0B", "\x0C",         "0x0E", "\x0F",

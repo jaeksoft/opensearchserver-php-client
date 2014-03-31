@@ -27,8 +27,8 @@
 
 namespace Opensearchserver;
 
-class OssSearchTemplate extends OssAbstract {
-
+class OssSearchTemplate extends OssAbstract
+{
   const API_SEARCH_TEMPLATE='searchtemplate';
   const API_SEARCH_TEMPLATE_CREATE='create';
   const API_SEARCH_TEMPLATE_SETRETURNFIELD='setreturnfield';
@@ -37,7 +37,8 @@ class OssSearchTemplate extends OssAbstract {
   protected $query;
   protected $template;
 
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL) {
+  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  {
     $this->init($enginePath, $index, $login, $apiKey);
   }
 
@@ -50,7 +51,8 @@ class OssSearchTemplate extends OssAbstract {
    * @param int $qtslop Phrase slop
    * @param string $qtlang Default language
    */
-  public function createSearchTemplate($qtname, $qtquery = NULL, $qtoperator = NULL, $qtrows = NULL, $qtslop = NULL, $qtlang = NULL) {
+  public function createSearchTemplate($qtname, $qtquery = NULL, $qtoperator = NULL, $qtrows = NULL, $qtslop = NULL, $qtlang = NULL)
+  {
     $params = array("qt.name" => $qtname);
     if ($qtquery) {
       $params['qt.query'] = $qtquery;
@@ -86,7 +88,8 @@ class OssSearchTemplate extends OssAbstract {
    * @param string $qtlang
    * @param string $qtalgorithm LevensteinDistance, NGramDistance or JaroWinklerDistance
    */
-  public function createSpellCheckTemplate($qtname, $qtquery = NULL, $qtsuggestions = NULL, $qtfield = NULL, $qtscore = NULL, $qtlang = NULL, $qtalgorithm = NULL) {
+  public function createSpellCheckTemplate($qtname, $qtquery = NULL, $qtsuggestions = NULL, $qtfield = NULL, $qtscore = NULL, $qtlang = NULL, $qtalgorithm = NULL)
+  {
     $params = array("qt.name" => $qtname);
     $params['qt.type'] = 'SpellCheckRequest';
     if ($qtquery) {
@@ -114,7 +117,8 @@ class OssSearchTemplate extends OssAbstract {
     return $return === FALSE ? FALSE : TRUE;
   }
 
-  public function setReturnField($qtname, $returnField) {
+  public function setReturnField($qtname, $returnField)
+  {
     $params = array("qt.name" => $qtname);
     $params['returnfield']=$returnField;
     $params['cmd'] = OssSearchTemplate::API_SEARCH_TEMPLATE_SETRETURNFIELD;
@@ -123,7 +127,8 @@ class OssSearchTemplate extends OssAbstract {
     return $return === FALSE ? FALSE : TRUE;
   }
 
-  public function setSnippetField($qtname, $snippetField, $maxSnippetSize=NULL, $tag=NULL, $maxSnippetNo=NULL, $fragmenter=NULL) {
+  public function setSnippetField($qtname, $snippetField, $maxSnippetSize=NULL, $tag=NULL, $maxSnippetNo=NULL, $fragmenter=NULL)
+  {
     $params = array("qt.name" => $qtname);
     if ($maxSnippetSize) {
       $params['qt.maxSnippetSize'] = $maxSnippetSize;

@@ -32,8 +32,8 @@ namespace Opensearchserver;
  * FIXME Complete this documentations
  * FIXME Clean this class and use facilities provided by OssApi
 */
-class OssSearchSpellCheck extends OssSearchAbstract {
-
+class OssSearchSpellCheck extends OssSearchAbstract
+{
   protected $query;
 
   /**
@@ -41,7 +41,8 @@ class OssSearchSpellCheck extends OssSearchAbstract {
    * @param $index The index name
    * @return OssSearchSpellCheck
    */
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL) {
+  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  {
     parent::__construct($enginePath, $index, $login, $apiKey);
     $this->query  = NULL;
   }
@@ -51,7 +52,8 @@ class OssSearchSpellCheck extends OssSearchAbstract {
    * @param $query string
    * @return OssSearch
    */
-  public function query($query = NULL) {
+  public function query($query = NULL)
+  {
     $this->query = $query;
 
     return $this;
@@ -61,7 +63,8 @@ class OssSearchSpellCheck extends OssSearchAbstract {
    * @param array $queryChunks
    * @return array
    */
-  protected function addParams($queryChunks = NULL) {
+  protected function addParams($queryChunks = NULL)
+  {
     $queryChunks = parent::addParams($queryChunks);
     $queryChunks[] = 'q=' . urlencode($this->query);
 

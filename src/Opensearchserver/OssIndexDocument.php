@@ -31,13 +31,14 @@ namespace Opensearchserver;
  * @author pmercier <pmercier@open-search-server.com>
  * @package OpenSearchServer
  */
-class OssIndexDocument extends ArrayObject {
-
+class OssIndexDocument extends ArrayObject
+{
   /**
    * @param string $language ISO 639-1 format (en, de, fr, ...)
    * @return OssIndexDocument_Document
    */
-  public function newDocument($language = '') {
+  public function newDocument($language = '')
+  {
     $document = new OssIndexDocument_Document($this, $language);
     $this->append($document);
 
@@ -48,7 +49,8 @@ class OssIndexDocument extends ArrayObject {
    * @param mixed $offset
    * @param OssIndexDocument_Document $document
    */
-  public function offsetSet($offset, $document) {
+  public function offsetSet($offset, $document)
+  {
     if (!$document instanceof OssIndexDocument_Document) {
       throw new UnexpectedValueException("OssIndexDocument_Document was expected.");
     }
@@ -58,7 +60,8 @@ class OssIndexDocument extends ArrayObject {
   /**
    * @param OssIndexDocument_Document $document
    */
-  public function append($document) {
+  public function append($document)
+  {
     if (!$document instanceof OssIndexDocument_Document) {
       throw new UnexpectedValueException("OssIndexDocument_Document was expected.");
     }
@@ -68,11 +71,13 @@ class OssIndexDocument extends ArrayObject {
   /**
    * @return string XML
    */
-  public function toXML() {
+  public function toXML()
+  {
     return $this->__toString();
   }
 
-  public function __toString() {
+  public function __toString()
+  {
     $return  = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<index>";
     foreach ($this as $document) {
       $return .= $document->__toString();
@@ -87,8 +92,8 @@ class OssIndexDocument extends ArrayObject {
  * @author pmercier <pmercier@open-search-server.com>
  * @package OpenSearchServer
  */
-class OssIndexDocument_Document extends ArrayObject {
-
+class OssIndexDocument_Document extends ArrayObject
+{
   /** @var OssIndexDocument */
   private $indexDocument;
 
@@ -106,7 +111,8 @@ class OssIndexDocument_Document extends ArrayObject {
    * @param string $language ISO 639-1 format (en, de, fr, ...)
    * @return OSS_DocumentNode
   */
-  public function __construct(OssIndexDocument $indexDocument, $language = '') {
+  public function __construct(OssIndexDocument $indexDocument, $language = '')
+  {
     $this->indexDocument = $indexDocument;
     $this->setLanguage($language);
   }
@@ -117,7 +123,8 @@ class OssIndexDocument_Document extends ArrayObject {
    * @return boolean True if language is supported. Null if language was unset.
    * @throw UnexpectedValueException When language is not supported
    */
-  public function setLanguage($language) {
+  public function setLanguage($language)
+  {
     static $supportedLanguages = NULL;
 
     if ($language === NULL) {
@@ -132,8 +139,7 @@ class OssIndexDocument_Document extends ArrayObject {
 
     if (isset($supportedLanguages[$language])) {
       $this->language = (string) $language;
-    }
-    else {
+    } else {
       if (class_exists('OssException')) {
         throw new UnexpectedValueException('Language "' . $language . '" is not supported.');
       }
@@ -149,7 +155,8 @@ class OssIndexDocument_Document extends ArrayObject {
    * Return the defined language of the document
    * @return string ISO 639-1 format (en, de, fr, ...)
    */
-  public function getLanguage() {
+  public function getLanguage()
+  {
     return $this->language;
   }
 
@@ -160,7 +167,8 @@ class OssIndexDocument_Document extends ArrayObject {
    * @return OssIndexDocument_Field
    * Note: If the field by that name already exist, it'll be returned
    */
-  public function newField($name, $values = NULL) {
+  public function newField($name, $values = NULL)
+  {
     if (isset($this->fieldByName[$name])) {
       return $this->fieldByName[$name];
     }
@@ -178,7 +186,8 @@ class OssIndexDocument_Document extends ArrayObject {
    * @param URI $uri The URL to the file to index
    * @param string $faultTolerant
    */
-  public function newBinaryUrl($uri, $faultTolerant = true) {
+  public function newBinaryUrl($uri, $faultTolerant = true)
+  {
     $this->binaries[] = new OssIndexDocument_BinaryUrl($uri, $faultTolerant);
   }
 
@@ -187,7 +196,8 @@ class OssIndexDocument_Document extends ArrayObject {
    * @param string $name The name of the field to retrieve
    * @return OssIndexDocument_Field If field don't exist, NULL is returned
    */
-  public function getField($name) {
+  public function getField($name)
+  {
     if (isset($this->fieldByName[$name])) {
       return $this->fieldByName[$name];
     }
@@ -199,7 +209,8 @@ class OssIndexDocument_Document extends ArrayObject {
    * @param mixed $offset
    * @param OssIndexDocument_Field $field
    */
-  public function offsetSet($offset, $field) {
+  public function offsetSet($offset, $field)
+  {
     if (!$field instanceof OssIndexDocument_Field) {
       throw new UnexpectedValueException("OssIndexDocument_Field was expected.");
     }
@@ -210,7 +221,8 @@ class OssIndexDocument_Document extends ArrayObject {
   /**
    * @param OssIndexDocument_Field $field
    */
-  public function append($field) {
+  public function append($field)
+  {
     if (!$field instanceof OssIndexDocument_Field) {
       throw new UnexpectedValueException("OssIndexDocument_Field was expected.");
     }
@@ -220,14 +232,14 @@ class OssIndexDocument_Document extends ArrayObject {
       foreach ($field as $value) {
         $storedField->append($value);
       }
-    }
-    else {
+    } else {
       parent::append($field);
       $this->fieldByName[$field->getName()] = $field;
     }
   }
 
-  public function __toString() {
+  public function __toString()
+  {
     $data = '';
     foreach ($this as $field) {
       $field = $field->__toString();
@@ -255,8 +267,8 @@ class OssIndexDocument_Document extends ArrayObject {
  * @author pmercier <pmercier@open-search-server.com>
  * @package OpenSearchServer
  */
-class OssIndexDocument_Field extends ArrayObject {
-
+class OssIndexDocument_Field extends ArrayObject
+{
   /** @var OssIndexDocument_Document */
   protected $document;
 
@@ -268,7 +280,8 @@ class OssIndexDocument_Field extends ArrayObject {
    * @param string $name The name of the field
    * @return OssIndexDocument_Field
    */
-  public function __construct(OssIndexDocument_Document $document, $name) {
+  public function __construct(OssIndexDocument_Document $document, $name)
+  {
     $this->document = $document;
     $this->name = $name;
   }
@@ -277,7 +290,8 @@ class OssIndexDocument_Field extends ArrayObject {
    * Return the name of the field
    * @return string
    */
-  public function getName() {
+  public function getName()
+  {
     return $this->name;
   }
 
@@ -287,7 +301,8 @@ class OssIndexDocument_Field extends ArrayObject {
    * @param boolean $removeTag Ask the indexator to remove the tags
    * @return OssIndexDocument_Value
    */
-  public function newValue($value, $removeTag = FALSE) {
+  public function newValue($value, $removeTag = FALSE)
+  {
     $value = new OssIndexDocument_Value($this, $value);
     $value->setRemoveTag($removeTag);
     $this->append($value);
@@ -299,7 +314,8 @@ class OssIndexDocument_Field extends ArrayObject {
    * Add one or many values to the field
    * @param mixed $values The string to append. Can be an Array<String>
    */
-  public function addValues($values) {
+  public function addValues($values)
+  {
     foreach ((array) $values as $value) {
       $this->append(new OssIndexDocument_Value($this, $value));
     }
@@ -309,7 +325,8 @@ class OssIndexDocument_Field extends ArrayObject {
    * @param mixed $offset
    * @param OssIndexDocument_Value $value
    */
-  public function offsetSet($offset, $value) {
+  public function offsetSet($offset, $value)
+  {
     if (!$value instanceof OssIndexDocument_Value) {
       throw new UnexpectedValueException("OssIndexDocument_Value was expected.");
     }
@@ -320,14 +337,16 @@ class OssIndexDocument_Field extends ArrayObject {
    * @param mixed $offset
    * @param OssIndexDocument_Value $value
    */
-  public function append($value) {
+  public function append($value)
+  {
     if (!$value instanceof OssIndexDocument_Value) {
       throw new UnexpectedValueException("OssIndexDocument_Value was expected.");
     }
     parent::append($value);
   }
 
-  public function __toString() {
+  public function __toString()
+  {
     $return = '';
     foreach ($this as $value) {
       $value = $value->__toString();
@@ -348,8 +367,8 @@ class OssIndexDocument_Field extends ArrayObject {
  * @author pmercier <pmercier@open-search-server.com>
  * @package OpenSearchServer
  */
-class OssIndexDocument_Value {
-
+class OssIndexDocument_Value
+{
   /** @var string */
   private $field;
 
@@ -364,7 +383,8 @@ class OssIndexDocument_Value {
    * @param string $value The value
    * @return OssIndexDocument_Value
    */
-  public function __construct(OssIndexDocument_Field $field, $value) {
+  public function __construct(OssIndexDocument_Field $field, $value)
+  {
     $this->field = $field;
     $this->value = (string) $value;
   }
@@ -373,7 +393,8 @@ class OssIndexDocument_Value {
    * Set the value
    * @param string $value The value
    */
-  public function setValue($value) {
+  public function setValue($value)
+  {
     $this->value = (string) $value;
   }
 
@@ -381,7 +402,8 @@ class OssIndexDocument_Value {
    * Retrieve the value
    * @return string
    */
-  public function getValue() {
+  public function getValue()
+  {
     return $this->value;
   }
 
@@ -389,18 +411,21 @@ class OssIndexDocument_Value {
    *  Ask the indexator to remove the tags
    * @param boolean $bool
    */
-  public function setRemoveTag($bool) {
+  public function setRemoveTag($bool)
+  {
     $this->removeTag = (bool) $bool;
   }
 
   /**
    * @return boolean
    */
-  public function getRemoveTag() {
+  public function getRemoveTag()
+  {
     return $this->removeTag;
   }
 
-  public function __toString() {
+  public function __toString()
+  {
     $data = str_replace(']]>', ']]]]><![CDATA[>', $this->value);
     if (empty($data)) {
       return NULL;
@@ -419,20 +444,22 @@ class OssIndexDocument_Value {
  * @author Emmanuel Keller
  * @package OpenSearchServer
  */
-class OssIndexDocument_BinaryUrl  {
-
+class OssIndexDocument_BinaryUrl
+{
   /**  @var The URL for retrieving the file to index */
   private $uri;
 
   /**  @var The behavior in case of error when indexing the file */
   private $faultTolerant;
 
-  public function __construct($uri, $faultTolerant = true) {
+  public function __construct($uri, $faultTolerant = true)
+  {
     $this->uri = $uri;
     $this->faultTolerant = $faultTolerant;
   }
 
-  public function __toString() {
+  public function __toString()
+  {
     return '<binary url="'.$this->uri.'" faultTolerant="'.($this->faultTolerant ? 'yes' : 'no').'"/>';
   }
 }

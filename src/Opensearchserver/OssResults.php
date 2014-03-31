@@ -32,8 +32,8 @@ if (!extension_loaded('SimpleXML')) {
  * @author philcube <egosse@open-search-server.com>
  * @package OpenSearchServer
  */
-class OssResults {
-
+class OssResults
+{
   /* @var SimpleXMLElement */
   protected $result;
   protected $resultFound;
@@ -47,7 +47,8 @@ class OssResults {
    * @param $model The list of fields
    * @return OssApi
    */
-  public function __construct(\SimpleXMLElement $result, $model = NULL) {
+  public function __construct(\SimpleXMLElement $result, $model = NULL)
+  {
     $this->result  = $result;
     $this->resultFound = (int) $this->result->result['numFound'];
     $this->resultTime = (float) $this->result->result['time'] / 1000;
@@ -55,34 +56,41 @@ class OssResults {
     $this->resultStart = (int) $this->result->result['start'];
     $this->resultCollapsedCount = (int) $this->result->result['collapsedDocCount'];
   }
-  public function getResultCollapsedCount() {
+  public function getResultCollapsedCount()
+  {
     return $this->resultCollapsedCount;
   }
 
-  public function getResult() {
+  public function getResult()
+  {
     return $this->result;
   }
 
-  public function getResultFound() {
+  public function getResultFound()
+  {
     return $this->resultFound;
   }
 
-  public function getResultTime() {
+  public function getResultTime()
+  {
     return $this->resultTime;
   }
 
-  public function getResultRows() {
+  public function getResultRows()
+  {
     return $this->resultRows;
   }
 
-  public function getResultStart() {
+  public function getResultStart()
+  {
     return $this->resultStart;
   }
 
   /**
    *  GETTER
    */
-  public function getField($position, $fieldName, $modeSnippet = FALSE, $highlightedOnly = FALSE, $joinPosition = NULL, $getMultipleValues = false) {
+  public function getField($position, $fieldName, $modeSnippet = FALSE, $highlightedOnly = FALSE, $joinPosition = NULL, $getMultipleValues = false)
+  {
     $field = NULL;
     $joinPrefix = '';
 
@@ -111,8 +119,7 @@ class OssResults {
               $tempArray[] = $elt;
           }
           $field = $tempArray;
-      }
-      elseif (isset($value[0])) {
+      } elseif (isset($value[0])) {
         $field = $value[0];
       }
     }
@@ -120,7 +127,8 @@ class OssResults {
     return $field;
   }
 
-  public function getScore($position) {
+  public function getScore($position)
+  {
     $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]');
     if (isset($doc[0]) && is_array($doc)) {
       return $doc[0]['score'];
@@ -132,7 +140,8 @@ class OssResults {
   /**
    *
    */
-  public function getFields($position, $modeSnippet = FALSE) {
+  public function getFields($position, $modeSnippet = FALSE)
+  {
     $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]');
 
     $fields = $doc->xpath('field');
@@ -157,7 +166,8 @@ class OssResults {
    * @param unknown_type $fieldName
    * @return Ambigous <multitype:, NULL>
    */
-  public function getFacet($fieldName) {
+  public function getFacet($fieldName)
+  {
     $currentFacet = isset($fieldName)? $this->result->xpath('faceting/field[@name="' . $fieldName . '"]/facet'):NULL;
     if (!isset($currentFacet) || ( isset($currentFacet) && $currentFacet === FALSE)) {
       $currentFacet = array();
@@ -170,7 +180,8 @@ class OssResults {
    *
    * @return unknown_type
    */
-  public function getFacets() {
+  public function getFacets()
+  {
     $facets = array();
     $allFacets = $this->result->xpath('faceting/field');
     foreach ($allFacets as $each) {
@@ -184,7 +195,8 @@ class OssResults {
    *
    * @return Return the spellsuggest array.
    */
-  public function getSpellSuggestions($fieldName) {
+  public function getSpellSuggestions($fieldName)
+  {
     $currentSpellCheck = isset($fieldName)? $this->result->xpath('spellcheck/field[@name="' . $fieldName . '"]/word/suggest'):NULL;
     if (!isset($currentSpellCheck) || ( isset($currentSpellCheck) && $currentSpellCheck === FALSE)) {
       $currentSpellCheck = array();
@@ -196,7 +208,8 @@ class OssResults {
    *
    * @return Return the spellsuggest terms.
    */
-  public function getSpellSuggest($fieldName) {
+  public function getSpellSuggest($fieldName)
+  {
     $spellCheckWord = isset($fieldName)? $this->result->xpath('spellcheck/field[@name="' . $fieldName . '"]/word'):NULL;
     $queryExact = '';
     if (isset($spellCheckWord) && $spellCheckWord != null) {

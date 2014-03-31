@@ -27,8 +27,8 @@
 
 namespace Opensearchserver;
 
-class OssSchema extends OssAbstract {
-
+class OssSchema extends OssAbstract
+{
   const API_SCHEMA   = 'schema';
   const API_SCHEMA_INDEX_LIST    = 'indexList';
   const API_SCHEMA_CREATE_INDEX  = 'createIndex';
@@ -37,7 +37,8 @@ class OssSchema extends OssAbstract {
   const API_SCHEMA_SET_FIELD    = "setField";
   const API_SCHEMA_DELETE_FIELD  = "deleteField";
 
-  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL) {
+  public function __construct($enginePath, $index = NULL, $login = NULL, $apiKey = NULL)
+  {
     $this->init($enginePath, $index, $login, $apiKey);
   }
 
@@ -45,7 +46,8 @@ class OssSchema extends OssAbstract {
    * Return the list of indexes usable by the current credential
    * @return string[]
    */
-  public function indexList() {
+  public function indexList()
+  {
     $params = array('cmd' => OssSchema::API_SCHEMA_INDEX_LIST);
     $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
     $indexes = array();
@@ -62,7 +64,8 @@ class OssSchema extends OssAbstract {
    * @param string $template Optional. The name of the template to use
    * @return boolean
    */
-  public function createIndex($index, $template = FALSE) {
+  public function createIndex($index, $template = FALSE)
+  {
     $params = array('index.name' => $index);
     if ($template) {
       $params['index.template'] = $template;
@@ -80,7 +83,8 @@ class OssSchema extends OssAbstract {
    * Delete an index
    * @param string $index The name of the index to delete
    */
-  public function deleteIndex($index) {
+  public function deleteIndex($index)
+  {
     $params = array('cmd' => OssSchema::API_SCHEMA_DELETE_INDEX);
     $params['index.delete.name'] = $index;
     $params['index.name'] = $index;
@@ -98,7 +102,8 @@ class OssSchema extends OssAbstract {
    * The schema is provided by the OSS engine as an xml. This xml is actualy the complete configuration of the schema.
    * If you want to manipulate the schema, pass it to OSS_Schema::factoryFromXML(...) for easier access.
    */
-  public function getSchema() {
+  public function getSchema()
+  {
     $params = array('cmd' => OssSchema::API_SCHEMA_GET_SCHEMA);
 
     return $this->queryServerXML(OssSchema::API_SCHEMA, $params);
@@ -113,7 +118,8 @@ class OssSchema extends OssAbstract {
    * @param string $termVector
    * @return boolean
    */
-  public function setField($name, $analyzer = NULL, $stored = NULL, $indexed = NULL, $termVector = NULL, $default = NULL, $unique = NULL) {
+  public function setField($name, $analyzer = NULL, $stored = NULL, $indexed = NULL, $termVector = NULL, $default = NULL, $unique = NULL)
+  {
     $params = array("field.name" => $name);
     if ($analyzer) {
       $params["field.analyzer"]   = $analyzer;
@@ -148,7 +154,8 @@ class OssSchema extends OssAbstract {
    * Delete a field
    * @param string $name The name of the field to delete
    */
-  public function deleteField($name) {
+  public function deleteField($name)
+  {
     $params = array("cmd" => OssSchema::API_SCHEMA_DELETE_FIELD);
     $params['field.name'] = $name;
     $return = $this->queryServerXML(OssSchema::API_SCHEMA, $params);
