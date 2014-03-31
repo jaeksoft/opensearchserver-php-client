@@ -273,7 +273,6 @@ class NewsFeedParser_Atom_Entry extends NewsFeedParser_Feed_Entry {
 
 }
 
-
 function indentXML($string) {
 
   function indentXML_pregCallback($matches) {

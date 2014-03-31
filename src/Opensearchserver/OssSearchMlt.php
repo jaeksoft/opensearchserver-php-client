@@ -20,7 +20,6 @@
 *  along with OpenSearchServer PHP Client.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 /**
  * @file
  * Class to access OpenSearchServer API
@@ -113,7 +112,6 @@ class OssSearchMlt extends OssSearchAbstract {
     return $this;
   }
 
-
   /**
    * @return OssSearchMlt
    */
@@ -192,7 +190,6 @@ class OssSearchMlt extends OssSearchAbstract {
     return $this;
   }
 
-
   /**
    * @param int $maxNumTokensParsed
    * @return OssSearchMlt
@@ -247,7 +244,6 @@ class OssSearchMlt extends OssSearchAbstract {
       if (empty($field)) continue;
       $queryChunks[] = 'rf=' . $field;
     }
-
 
     if ($this->likeText != NULL) {
       $queryChunks[] = 'mlt.liketext='.urlencode($this->likeText);

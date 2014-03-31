@@ -49,7 +49,6 @@ if (!class_exists('OutOfRangeException')) {
  * @package OpenSearchServer
  */
 
-
 class OssApi extends OssAbstract {
 
   const API_UPDATE   = 'update';

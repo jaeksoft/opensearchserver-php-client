@@ -20,7 +20,6 @@
 *  along with OpenSearchServer PHP Client.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 /**
  * @file
  * Class to access OpenSearchServer API
@@ -185,7 +184,6 @@ class OssSearch extends OssSearchAbstract {
 
     return $this;
   }
-
 
   /**
    * @return OssSearch

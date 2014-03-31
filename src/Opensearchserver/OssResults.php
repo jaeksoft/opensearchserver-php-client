@@ -129,7 +129,6 @@ class OssResults {
     return null;
   }
 
-
   /**
    *
    */

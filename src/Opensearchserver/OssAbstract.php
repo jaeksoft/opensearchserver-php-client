@@ -104,7 +104,6 @@ abstract class OssAbstract {
       $chunks[] = $options;
     }
 
-
     //User
     if(!empty($this->user))
     {

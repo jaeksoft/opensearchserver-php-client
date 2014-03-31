@@ -99,7 +99,6 @@ class OssPaging {
     return $this->pageBaseURI;
   }
 
-
   public function compute() {
     $this->resultFound   = ((int) $this->oss_result->result['numFound'] - (int) $this->oss_result->result['collapsedDocCount']);
     $this->resultTime    = (float) $this->oss_result->result['time'] / 1000;

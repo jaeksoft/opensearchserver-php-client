@@ -43,5 +43,4 @@ class OssDelete extends OssAbstract {
     return TRUE;
   }
 
-
 }

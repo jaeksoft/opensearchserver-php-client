@@ -373,7 +373,6 @@ class OssIndexDocument_Value {
     $this->value = (string)$value;
   }
 
-
   /**
    * Set the value
    * @param string $value The value
