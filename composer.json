@@ -1,0 +1,19 @@
+{
+   "name" : "opensearchserver/opensearchserver",
+   "description" : "PHP library for Open Search Server.",
+   "version" : "1.4",
+   "type" : "library",
+   "keywords" : ["oss","search engine","opensearchserver","search"],
+   "homepage" : "http://www.open-search-server.com/",
+   "require-dev": {
+   },
+   "license": "GPL-3.0",
+   "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Opensearchserver": "src"
+        }
+    }
+}

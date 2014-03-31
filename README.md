@@ -1,7 +1,7 @@
 OpenSearchServer PHP Client
 ===========================
 
-This API connector is intended to be used with PHP5 with any version >= 5.0.1
+This API connector is intended to be used with PHP 5 (any version >= 5.3) and [Composer](http://getcomposer.org/).
 It is based on the v1 API of OpenSearchServer.
 
 You can find more about the OSS API on the OSS WiKi
@@ -26,15 +26,26 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenSearchServer PHP Client.
 If not, see <http://www.gnu.org/licenses/>.
 
-### How to use it
+### How to install it
 
-Here is an example of code make a simple search.
-
-Put the required includes:
-```php 
-require_once(dirname(__FILE__).'/oss_api.class.php');
-require_once(dirname(__FILE__).'/oss_results.class.php');
+Add the repository information in your `composer.json` file:
+``` 
+"repositories": [
+  {
+    "type": "git",
+    "url": "https://github.com/AlexandreToyer/opensearchserver-php-client"
+  }
+],
 ```
+
+Add the require information in your `composer.json` file:
+```
+"opensearchserver/opensearchserver": "~1.4-dev"
+``` 
+
+Run `composer install` (or `php composer.phar install`).
+
+### How to use it
 
 Create an OSS_API instance:
 ```php
@@ -42,10 +53,10 @@ $oss_url = 'http://localhost:8080';
 $oss_index = 'my_index';
 $oss_login = 'my_login';
 $oss_key = '54a51de4f27cefbcb7a771335b980567f'
-$oss_api = new OssApi($oss_url, $oss_index, $oss_login, $oss_key);
+$oss_api = new \Opensearchserver\OssApi($oss_url, $oss_index, $oss_login, $oss_key);
 ```
 
-To make a search, we need an OSS_SEARCH instance:
+To make a search, we need an OssSearch instance:
 ```php
 $oss_search = $oss_api->search();
 ```
@@ -59,7 +70,7 @@ $xmlResult = $oss_search->query('open')
 
 Get the number of documents found (using OssResults class):
 ```php
-$oss_result = new OssResults($xmlResult);
+$oss_result = new \Opensearchserver\OssResults($xmlResult);
 $doc_found_number = $oss_result->getResultFound() - $oss_result->getResultCollapsedCount();
 print 'Documents found: '.$doc_found_number."\n";
 ```

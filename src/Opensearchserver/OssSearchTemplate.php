@@ -26,7 +26,7 @@
  * Class to access OpenSearchServer API
  */
 
-require_once(dirname(__FILE__).'/oss_abstract.class.php');
+namespace Opensearchserver;
 
 class OssSearchTemplate extends OssAbstract {
 
