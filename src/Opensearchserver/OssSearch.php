@@ -295,7 +295,7 @@ class OssSearch extends OssSearchAbstract {
     foreach ((array)$this->facet as $field => $options) {
       if ($options['multi']) {
         $facet = 'facet.multi=';
-      } else if ($options['multi_collapse']) {
+      } elseif ($options['multi_collapse']) {
         $facet = 'facet.multi.collapse=';
       } else {
         $facet = 'facet=';

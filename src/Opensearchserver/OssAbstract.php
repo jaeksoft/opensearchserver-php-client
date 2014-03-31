@@ -100,7 +100,7 @@ abstract class OssAbstract {
       foreach ($options as $argName => $argValue) {
         $chunks[] = $argName . "=" . urlencode($argValue);
       }
-    } else if ($options != null) {
+    } elseif ($options != null) {
       $chunks[] = $options;
     }
 
