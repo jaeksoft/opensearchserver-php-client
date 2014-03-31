@@ -69,4 +69,3 @@ class OssSearchSpellCheck extends OssSearchAbstract {
     return $queryChunks;
   }
 }
-?>

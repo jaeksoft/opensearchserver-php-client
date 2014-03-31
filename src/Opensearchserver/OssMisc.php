@@ -339,4 +339,3 @@ function beautifulXML($string) {
   return preg_replace_callback('/<[^>]+>/', "beautifulXML_pregCallback", $string);
 
 }
-?>

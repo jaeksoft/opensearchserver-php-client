@@ -201,4 +201,3 @@ class OssSearchTemplate extends OssAbstract {
   }
 
 }
-?>

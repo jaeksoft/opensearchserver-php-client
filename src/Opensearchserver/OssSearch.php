@@ -351,4 +351,3 @@ class OssSearch extends OssSearchAbstract {
     return $queryChunks;
   }
 }
-?>

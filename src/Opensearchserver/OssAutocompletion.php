@@ -83,4 +83,3 @@ class OssAutocompletion extends OssAbstract {
     return TRUE;
   }
 }
-?>

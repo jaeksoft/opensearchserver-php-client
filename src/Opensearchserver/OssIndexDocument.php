@@ -441,4 +441,3 @@ class OssIndexDocument_BinaryUrl  {
     return '<binary url="'.$this->uri.'" faultTolerant="'.($this->faultTolerant ? 'yes' : 'no').'"/>';
   }
 }
-?>
