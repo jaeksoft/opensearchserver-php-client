@@ -54,4 +54,3 @@ for ($i = 0; $i < $doc_found_number; $i++) {
   $title = $oss_result->getField($i, 'title');
   print '#'.$i.' '.$title."\n";
 }
-
