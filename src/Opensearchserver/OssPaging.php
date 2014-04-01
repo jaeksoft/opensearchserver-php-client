@@ -27,10 +27,6 @@
 
 namespace Opensearchserver;
 
-if (!extension_loaded('SimpleXML')) {
-    trigger_error("OssApi won't work whitout SimpleXML extension", E_USER_ERROR); die();
-}
-
 /**
  * Class to access OpenSearchServer API
  * @author philcube <egosse@open-search-server.com>

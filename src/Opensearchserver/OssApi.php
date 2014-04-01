@@ -22,13 +22,6 @@
 
 namespace Opensearchserver;
 
-if (!extension_loaded('curl')) {
-    trigger_error("OssApi won't work whitout curl extension", E_USER_ERROR); die();
-}
-if (!extension_loaded('SimpleXML')) {
-    trigger_error("OssApi won't work whitout SimpleXML extension", E_USER_ERROR); die();
-}
-
 /**
  * @file
  * Class to access OpenSearchServer API
