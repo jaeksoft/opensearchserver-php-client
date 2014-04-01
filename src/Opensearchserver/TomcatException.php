@@ -20,56 +20,30 @@
 *  along with OpenSearchServer PHP Client.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
- * @file
- * Class to access OpenSearchServer API
- */
-
 namespace Opensearchserver;
 
 /**
- * Open Search Server Exception
+ * Open Search Server Tomcat Exception
  * @author pmercier <pmercier@open-search-server.com>
  * @package OpenSearchServer
  * FIXME Complete this documentation
  */
-class OssException extends \RuntimeException
+class TomcatException extends \RuntimeException
 {
     private $status;
     protected $message;
 
-    public function __construct($xml)
+    public function __construct($code, $html)
     {
-        if ($xml instanceof SimpleXMLElement) {
-            $xmlDoc = $xml;
-        } elseif ($xml instanceof DOMDocument) {
-            $xmlDoc = simplexml_import_dom($xml);
+        // Tomcat don't return a valid XHTML document, so we use preg_match
+        $matches = array();
+        if (!preg_match_all('/<p>(?:(?:(?!<\/p>).)*)<\/p>/mi', $html, $matches)) {
+            $message = "Tomcat returned an unknown error.";
         } else {
-            $previous_error_level = error_reporting(0);
-            $xmlDoc = simplexml_load_string($xml);
-            error_reporting($previous_error_level);
-
-            if (!$xmlDoc) {
-                throw new \RuntimeException('The provided parameter is not a valid XML data. Please use OSSAPI::isOSSError before throwing this exception.');
-            }
+            $message = strip_tags(end($matches[0]));
+            $message = substr($message, strpos($message, ' '));
         }
 
-        $data = array();
-        foreach ($xmlDoc->entry as $entry)
-            $data[(string) $entry['key']] = (string) $entry;
-
-        $this->status = $data['Status'];
-
-        parent::__construct($data['Exception'], 0);
-
-    }
-
-    /**
-     * Return the error status from the search engine
-     * @return string
-     */
-    public function getStatus()
-    {
-        return $this->status;
+        parent::__construct($message, (int) $code);
     }
 }
