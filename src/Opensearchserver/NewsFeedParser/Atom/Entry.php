@@ -32,7 +32,7 @@ class Entry extends \Opensearchserver\NewsFeedParser\Feed\Entry
         $this->summary = (string) $xml->content;
         $this->title = $xml->title;
 
-        // Only RSSS2.0
+        // Only RSS2.0
         $this->author    = (string) $xml->author->name;
         $this->content = (string) $xml->content;
     }
