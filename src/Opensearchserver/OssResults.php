@@ -149,14 +149,14 @@ class OssResults
         $current = array();
         foreach ($fields as $field) {
             $name = (string) $field[0]['name'];
-            $current[(string) $name] = (string) $field;
+            $current[(string) $name] = trim($field);
         }
 
         if ($modeSnippet) {
             $snippets = $doc->xpath('snippet');
             foreach ($snippets as $field) {
                 $name = (string) $field[0]['name'];
-                $current[(string) $name] = (string) $field;
+                $current[(string) $name] = trim($field);
             }
         }
 
