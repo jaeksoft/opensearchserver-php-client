@@ -139,7 +139,14 @@ class OssResults
     {
         $doc = $this->result->xpath('result/doc[@pos="' . $position . '"]');
 
+        if(! isset($doc[0]))
+        {
+            throw new \Exception('Invalid doc format');
+        }
+
+        $doc = $doc[0];
         $fields = $doc->xpath('field');
+        $current = array();
         foreach ($fields as $field) {
             $name = (string) $field[0]['name'];
             $current[(string) $name] = (string) $field;
