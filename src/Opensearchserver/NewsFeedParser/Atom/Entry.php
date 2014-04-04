@@ -20,28 +20,20 @@
 *  along with OpenSearchServer PHP Client.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
- * @file
- * Class to access OpenSearchServer API
- */
+namespace Opensearchserver\NewsFeedParser\Atom;
 
-namespace Opensearchserver;
-
-class OssDelete extends OssAbstract
+class Entry extends \Opensearchserver\NewsFeedParser\Feed\Entry
 {
-    public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
+    public function __construct(\SimpleXMLElement $xml)
     {
-        $this->init($enginePath, $index, $login, $apiKey);
-    }
+        $this->id = md5((string) $xml->id);
+        $this->link = $xml->link['href'];
+        $this->published = date('Y-m-d\TH:i:sO', strtotime((string) $xml->published));
+        $this->summary = (string) $xml->content;
+        $this->title = $xml->title;
 
-    public function delete($query)
-    {
-        $params = array('q' => $query);
-        $return = $this->queryServerXML(OssApi::API_DELETE, $params);
-        if ($return === false) {
-            return false;
-        }
-
-        return true;
+        // Only RSS2.0
+        $this->author    = (string) $xml->author->name;
+        $this->content = (string) $xml->content;
     }
 }

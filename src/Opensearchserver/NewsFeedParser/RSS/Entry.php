@@ -20,28 +20,24 @@
 *  along with OpenSearchServer PHP Client.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
- * @file
- * Class to access OpenSearchServer API
- */
+namespace Opensearchserver\NewsFeedParser\RSS;
 
-namespace Opensearchserver;
-
-class OssDelete extends OssAbstract
+class Entry extends \Opensearchserver\NewsFeedParser\Feed\Entry
 {
-    public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
+    public function __construct(\SimpleXMLElement $xml)
     {
-        $this->init($enginePath, $index, $login, $apiKey);
-    }
+        $this->id = md5((string) $xml->guid);
+        $this->link = $xml->link;
+        $this->published = date('Y-m-d\TH:i:sO', strtotime((string) $xml->pubDate));
+        $this->summary = (string) $xml->description;
+        $this->title = $xml->title;
 
-    public function delete($query)
-    {
-        $params = array('q' => $query);
-        $return = $this->queryServerXML(OssApi::API_DELETE, $params);
-        if ($return === false) {
-            return false;
+        // Only RSSS2.0
+        $this->author    = (string) $xml->author;
+        if (empty($this->author)) {
+            $this->author    = $xml->children("http://purl.org/dc/elements/1.1/")->creator;
         }
+        $this->content = (string) $xml->children('http://purl.org/rss/1.0/modules/content/');
 
-        return true;
     }
 }

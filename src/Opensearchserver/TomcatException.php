@@ -20,28 +20,30 @@
 *  along with OpenSearchServer PHP Client.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
- * @file
- * Class to access OpenSearchServer API
- */
-
 namespace Opensearchserver;
 
-class OssDelete extends OssAbstract
+/**
+ * Open Search Server Tomcat Exception
+ * @author pmercier <pmercier@open-search-server.com>
+ * @package OpenSearchServer
+ * FIXME Complete this documentation
+ */
+class TomcatException extends \RuntimeException
 {
-    public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
-    {
-        $this->init($enginePath, $index, $login, $apiKey);
-    }
+    private $status;
+    protected $message;
 
-    public function delete($query)
+    public function __construct($code, $html)
     {
-        $params = array('q' => $query);
-        $return = $this->queryServerXML(OssApi::API_DELETE, $params);
-        if ($return === false) {
-            return false;
+        // Tomcat don't return a valid XHTML document, so we use preg_match
+        $matches = array();
+        if (!preg_match_all('/<p>(?:(?:(?!<\/p>).)*)<\/p>/mi', $html, $matches)) {
+            $message = "Tomcat returned an unknown error.";
+        } else {
+            $message = strip_tags(end($matches[0]));
+            $message = substr($message, strpos($message, ' '));
         }
 
-        return true;
+        parent::__construct($message, (int) $code);
     }
 }

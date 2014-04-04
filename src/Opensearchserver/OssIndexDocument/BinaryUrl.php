@@ -20,28 +20,28 @@
 *  along with OpenSearchServer PHP Client.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace Opensearchserver\OssIndexDocument;
+
 /**
- * @file
- * Class to access OpenSearchServer API
+ * @author Emmanuel Keller
+ * @package OpenSearchServer
  */
-
-namespace Opensearchserver;
-
-class OssDelete extends OssAbstract
+class BinaryUrl
 {
-    public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
+    /**    @var The URL for retrieving the file to index */
+    private $uri;
+
+    /**    @var The behavior in case of error when indexing the file */
+    private $faultTolerant;
+
+    public function __construct($uri, $faultTolerant = true)
     {
-        $this->init($enginePath, $index, $login, $apiKey);
+        $this->uri = $uri;
+        $this->faultTolerant = $faultTolerant;
     }
 
-    public function delete($query)
+    public function __toString()
     {
-        $params = array('q' => $query);
-        $return = $this->queryServerXML(OssApi::API_DELETE, $params);
-        if ($return === false) {
-            return false;
-        }
-
-        return true;
+        return '<binary url="'.$this->uri.'" faultTolerant="'.($this->faultTolerant ? 'yes' : 'no').'"/>';
     }
 }

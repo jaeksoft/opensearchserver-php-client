@@ -19,29 +19,56 @@
 *  You should have received a copy of the GNU Lesser General Public License
 *  along with OpenSearchServer PHP Client.  If not, see <http://www.gnu.org/licenses/>.
 */
+namespace Opensearchserver\NewsFeedParser\Feed;
 
-/**
- * @file
- * Class to access OpenSearchServer API
- */
-
-namespace Opensearchserver;
-
-class OssDelete extends OssAbstract
+abstract class Entry
 {
-    public function __construct($enginePath, $index = null, $login = null, $apiKey = null)
+    protected $author;
+    protected $content;
+    protected $id;
+    protected $link;
+    protected $published;
+    protected $summary;
+    protected $title;
+    protected $language;
+
+    public function getLanguage()
     {
-        $this->init($enginePath, $index, $login, $apiKey);
+        return $this->language;
     }
 
-    public function delete($query)
+    public function getAuthor()
     {
-        $params = array('q' => $query);
-        $return = $this->queryServerXML(OssApi::API_DELETE, $params);
-        if ($return === false) {
-            return false;
-        }
+        return $this->author;
+    }
 
-        return true;
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getLink()
+    {
+        return $this->link;
+    }
+
+    public function getPublished()
+    {
+        return $this->published;
+    }
+
+    public function getSummary()
+    {
+        return $this->summary;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
     }
 }
