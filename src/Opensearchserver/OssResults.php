@@ -199,9 +199,11 @@ class OssResults
 
         return $currentSpellCheck;
     }
+
     /**
      *
      * @return Return the spellsuggest terms.
+     * @deprecated Use getBestSpellSuggestion instead
      */
     public function getSpellSuggest($fieldName)
     {
@@ -214,5 +216,38 @@ class OssResults
         }
 
         return $queryExact;
+    }
+    
+    /**
+     * Return the spell suggestions for one field as array, key is suggestion and value is frequency.
+     * Array will be sorted with more frequent suggestions at the beginning.
+     * @param fieldName string Name of the field that must be used
+     */
+    public function getSpellSuggestionsArray($fieldName)
+    {
+        $suggestions = array();
+    	foreach($this->getSpellSuggestions($fieldName) as $suggestionXml)
+		{
+			$suggestionArray = (array)$suggestionXml[0];
+			$suggestions[(string)$suggestionXml] = $suggestionArray['@attributes']['freq'];
+		}
+		uasort($suggestions, function($a, $b) {
+		    if ($a == $b) {
+		        return 0;
+		    }
+		
+		    return ($a < $b) ? 1 : -1;
+		});
+		return $suggestions;
+    }
+    
+    /**
+     * Return the best suggestion for one field.
+     * @param fieldName string Name of the field that must be used
+     */
+    public function getBestSpellSuggestion($fieldName)
+    {
+		$suggestions = $this->getSpellSuggestionsArray($fieldName);
+		return (!empty($suggestions)) ? array_shift(array_keys($suggestions)) : '';
     }
 }
