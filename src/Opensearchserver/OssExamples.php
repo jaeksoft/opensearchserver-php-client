@@ -41,8 +41,8 @@ $oss_search = $oss_api->search();
 
 // Searching the keyword "open", using the search template called "search"
 $xmlResult = $oss_search->query('open')
-    ->template('search')
-    ->execute(60);
+					    ->template('search')
+					    ->execute(60);
 
 // Print the number of documents found
 $oss_result = new OssResults($xmlResult);
@@ -54,3 +54,15 @@ for ($i = 0; $i < $doc_found_number; $i++) {
     $title = $oss_result->getField($i, 'title');
     print '#'.$i.' '.$title."\n";
 }
+
+// Get some spell suggestions, using spellcheck template called "spellcheck"
+$oss_search_spellcheck = new OssSearchSpellCheck($oss_url, $oss_index, $oss_login, $oss_key);
+$xmlResult = $oss_search_spellcheck	->query('apen')
+					    			->template('spellcheck')
+					    			->execute(60);
+$oss_result = new OssResults($xmlResult);
+// Display best suggestion taken from field "content":
+print 'Best suggestion: '.$oss_result->getBestSpellSuggestion('content')."\n";
+
+// Display every suggestion and their frequencies for field "content":
+print_r($oss_result->getSpellSuggestionsArray('content'));
