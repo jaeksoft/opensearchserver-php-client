@@ -242,6 +242,22 @@ class OssResults
     }
     
     /**
+     * Return configured fieldnames for this spellcheck template
+     */
+    public function getSpellSuggestionsFieldnames()
+    {
+		$fieldnames = array();    	
+		foreach($this->result->xpath('spellcheck/field') as $xml)
+		{
+			$suggestionsArray = (array)$xml;
+			if(!empty($suggestionsArray['@attributes']['name'])) {
+				$fieldnames[] = $suggestionsArray['@attributes']['name'];
+			}
+		}
+		return $fieldnames;
+    }
+    
+    /**
      * Return the best suggestion for one field.
      * @param fieldName string Name of the field that must be used
      */
