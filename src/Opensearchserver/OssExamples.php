@@ -66,3 +66,6 @@ print 'Best suggestion: '.$oss_result->getBestSpellSuggestion('content')."\n";
 
 // Display every suggestion and their frequencies for field "content":
 print_r($oss_result->getSpellSuggestionsArray('content'));
+
+// Display every fieldnames configured in the 'spellcheck' template.
+print_r($oss_result->getSpellSuggestionsFieldnames()); 
