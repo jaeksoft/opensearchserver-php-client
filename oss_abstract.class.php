@@ -172,6 +172,7 @@ abstract class OssAbstract {
         throw new RuntimeException('CURL failed to execute on URL "' . $url . '"');
       }
       trigger_error('CURL failed to execute on URL "' . $url . '"', E_USER_WARNING);
+	  curl_close($rcurl);
       return FALSE;
     }
 
@@ -183,7 +184,8 @@ abstract class OssAbstract {
         throw new TomcatException($aResponse['http_code'], $content);
       }
       trigger_error('HTTP ERROR ' . $aResponse['http_code'] . ': "' . trim(strip_tags($content)) . '"', E_USER_WARNING);
-      return FALSE;
+	  curl_close($rcurl);
+	  return FALSE;
     }
 
     // FIXME Possible problem to identify Locked Index message. Must set a lock on an index to check this
@@ -192,9 +194,11 @@ abstract class OssAbstract {
         throw new OssException($content);
       }
       trigger_error('OSS Returned an error: "' . trim(strip_tags($content)) . '"', E_USER_WARNING);
+	  curl_close($rcurl);
       return FALSE;
     }
 
+    curl_close($rcurl);
     return $content;
   }
 
