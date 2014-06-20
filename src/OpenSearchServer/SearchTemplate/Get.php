@@ -1,12 +1,12 @@
 <?php
-namespace OpenSearchServer\Field;
+namespace OpenSearchServer\SearchTemplate;
 
 use OpenSearchServer\Request;
 
 class Get extends Request
 {
 	/**
-	 * Specify the name of field
+	 * Specify the name of search template
 	 * @param string $name
 	 * @return OpenSearchServer\Field\Create
 	 */
@@ -35,6 +35,6 @@ class Get extends Request
     	if(empty($this->options['name'])) {
     		throw new \Exception('Method "name($name)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/field/'.$this->options['name'];
+        return $this->options['index'].'/search/template/'.$this->options['name'];
     }
 }

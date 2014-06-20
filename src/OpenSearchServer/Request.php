@@ -14,6 +14,13 @@ class Request
     const METHOD_DELETE  = 'DELETE';
     const METHOD_PATCH   = 'PATCH';
     
+    /**
+     * Languages
+     */
+    const LANG_FR = 'FRENCH';
+    const LANG_EN = 'ENGLISH';
+    const LANG_DE = 'GERMAN';
+    
     /** 
      * Index templates names
      */
@@ -134,7 +141,7 @@ class Request
     
     protected function checkPathIndexNeeded() {
     	if(empty($this->options['index'])) {
-    		throw new Exception('Method "index($indexName)" must be called before submitting request.');
+    		throw new \Exception('Method "index($indexName)" must be called before submitting request.');
     	}
     }
 }

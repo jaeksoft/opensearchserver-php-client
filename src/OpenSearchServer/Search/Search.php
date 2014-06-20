@@ -3,7 +3,7 @@ namespace OpenSearchServer\Search;
 
 use OpenSearchServer\RequestJson;
 
-abstract class RequestJson extends RequestJson
+abstract class Search extends RequestJson
 {
 	/**
 	 * Set name of search template to use

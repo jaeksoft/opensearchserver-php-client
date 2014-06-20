@@ -1,14 +1,14 @@
 <?php
-namespace OpenSearchServer\Field;
+namespace OpenSearchServer\Autocompletion;
 
-use OpenSearchServer\Request;
+use OpenSearchServer\RequestJson;
 
-class Get extends Request
+class Build extends RequestJson
 {
 	/**
-	 * Specify the name of field
+	 * Specify the name of autocompletion
 	 * @param string $name
-	 * @return OpenSearchServer\Field\Create
+	 * @return OpenSearchServer\Autocompletion\Create
 	 */
 	public function name($name) {
 		$this->options['name'] = $name;
@@ -17,13 +17,13 @@ class Get extends Request
 	
 	/******************************
 	 * INHERITED METHODS OVERRIDDEN
-	 ******************************/
+	 ******************************/	
     /**
      * {@inheritdoc}
      */
     public function getMethod()
     {
-        return self::METHOD_GET;
+        return self::METHOD_PUT;
     }
     
     /**
@@ -35,6 +35,6 @@ class Get extends Request
     	if(empty($this->options['name'])) {
     		throw new \Exception('Method "name($name)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/field/'.$this->options['name'];
+        return $this->options['index'].'/autocompletion/'.$this->options['name'];
     }
 }

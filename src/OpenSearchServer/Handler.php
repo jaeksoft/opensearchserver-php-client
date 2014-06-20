@@ -104,10 +104,14 @@ class Handler
             $request->getHeaders(),
             $request->getData()
             );
-            
-        var_dump($this->browser->getLastRequest());
-
         return new Response($response);
+    }
+    
+    /**
+     * Get last request's object
+     */
+    public function getLastRequest() {
+    	return $this->browser->getLastRequest();
     }
 
 }

@@ -45,7 +45,7 @@ class SetDefaultUnique extends Request
     {
     	$this->checkPathIndexNeeded();
     	if(empty($this->parameters['default']) && empty($this->parameters['unique'])) {
-    		throw new Exception('Method "defaultField($fieldName)" or "uniqueField($fieldName)" must be called before submitting request.');
+    		throw new \Exception('Method "defaultField($fieldName)" or "uniqueField($fieldName)" must be called before submitting request.');
     	}
         return $this->options['index'].'/field';
         

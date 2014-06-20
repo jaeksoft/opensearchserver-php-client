@@ -23,8 +23,8 @@ class Put extends SearchField
 	public function getPath()
 	{
     	$this->checkPathIndexNeeded();
-		if(empty($this->options['index'])) {
-    		throw new Exception('Method "template($templateName)" must be called before submitting request.');
+		if(empty($this->options['template'])) {
+    		throw new \Exception('Method "template($templateName)" must be called before submitting request.');
     	}
         return $this->options['index'].'/search/field/'.$this->options['template'];
 	}
