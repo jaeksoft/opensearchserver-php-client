@@ -48,9 +48,6 @@ cd ossphp_sandbox
         }
     ],
     "require": {
-        "php": ">=5.3.3",
-        "kriswallsmith/buzz": ">=0.6",
-        "symfony/options-resolver": ">=2.1",
         "opensearchserver/opensearchserver": "~3.0-dev"
     }
 }   
