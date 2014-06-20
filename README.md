@@ -65,7 +65,7 @@ php composer.phar install
 ```shell
 mkdir web
 cd web
-echo '<?php include_once '../vendor/autoload.php';' > index.php
+echo "<?php include_once '../vendor/autoload.php';" > index.php
 ```
 
 * Code can now be written in file `web/index.php`. Take examples from `vendor/opensearchserver/opensearchserver/examples/oss_examples.php`.
