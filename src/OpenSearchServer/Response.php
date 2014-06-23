@@ -5,12 +5,13 @@ use Buzz\Message\Response as BuzzResponse;
 
 class Response
 {
+	protected $request;
 	protected $rawContent;
 	protected $success;
 	protected $info;
 	protected $jsonValues;
 	
-    public function __construct(BuzzResponse $response)
+    public function __construct(BuzzResponse $response, Request $request)
     {
 		$this->rawContent = $response->getContent();
 		if(!empty($this->rawContent)) {
@@ -27,6 +28,8 @@ class Response
 			}
 			$this->jsonValues = $jsonValues;
 		}
+		
+		$this->request = $request;
     }    
 
     public function getSuccess() {

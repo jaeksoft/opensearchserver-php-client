@@ -87,7 +87,7 @@ class Handler
      * @param OpenSearchServer\Request $request
      */
     private function buildUrl($request) {
-    	return $this->options['url'] . $this->options['prefix'] . $request->getPath() . '?' . http_build_query(array_merge($this->getParameters(), $request->getParameters()));
+    	return $this->options['url'] . $this->options['prefix'] . $request->getPath() . '?' . http_build_query(array_merge($this->getParameters(), $request->getParameters())) . $this->getURLStringCredentials();
     }
     
     /**
@@ -104,7 +104,29 @@ class Handler
             $request->getHeaders(),
             $request->getData()
             );
-        return new Response($response);
+            var_dump($response);
+        return new Response($response, $request);
+    }
+    
+    public function setUser($value)
+    {
+        $this->options['user'] = $value;
+    }
+    public function setGroups($groups)
+    {
+        $this->options['groups'] = array($groups);
+    }
+    
+    protected function getURLStringCredentials() {
+   		$url = '&';
+   		if(!empty($this->options['user'])) {
+   			$url .= 'user='.$this->options['user'];
+   		}
+       	if(!empty($this->options['groups'])) {
+       		foreach($this->groups as $group) {
+       			$url .= '&group='.urlencode($group);
+            }
+   		}
     }
     
     /**

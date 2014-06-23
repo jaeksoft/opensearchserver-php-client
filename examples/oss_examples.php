@@ -10,6 +10,7 @@ $oss_api = new OpenSearchServer\Handler(array('url'=>$url, 'key' => $app_key, 'l
  * ## Index\Create
  * Create index
  */
+echo '<hr/><h2>Index\Create</h2>';
 //create an empty index
 $request = new OpenSearchServer\Index\Create();
 $request->index('00__test');
@@ -29,93 +30,10 @@ $response = $oss_api->submit($request);
 var_dump($response);
 
 /**
- * ## Crawler\Web\Patterns\Exclusion\Insert
- * Insert patterns to exclude in web crawler
- */
-$request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\Insert();
-$request->index('00__test_web')
-		->pattern('http://www.exclude.com/*')
-		->patterns(array('http://www.exclude1.com/page1', 'http://www.exclude2.net/page1'));
-$response = $oss_api->submit($request);
-var_dump($response);
-
-/**
- * ## Crawler\Web\Patterns\Exclusion\GetList
- * Get list of exclusion patterns
- */
-$request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList();
-$request->index('00__test_web');
-$response = $oss_api->submit($request);
-var_dump($response);
-
-/**
- * ## Crawler\Web\Patterns\Exclusion\Delete
- * Delete some exclusion patterns
- */
-$request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\Delete();
-$request->index('00__test_web')
-		->pattern('http://www.exclude1.com/page1');
-$response = $oss_api->submit($request);
-var_dump($response);
-
-
-/**
- * ## Crawler\Web\Patterns\Exclusion\GetList
- * Get list of exclusion patterns
- */
-$request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList();
-$request->index('00__test_web');
-$response = $oss_api->submit($request);
-var_dump($response);
-
-/**
- * ## Crawler\Web\Patterns\Inclusion\Insert
- * Insert patterns to crawl with web crawler
- */
-$request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\Insert();
-$request->index('00__test_web')
-		->pattern('http://www.alexandre-toyer.fr/*')
-		->patterns(array('http://www.lemonde.fr', 'http://www.20minutes.fr/'));
-$response = $oss_api->submit($request);
-var_dump($response);
-
-/**
- * ## Crawler\Web\Patterns\Inclusion\GetList
- * Get list of inclusion patterns
- */
-$request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList();
-$request->index('00__test_web');
-$response = $oss_api->submit($request);
-var_dump($response);
-
-/**
- * ## Crawler\Web\Patterns\Inclusion\Delete
- * Delete some inclusions patterns
- */
-$request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\Delete();
-$request->index('00__test_web')
-		->patterns(array('http://www.lemonde.fr', 'http://www.20minutes.fr/'));
-$response = $oss_api->submit($request);
-var_dump($oss_api->getLastRequest());
-var_dump($response);
-
-/**
- * ## Crawler\Web\Url\Insert
- * Insert URL to crawl
- */
-$request = new OpenSearchServer\Crawler\Web\Url\Insert();
-$request->index('00__test_web')
-		->urls(array('http://www.lemonde.fr', 'http://www.20minutes.fr'));
-$response = $oss_api->submit($request);
-var_dump($oss_api->getLastRequest());
-var_dump($response);
-
-exit;
-
-/**
  * ## Document\Put
  * Add documents in index
  */
+echo '<hr/><h2>Document\Put</h2>';
 //Add document with array notation
 $request = new OpenSearchServer\Document\Put();
 $request->index('00__test_file');
@@ -165,9 +83,214 @@ var_dump($oss_api->getLastRequest());
 var_dump($response);
 
 /**
+ * ## Search\Pattern\Search
+ * Execute a Search(pattern) query
+ */
+echo '<hr/><h2>Search\Pattern\Search</h2>';
+$request = new OpenSearchServer\Search\Pattern\Search();
+$request->index('00__test_file')
+		->query('count')
+		->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10')
+		->patternSnippetQuery('title:($$) OR content:($$)')
+		->returnedFields(array('title', 'uri'))
+		->rows(4);
+$response = $oss_api->submit($request);
+var_dump($response);
+
+/**
+ * ## Search\Pattern\Put
+ * Save a Search(pattern) template
+ */
+echo '<hr/><h2>Search\Pattern\Put</h2>';
+//build request
+$request = new OpenSearchServer\Search\Pattern\Put();
+$request->index('00__test_file')
+		//set operator to use when multiple keywords
+		->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
+		//set lang of keywords
+		->lang('FRENCH')
+		//enable logging
+		->enableLog()
+		//set search pattern
+		->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10 OR url:($$)^5 OR urlSplit:($$)^5 OR urlExact:($$)^5 OR urlPhonetic:($$)^5 OR content:($$) OR contentExact:($$) OR contentPhonetic:($$) OR full:($$)^0.1 OR fullExact:($$)^0.1 OR fullPhonetic:($$)^0.1')
+		//set snippet pattern
+		->patternSnippetQuery('title:($$) OR content:($$)')
+		//set returned fields
+		->returnedFields(array('title', 'url'))
+		//set static filter
+		->filter('status:1')
+		//set another static filter, different way
+		->filterField('year', '[0 TO 1990]')
+		//set another static filter, with yet a different way
+		->filterField('category', array('files', 'archives'))
+		//set number of results
+		->rows(5)
+		//configure sorting
+		->sort('date', OpenSearchServer\Search\Search::SORT_DESC)
+		//set facets (min 1, multivalued field)
+		->facet('category', 1, true)
+		//set snippets
+		->snippet('title')
+		->snippet('content', 'b', '...', 200, 1, OpenSearchServer\Search\Search::SNIPPET_SENTENCE_FRAGMENTER)
+		//give this template a name
+		->template('new_template_pattern');
+//dump JSON encoded content
+echo '<pre style="word-wrap: break-word;">'; print_r($request->getData()); echo '</pre>';
+//send request
+$response = $oss_api->submit($request);
+//dump response
+var_dump($response);
+
+/**
+ * ## MoreLikeThis\Create
+ * Create a more like this template
+ */
+echo '<hr/><h2>MoreLikeThis\Create</h2>';
+//build request
+$request = new OpenSearchServer\MoreLikeThis\Create();
+$request->index('00__test_file')
+		//set lang of keywords
+		->lang('FRENCH')
+		//set some search fields
+		->fields(array('title', 'content', 'url'))
+		//set returned fields
+		->returnedFields(array('title', 'url'))
+		->minWordLen(1)
+		->maxWordLen(100)
+		->minDocFreq(1)
+		->minTermFreq(1)
+		->maxNumTokensParsed(5000)
+		->maxQueryTerms(25)
+		->boost(true)
+		//->filterField('lang', 'en')
+		->rows(10)
+		//give this template a name
+		->template('template_mlt');
+$response = $oss_api->submit($request);
+var_dump($response);
+
+/**
+ * ## MoreLikeThis\Search
+ * Run a Morelikethis query, with or without a template
+ */
+echo '<hr/><h2>MoreLikeThis\Search</h2>';
+$request = new OpenSearchServer\MoreLikeThis\Search();
+$request->index('00__test_file')
+		->likeText('count')
+		->template('template_mlt');
+$response = $oss_api->submit($request);
+var_dump($response);
+
+/**
+ * ## MoreLikeThis\Delete
+ * Delete a morelikethis template
+ */
+echo '<hr/><h2>MoreLikeThis\Delete</h2>';
+$request = new OpenSearchServer\MoreLikeThis\Delete();
+$request->index('00__test_file')
+		->template('template_mlt');
+$response = $oss_api->submit($request);
+var_dump($oss_api->getLastRequest());
+var_dump($response);
+
+
+
+/**
+ * ## Crawler\Web\Patterns\Exclusion\Insert
+ * Insert patterns to exclude in web crawler
+ */
+echo '<hr/><h2>Crawler\Web\Patterns\Exclusion\Insert</h2>';
+$request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\Insert();
+$request->index('00__test_web')
+		->pattern('http://www.exclude.com/*')
+		->patterns(array('http://www.exclude1.com/page1', 'http://www.exclude2.net/page1'));
+$response = $oss_api->submit($request);
+var_dump($response);
+
+/**
+ * ## Crawler\Web\Patterns\Exclusion\GetList
+ * Get list of exclusion patterns
+ */
+echo '<hr/><h2>Crawler\Web\Patterns\Exclusion\GetList</h2>';
+$request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList();
+$request->index('00__test_web');
+$response = $oss_api->submit($request);
+var_dump($response);
+
+/**
+ * ## Crawler\Web\Patterns\Exclusion\Delete
+ * Delete some exclusion patterns
+ */
+echo '<hr/><h2>Crawler\Web\Patterns\Exclusion\Delete</h2>';
+$request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\Delete();
+$request->index('00__test_web')
+		->pattern('http://www.exclude1.com/page1');
+$response = $oss_api->submit($request);
+var_dump($response);
+
+
+/**
+ * ## Crawler\Web\Patterns\Exclusion\GetList
+ * Get list of exclusion patterns
+ */
+echo '<hr/><h2>Crawler\Web\Patterns\Exclusion\GetList</h2>';
+$request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList();
+$request->index('00__test_web');
+$response = $oss_api->submit($request);
+var_dump($response);
+
+/**
+ * ## Crawler\Web\Patterns\Inclusion\Insert
+ * Insert patterns to crawl with web crawler
+ */
+echo '<hr/><h2>Crawler\Web\Patterns\Inclusion\Insert</h2>';
+$request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\Insert();
+$request->index('00__test_web')
+		->pattern('http://www.alexandre-toyer.fr/*')
+		->patterns(array('http://www.lemonde.fr', 'http://www.20minutes.fr/'));
+$response = $oss_api->submit($request);
+var_dump($response);
+
+/**
+ * ## Crawler\Web\Patterns\Inclusion\GetList
+ * Get list of inclusion patterns
+ */
+echo '<hr/><h2>Crawler\Web\Patterns\Inclusion\GetList</h2>';
+$request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList();
+$request->index('00__test_web');
+$response = $oss_api->submit($request);
+var_dump($response);
+
+/**
+ * ## Crawler\Web\Patterns\Inclusion\Delete
+ * Delete some inclusions patterns
+ */
+echo '<hr/><h2>Crawler\Web\Patterns\Inclusion\Delete</h2>';
+$request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\Delete();
+$request->index('00__test_web')
+		->patterns(array('http://www.lemonde.fr', 'http://www.20minutes.fr/'));
+$response = $oss_api->submit($request);
+var_dump($oss_api->getLastRequest());
+var_dump($response);
+
+/**
+ * ## Crawler\Web\Url\Insert
+ * Insert URL to crawl
+ */
+echo '<hr/><h2>Crawler\Web\Url\Insert</h2>';
+$request = new OpenSearchServer\Crawler\Web\Url\Insert();
+$request->index('00__test_web')
+		->urls(array('http://www.lemonde.fr', 'http://www.20minutes.fr'));
+$response = $oss_api->submit($request);
+var_dump($oss_api->getLastRequest());
+var_dump($response);
+
+
+/**
  * ## Autocompletion\Create
  * Create an autocompletion
  */
+echo '<hr/><h2>Autocompletion\Create</h2>';
 $request = new OpenSearchServer\Autocompletion\Create();
 $request->index('00__test_file')
 		->name('test_autocomplete')
@@ -180,6 +303,7 @@ var_dump($response);
  * ## Autocompletion\GetList
  * List avalaible autocompletions
  */
+echo '<hr/><h2>Autocompletion\GetList</h2>';
 $request = new OpenSearchServer\Autocompletion\GetList();
 $request->index('00__test_file');
 $response = $oss_api->submit($request);
@@ -190,6 +314,7 @@ var_dump($response);
  * ## Autocompletion\Build
  * Build autocompletion index
  */
+echo '<hr/><h2>Autocompletion\Build</h2>';
 $request = new OpenSearchServer\Autocompletion\Build();
 $request->index('00__test_file')
 		->name('test_autocomplete');
@@ -201,6 +326,7 @@ var_dump($response);
  * ## Autocompletion\Query
  * Query autocompletion
  */
+echo '<hr/><h2>Autocompletion\Query</h2>';
 $request = new OpenSearchServer\Autocompletion\Query();
 $request->index('00__test_file')
 		->name('test_autocomplete')
@@ -214,6 +340,7 @@ var_dump($response);
  * ## Autocompletion\Delete
  * Delete autocompletion index
  */
+echo '<hr/><h2>Autocompletion\Delete</h2>';
 $request = new OpenSearchServer\Autocompletion\Delete();
 $request->index('00__test_file')
 		->name('test_autocomplete');
@@ -225,6 +352,7 @@ var_dump($response);
  * ## Document\Delete
  * Delete document
  */
+echo '<hr/><h2>Document\Delete</h2>';
 $request = new OpenSearchServer\Document\Delete();
 $request->index('00__test_file')
 		//delete document where field "uri" = "2"
@@ -238,6 +366,7 @@ var_dump($response);
  * ## Field\Create
  * Create fields
  */
+echo '<hr/><h2>Field\Create</h2>';
 //create 3 fields in newly created empty index
 $request = new OpenSearchServer\Field\Create();
 $request->index('00__test')
@@ -271,6 +400,7 @@ var_dump($response);
  * ## Field\GetList
  * Get list of fields in one index
  */
+echo '<hr/><h2>Field\GetList</h2>';
 $request = new OpenSearchServer\Field\GetList();
 $request->index('00__test');
 $response = $oss_api->submit($request);
@@ -280,6 +410,7 @@ var_dump($response);
  * ## Field\Get
  * Get details of a specific field
  */
+echo '<hr/><h2>Field\Get</h2>';
 $request = new OpenSearchServer\Field\Get();
 $request->index('00__test')
 		->name('titleStandard');
@@ -290,6 +421,7 @@ var_dump($response);
  * ## Field\Delete
  * Delete a specific field
  */
+echo '<hr/><h2>Field\Delete</h2>';
 $request = new OpenSearchServer\Field\Delete();
 $request->index('00__test')
 		->name('titleStandard');
@@ -297,9 +429,10 @@ $response = $oss_api->submit($request);
 var_dump($response);
 
 /**
- * ##Field\SetDefaultUnique
+ * ## Field\SetDefaultUnique
  * Set default and unique field for an index
  */
+echo '<hr/><h2>Field\SetDefaultUnique</h2>';
 $request = new OpenSearchServer\Field\SetDefaultUnique();
 $request->index('00__test_file')
 		->defaultField('title')
@@ -312,6 +445,7 @@ var_dump($response);
  * ## Index\GetList
  * Get list of index on the OpenSearchServer instance
  */
+echo '<hr/><h2>Index\GetList</h2>';
 $request = new OpenSearchServer\Index\GetList();
 $response = $oss_api->submit($request);
 var_dump($response);
@@ -320,6 +454,7 @@ var_dump($response);
  * ## Index\Exists
  * Check if an index exists
  */
+echo '<hr/><h2>Index\Exists</h2>';
 $request = new OpenSearchServer\Index\Exists();
 $request->index('00__test');
 $response = $oss_api->submit($request);
@@ -334,6 +469,7 @@ var_dump($response);
  * ## Search\Field\Search
  * Execute a Search(field) query
  */
+echo '<hr/><h2>Search\Field\Search</h2>';
 $request = new OpenSearchServer\Search\Field\Search();
 $request->index('00__test_file')
 		->query('maison')
@@ -347,6 +483,7 @@ var_dump($response);
  * ## Search\Field\Put
  * Save a Search(field) template
  */
+echo '<hr/><h2>Search\Field\Put</h2>';
 //build request
 $request = new OpenSearchServer\Search\Field\Put();
 $request->index('00__test_file')
@@ -391,6 +528,7 @@ var_dump($response);
  * ## SearchTemplate\GetList
  * Get list of existing search templates
  */
+echo '<hr/><h2>SearchTemplate\GetList</h2>';
 $request = new OpenSearchServer\SearchTemplate\GetList();
 $request->index('00__test_file');
 $response = $oss_api->submit($request);
@@ -400,6 +538,7 @@ print_r($response);
  * ## SearchTemplate\Get
  * Get a search template
  */
+echo '<hr/><h2>SearchTemplate\Get</h2>';
 $request = new OpenSearchServer\SearchTemplate\Get();
 $request->index('00__test_file')
 		->name('new_template');
@@ -410,21 +549,25 @@ var_dump($response);
  * ## SearchTemplate\Delete
  * Delete a search template
  */
+echo '<hr/><h2>SearchTemplate\Delete</h2>';
 $request = new OpenSearchServer\SearchTemplate\Delete();
 $request->index('00__test_file')
 		->name('new_template');
 $response = $oss_api->submit($request);
 var_dump($response);
 
-exit;
 /**
  * ## Index\Delete
  * Delete index
  */
+echo '<hr/><h2>Index\Delete</h2>';
 $request = new OpenSearchServer\Index\Delete();
-$request->index('00__test');
+$request->index('00__test_web');
 $response = $oss_api->submit($request);
 var_dump($response);
 $request->index('00__test_file');
+$response = $oss_api->submit($request);
+var_dump($response);
+$request->index('00__test');
 $response = $oss_api->submit($request);
 var_dump($response);

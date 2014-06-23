@@ -1,14 +1,14 @@
 <?php
-namespace OpenSearchServer\SearchTemplate;
+namespace OpenSearchServer\MoreLikeThis;
 
 use OpenSearchServer\Request;
 
 class Get extends Request
 {
 	/**
-	 * Specify the name of search template
+	 * Specify the name of more like this template
 	 * @param string $name
-	 * @return OpenSearchServer\SearchTemplate\Get
+	 * @return OpenSearchServer\MoreLikeThis\Get
 	 */
 	public function name($name) {
 		$this->options['name'] = $name;
@@ -35,6 +35,6 @@ class Get extends Request
     	if(empty($this->options['name'])) {
     		throw new \Exception('Method "name($name)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/search/template/'.$this->options['name'];
+        return $this->options['index'].'/morelikethis/template/'.$this->options['name'];
     }
 }

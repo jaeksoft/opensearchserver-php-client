@@ -1,5 +1,5 @@
 <?php
-namespace OpenSearchServer\SearchTemplate;
+namespace OpenSearchServer\MoreLikeThis;
 
 use OpenSearchServer\Request;
 
@@ -8,10 +8,10 @@ class Delete extends Request
 	/**
 	 * Specify the name of search template to delete
 	 * @param string $name
-	 * @return OpenSearchServer\SearchTemplate\Delete
+	 * @return OpenSearchServer\MoreLikeThis\Delete
 	 */
-	public function name($name) {
-		$this->options['name'] = $name;
+	public function template($name) {
+		$this->options['template'] = $name;
 		return $this;
 	}
 	
@@ -32,9 +32,9 @@ class Delete extends Request
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-    	if(empty($this->options['name'])) {
-    		throw new \Exception('Method "name($name)" must be called before submitting request.');
+    	if(empty($this->options['template'])) {
+    		throw new \Exception('Method "template($name)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/search/template/'.$this->options['name'];
+        return $this->options['index'].'/morelikethis/template/'.$this->options['template'];
     }
 }

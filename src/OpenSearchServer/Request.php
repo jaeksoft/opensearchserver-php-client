@@ -108,11 +108,10 @@ class Request
     	} elseif(!empty($this->data)) {
         	return json_encode($this->data);
         }
-        return '';
+        return null;
     }
     
     /**
-     * {@inheritdoc}
      */
     public function getHeaders()
     {
@@ -120,7 +119,6 @@ class Request
     }
     
     /**
-     * {@inheritdoc}
      */
     public function getMethod()
     {
@@ -128,7 +126,6 @@ class Request
     }
     
     /**
-     * {@inheritdoc}
      */
     public function getPath()
     {
@@ -138,6 +135,7 @@ class Request
     public function getParameters() {
     	return $this->parameters;
     }
+    
     
     protected function checkPathIndexNeeded() {
     	if(empty($this->options['index'])) {
