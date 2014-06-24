@@ -1,7 +1,7 @@
 OpenSearchServer PHP Client
 ======================================
 # For V2 API
-======================================
+
 **Warning:** this PHP client is still under heavy development.
 
 This API connector is intended to be used with PHP 5 (any version >= 5.3) and [Composer](http://getcomposer.org/).
@@ -26,7 +26,7 @@ cd ossphp_sandbox
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/AlexandreToyer/opensearchserver-php-client"
+            "url": "https://github.com/jaeksoft/opensearchserver-php-client"
         }
     ],
     "require": {
