@@ -5,9 +5,9 @@ use OpenSearchServer\MoreLikeThis\MoreLikeThis;
 
 class Create extends MoreLikeThis
 {
-	/******************************
-	 * INHERITED METHODS OVERRIDDEN
-	 ******************************/	
+    /******************************
+     * INHERITED METHODS OVERRIDDEN
+     ******************************/
     /**
      * {@inheritdoc}
      */
@@ -15,16 +15,16 @@ class Create extends MoreLikeThis
     {
         return self::METHOD_PUT;
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function getPath()
     {
-    	$this->checkPathIndexNeeded();
-    	if(empty($this->options['template'])) {
-    		throw new \Exception('Method "template($name)" must be called before submitting request.');
-    	}
+        $this->checkPathIndexNeeded();
+        if(empty($this->options['template'])) {
+            throw new \Exception('Method "template($name)" must be called before submitting request.');
+        }
         return $this->options['index'].'/morelikethis/template/'.$this->options['template'];
     }
 }
