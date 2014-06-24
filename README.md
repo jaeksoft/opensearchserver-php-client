@@ -26,7 +26,7 @@ cd ossphp_sandbox
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/AlexandreToyer/opensearchserver-php-client"
+            "url": "https://github.com/jaeksoft/opensearchserver-php-client"
         }
     ],
     "require": {
