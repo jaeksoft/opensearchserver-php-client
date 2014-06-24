@@ -41,40 +41,40 @@ $request->index('00__test_file');
 $request->addDocument(array(
 	'lang' => OpenSearchServer\Request::LANG_FR,
 	'fields' => array(
-array(
-				'name' => 'uri',
-				'value' => '1'
-				),
-				array(
-				'name' => 'title',
-				'value' => 'The Count Of Monte-Cristo, Alexandre Dumas'
-				),
-				array(
-				'name' => 'autocomplete',
-				'value' => 'The Count Of Monte-Cristo, Alexandre Dumas'
-				),
-				array(
-				'name' => 'content',
-				'value' => '"Very true," said Monte Cristo; "it is unnecessary, we know each other so well!"
+        array(
+    		'name' => 'uri',
+    		'value' => '1'
+		),
+		array(
+    		'name' => 'title',
+    		'value' => 'The Count Of Monte-Cristo, Alexandre Dumas'
+		),
+		array(
+    		'name' => 'autocomplete',
+    		'value' => 'The Count Of Monte-Cristo, Alexandre Dumas'
+		),
+		array(
+    		'name' => 'content',
+    		'value' => '"Very true," said Monte Cristo; "it is unnecessary, we know each other so well!"
 "On the contrary," said the count, "we know so little of each other."
 "Indeed?" said Monte Cristo, with the same indomitable coolness; "let us see. Are you not the soldier Fernand who deserted on the eve of the battle of Waterloo? Are you not the Lieutenant Fernand who served as guide and spy to the French army in Spain? Are you not the Captain Fernand who betrayed, sold, and murdered his benefactor, Ali? And have not all these Fernands, united, made Lieutenant-General, the Count of Morcerf, peer of France?"
 "Oh," cried the general, as if branded with a hot iron, "wretch,—to reproach me with my shame when about, perhaps, to kill me! No, I did not say I was a stranger to you.'
 ),
-)
-));
+        )
+    ));
 
 //Add documents by creating Document objects
 $document = new OpenSearchServer\Document\Document();
-$document	->lang(OpenSearchServer\Request::LANG_FR)
-            ->field('title','Test The Count 2')
-            ->field('autocomplete','Test The Count 2')
-            ->field('uri', '2');
+$document->lang(OpenSearchServer\Request::LANG_FR)
+         ->field('title','Test The Count 2')
+         ->field('autocomplete','Test The Count 2')
+         ->field('uri', '2');
 
 $document2 = new OpenSearchServer\Document\Document();
-$document2	->lang(OpenSearchServer\Request::LANG_FR)
-            ->field('title','Test The Count 3')
-            ->field('autocomplete','Test The Count 3')
-            ->field('uri', '3');
+$document2->lang(OpenSearchServer\Request::LANG_FR)
+          ->field('title','Test The Count 3')
+          ->field('autocomplete','Test The Count 3')
+          ->field('uri', '3');
 
 $request->addDocuments(array($document, $document2));
 
