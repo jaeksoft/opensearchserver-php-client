@@ -170,7 +170,7 @@ $response = $oss_api->submit($request);
 
 ## How to make requests
 
-In this PHP client requests to OpenSearchServer's API are objects. Each request object must be submitted to a global handler that is in charge to send them to an OpenSearchServer instance and return a response.
+In this PHP client requests to OpenSearchServer's API are objects. Each request object must be submitted to a global handler that is in charge of sending them to an OpenSearchServer instance and returning a response.
 
 ### Create an handler
 
@@ -184,6 +184,7 @@ $oss_api = new OpenSearchServer\Handler(array('url' => $url, 'key' => $app_key, 
 ### Create a request
 
 Several types of objects are available, each being a mapping to one API. For instance objects of type `OpenSearchServer\Index\Create` will be used to create index and objects of type `OpenSearchServer\Search\Field\Search` will be used to search for documents.
+
 Each request object is a child of the abstract parent class `OpenSearchServer\Request`.
 
 For example here is the code to create a request that wil create an index when sent to an OpenSearchServer instance:
@@ -200,10 +201,12 @@ For example this code will tell OpenSearchServer to name the new index "first_in
 $request->index('first_index');
 ```
 
-**Important**: method `index()` is really important and is shared by almost every type of requests. In the case of index creation it serves to give new index a name and in almost every other request it will be used to configure the index on which API call must be made.
-This method will not be documented further but will be displayed in code examples when needed.
+**Important note:** 
 
-Once configured request must be sent to an OpenSearchServer thanks to the handler created before:
+* method `index()` is really important and is shared by almost every type of requests. In the case of index creation it serves to give a name to new index and in almost every other request it will be used to configure the index on which API call must be made.
+> This method will not be documented further but will be displayed in code examples when needed.
+
+Once configured request must be sent to an OpenSearchServer instance thanks to the handler created before:
 
 ```php
 $response = $oss_api->submit($request);
