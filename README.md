@@ -89,16 +89,16 @@ $oss_api = new OpenSearchServer\Handler(array('url' => $url, 'key' => $app_key, 
 
 Each API request is wrapped in a particular class. Requests must be instanciated, configured and then passed to `$oss_api->submit()` that will return an `OpenSearchServer\Response` object.
 
-**Create an index:**
+**Create an index**
 
-This code creates an index based on our "WEB_CRAWLER" template, which will automatically create an index'schema allowing to easily crawl a website.
+This code creates an index based on our "WEB_CRAWLER" template, which will automatically create a schema allowing to easily crawl a website.
 
 ```php
 $request = new OpenSearchServer\Index\Create();
 $request->index('first_index')->template(OpenSearchServer\Request::TEMPLATE_WEB_CRAWLER);
 $response = $oss_api->submit($request);
 ```
-**Configure crawler:**
+**Configure crawler**
 
 Add some allowed patterns:
 
@@ -109,7 +109,7 @@ $request->index('first_index')
 $oss_api->submit($request);
 ```
 
-> Note character `*`: it means our crawler will be allowed to follow any URL starting by these patterns.
+> Note character `*`: it means crawler will be allowed to follow any URL starting by these patterns.
 
 Add some start URLs for crawler:
 
@@ -120,7 +120,7 @@ $request->index('first_index')
 $oss_api->submit($request);
 ```
 
-> Here we do not use `*` since we give real URL to our crawler: it will use these URLs as first entry points to those websites.
+> Here `*` is not used since we real URL are given to crawler: it will use these URLs as first entry points.
 
 Start crawler:
 
@@ -130,9 +130,9 @@ $request->index('first_index');
 $oss_api->submit($request);
 ```
 
-**Index documents:**
+**Index documents**
 
-While crawler is running we can still manually index some documents:
+While crawler is running some documents can still be manually indexed:
 
 ```php
 $document = new OpenSearchServer\Document\Document();
