@@ -168,7 +168,7 @@ $response = $oss_api->submit($request);
 
 # Client Documentation
 
-## Create index
+## Work with index
 
 ### Create an empty index
 
@@ -199,6 +199,15 @@ $request->index('00__test_file')->template(OpenSearchServer\Request::TEMPLATE_FI
 $response = $oss_api->submit($request);
 ```
 
+###  Get list of index on an instance
+
+```php
+$request = new OpenSearchServer\Index\GetList();
+$response = $oss_api->submit($request);
+```
+
+> This class does not need a call to `->index()` before submission.
+
 ## Configure a schema
 
 In OpenSearchServer each index must have a schema. A schema is a list of fields, each with some properties.
@@ -221,7 +230,62 @@ Available methods:
 * **name**: name of field to create.
 * **indexed**: tells whether or not this field must be indexed. Indexed field can then used in full-text searchs. 
 * **analyzer**: analyzer to use on this field. Analyzer allow to apply several transformations on indexed or searched data.
-* **stored**: tells whether or not this field must be stored. Stored field can return their original values in search queries, even if some Analyzers transformed it. 
+* **stored**: tells whether or not this field must be stored. Stored field can return their original values in search queries, even if some Analyzers transformed it.
+* **copyOf**: field(s) from which copy value. Value is copied before transformation by analyzers. A string or an array of string can be given to this method.
+
+### Get list of fields
+
+```php
+$request = new OpenSearchServer\Field\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request); 
+```
+
+### Get list of fields
+
+```php
+```
+
+### Get details of a specific field
+
+```php
+$request = new OpenSearchServer\Field\Get();
+$request->index('index_name')
+        ->name('titleStandard');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name**: name of field to get information for.
+
+### Delete a field
+
+```php
+$request = new OpenSearchServer\Field\Delete();
+$request->index('index_name')
+        ->name('titleStandard');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name**: name of field to delete.
+
+### Set default and unique field for an index
+
+```php
+$request = new OpenSearchServer\Field\SetDefaultUnique();
+$request->index('index_name')
+        ->defaultField('title')
+        //remove unique field for this index
+        ->uniqueField();
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+* **defaultField**: name of field that must be used as default field. Default field is used for search queries when no particular field is configured in the query. Empty value removes default field setting.
+* **uniqueField**:  name of field that must be used as unique field. Unique field is used as a primary key. Empty value removes unique field setting.
 
 # TODO
 
