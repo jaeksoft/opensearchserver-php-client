@@ -371,7 +371,7 @@ echo '<hr/><h2>Field\Create</h2>';
 $request = new OpenSearchServer\Field\Create();
 $request->index('00__test')
         ->name('url')
-        ->indexed('YES');
+        ->indexed(true);
 $response = $oss_api->submit($request);
 
 var_dump($oss_api->getLastRequest());
@@ -380,18 +380,18 @@ var_dump($response);
 $request = new OpenSearchServer\Field\Create();
 $request->index('00__test')
         ->name('title')
-        ->indexed('YES')
+        ->indexed(true)
         ->analyzer('TextAnalyzer')
-        ->stored('YES');
+        ->stored(true);
 $response = $oss_api->submit($request);
 var_dump($response);
 
 $request = new OpenSearchServer\Field\Create();
 $request->index('00__test')
         ->name('titleStandard')
-        ->indexed('YES')
+        ->indexed(true)
         ->analyzer('StandardAnalyzer')
-        ->stored('YES')
+        ->stored(true)
         ->copyOf('title');
 $response = $oss_api->submit($request);
 var_dump($response);
