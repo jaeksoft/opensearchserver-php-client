@@ -569,6 +569,8 @@ Available methods for object of type OpenSearchServer\Document\Document:
 
 ### Delete documents
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/document/delete_by_JSON.html)
+
 
 ```php
 $request = new OpenSearchServer\Document\Delete();
