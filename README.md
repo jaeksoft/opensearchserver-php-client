@@ -168,6 +168,14 @@ $response = $oss_api->submit($request);
 
 # Client Documentation
 
+**Table of contents**
+
+* [How to make requests](#how-to-make-requests)
+* [Work with index](#work-with-index)
+* [Configure schema](#configure-schema)
+* [Web crawler](#web-crawler)
+* [Autocompletion](#autocompletion)
+
 ## How to make requests
 
 In this PHP client requests to OpenSearchServer's API are objects. Each request object must be submitted to a global handler that is in charge of sending them to an OpenSearchServer instance and returning a response.
@@ -254,7 +262,7 @@ $response = $oss_api->submit($request);
 
 > This class does not need a call to `->index()` before submission.
 
-## Configure a schema
+## Configure schema
 
 In OpenSearchServer each index must have a schema. A schema is a list of fields, each with some properties.
 
