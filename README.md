@@ -204,6 +204,7 @@ $request->index('first_index');
 **Important note:** 
 
 * method `index()` is really important and is shared by almost every type of requests. In the case of index creation it serves to give a name to new index and in almost every other request it will be used to configure the index on which API call must be made.
+
 > This method will not be documented further but will be displayed in code examples when needed.
 
 Once configured request must be sent to an OpenSearchServer instance thanks to the handler created before:
