@@ -120,7 +120,7 @@ $request->index('first_index')
 $oss_api->submit($request);
 ```
 
-> Here `*` is not used since we real URL are given to crawler: it will use these URLs as first entry points.
+> Here `*` is not used since real URL are given to crawler: it will use these URLs as first entry points.
 
 Start crawler:
 
