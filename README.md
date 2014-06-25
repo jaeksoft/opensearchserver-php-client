@@ -500,6 +500,91 @@ Available methods:
 
 * **name(string $name)**: name of autocompletion item to delete.
 
+## Documents
+
+### Push documents
+
+Add document with array notation:
+
+```php
+$request = new OpenSearchServer\Document\Put();
+$request->index('index_name');
+$request->addDocument(array(
+    'lang' => OpenSearchServer\Request::LANG_FR,
+    'fields' => array(
+        array(
+            'name' => 'uri',
+            'value' => '1'
+        ),
+        array(
+            'name' => 'title',
+            'value' => 'The Count Of Monte-Cristo, Alexandre Dumas'
+        ),
+        array(
+            'name' => 'autocomplete',
+            'value' => 'The Count Of Monte-Cristo, Alexandre Dumas'
+        ),
+        array(
+            'name' => 'content',
+            'value' => '"Very true," said Monte Cristo; "it is unnecessary, we know each other so well!"
+"On the contrary," said the count, "we know so little of each other."
+"Indeed?" said Monte Cristo, with the same indomitable coolness; "let us see. Are you not the soldier Fernand who deserted on the eve of the battle of Waterloo? Are you not the Lieutenant Fernand who served as guide and spy to the French army in Spain? Are you not the Captain Fernand who betrayed, sold, and murdered his benefactor, Ali? And have not all these Fernands, united, made Lieutenant-General, the Count of Morcerf, peer of France?"
+"Oh," cried the general, as if branded with a hot iron, "wretch,—to reproach me with my shame when about, perhaps, to kill me! No, I did not say I was a stranger to you.'
+),
+        )
+    ));
+$response = $oss_api->submit($request);
+```
+
+Add documents by creating OpenSearchServer\Document\Document objects:
+
+```php
+$document = new OpenSearchServer\Document\Document();
+$document->lang(OpenSearchServer\Request::LANG_FR)
+         ->field('title','Test The Count 2')
+         ->field('autocomplete','Test The Count 2')
+         ->field('uri', '2');
+
+$document2 = new OpenSearchServer\Document\Document();
+$document2->lang(OpenSearchServer\Request::LANG_FR)
+          ->field('title','Test The Count 3')
+          ->field('autocomplete','Test The Count 3')
+          ->field('uri', '3');
+
+$request = new OpenSearchServer\Document\Put();
+$request->index('index_name')
+        ->addDocuments(array($document, $document2));
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **addDocument(array / OpenSearchServer\Document\Document $document)**: add a document in list of documents to add in the index.
+* **addDocuments(array $documents)**: helper method. Add several document, call `addDocument()` for each item in array.
+
+Available methods for object of type OpenSearchServer\Document\Document:
+
+* **lang(string $lang)**: set lang of indexation. Used by some Analyzers to transform text.
+* **field(string $name, string $value, int $boost)**: give value to a field, with an optionnal boost. You would probably prefer to use boost at query time.
+
+### Delete documents
+
+
+```php
+$request = new OpenSearchServer\Document\Delete();
+$request->index('index_name')
+        ->field('id')
+        ->value('3')
+        ->values(array('4','5','6'));
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **field(string $name)**: name of field on which base deletion.
+* **value(string $value)**: value of the field to delete.
+* **values(array $values)**: helper method. Call `value()` for each item in array.
+
 # TODO
 
 * Factory to work with responses and get easy access to different type of results (loop through search results, ...).
