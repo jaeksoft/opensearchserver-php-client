@@ -6,13 +6,13 @@ OpenSearchServer is an Open-Source professionnal search engine offering lots of 
 * Fully integrated solution: build your index, crawl your websites, filesystem or databases, configure your search queries
 * Complete user interface in browser
 * **Search features:** 
-  * Full-text, boolean and phonetic search
-  * Outer and inner join
-  * Clusters with faceting & collapsing
-  * Filtered search (date, distance)
-  * Geolocation using square or radius
-  * Several spell-checking algorithms
-  * Relevance customization
+  * **Full-text, boolean** and **phonetic** search
+  * Outer and inner **join**
+  * Clusters with **faceting** & collapsing
+  * **Filtered** search (date, distance)
+  * **Geolocation** using square or radius
+  * Several **spell-checking** algorithms
+  * **Relevance customization**
   * Suggestion (auto-completion)
 * **Indexation features:**
   * **17 languages**
@@ -168,7 +168,60 @@ $response = $oss_api->submit($request);
 
 # Client Documentation
 
-*TODO*
+## Create index
+
+### Create an empty index
+
+```php
+$request = new OpenSearchServer\Index\Create();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+```
+
+
+### Create an index with a template
+
+Two pre-configured templates are offered with OpenSearchServer: WEB_CRAWLER and FILE_CRAWLER. Each template comes with pre-configured schema, queries, renderers.
+
+Template `WEB_CRAWLER`:
+
+```php
+$request = new OpenSearchServer\Index\Create();
+$request->index('00__test_file')->template(OpenSearchServer\Request::TEMPLATE_WEB_CRAWLER);
+$response = $oss_api->submit($request);
+```
+
+Template `FILE_CRAWLER`:
+
+```php
+$request = new OpenSearchServer\Index\Create();
+$request->index('00__test_file')->template(OpenSearchServer\Request::TEMPLATE_FILE_CRAWLER);
+$response = $oss_api->submit($request);
+```
+
+## Configure a schema
+
+In OpenSearchServer each index must have a schema. A schema is a list of fields, each with some properties.
+
+### Create a field
+
+```php
+$request = new OpenSearchServer\Field\Create();
+$request->index('index_name')
+        ->name('titleStandard')
+        ->indexed('YES')
+        ->analyzer('StandardAnalyzer')
+        ->stored('YES')
+        ->copyOf('title');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name**: name of field to create.
+* **indexed**: tells whether or not this field must be indexed. Indexed field can then used in full-text searchs. 
+* **analyzer**: analyzer to use on this field. Analyzer allow to apply several transformations on indexed or searched data.
+* **stored**: tells whether or not this field must be stored. Stored field can return their original values in search queries, even if some Analyzers transformed it. 
 
 # TODO
 
