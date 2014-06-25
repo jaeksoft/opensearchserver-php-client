@@ -218,20 +218,20 @@ In OpenSearchServer each index must have a schema. A schema is a list of fields,
 $request = new OpenSearchServer\Field\Create();
 $request->index('index_name')
         ->name('titleStandard')
-        ->indexed('YES')
+        ->indexed(true)
         ->analyzer('StandardAnalyzer')
-        ->stored('YES')
+        ->stored(true)
         ->copyOf('title');
 $response = $oss_api->submit($request);
 ```
 
 Available methods:
 
-* **name**: name of field to create.
-* **indexed**: tells whether or not this field must be indexed. Indexed field can then used in full-text searchs. 
-* **analyzer**: analyzer to use on this field. Analyzer allow to apply several transformations on indexed or searched data.
-* **stored**: tells whether or not this field must be stored. Stored field can return their original values in search queries, even if some Analyzers transformed it.
-* **copyOf**: field(s) from which copy value. Value is copied before transformation by analyzers. A string or an array of string can be given to this method.
+* **name(string $name)**: name of field to create.
+* **indexed(boolean $indexed)**: tells whether or not this field must be indexed. Indexed field can then used in full-text searchs. 
+* **analyzer(string $analyzerName)**: analyzer to use on this field. Analyzer allow to apply several transformations on indexed or searched data.
+* **stored(boolean $stored)**: tells whether or not this field must be stored. Stored field can return their original values in search queries, even if some Analyzers transformed it.
+* **copyOf(string/array $fields)**: field(s) from which copy value. Value is copied before transformation by analyzers. A string or an array of string can be given to this method.
 
 ### Get list of fields
 
@@ -239,11 +239,6 @@ Available methods:
 $request = new OpenSearchServer\Field\GetList();
 $request->index('index_name');
 $response = $oss_api->submit($request); 
-```
-
-### Get list of fields
-
-```php
 ```
 
 ### Get details of a specific field
@@ -257,7 +252,7 @@ $response = $oss_api->submit($request);
 
 Available methods:
 
-* **name**: name of field to get information for.
+* **name(string $name)**: name of field to get information for.
 
 ### Delete a field
 
@@ -270,7 +265,7 @@ $response = $oss_api->submit($request);
 
 Available methods:
 
-* **name**: name of field to delete.
+* **name(string $name)**: name of field to delete.
 
 ### Set default and unique field for an index
 
@@ -284,8 +279,73 @@ $response = $oss_api->submit($request);
 ```
 
 Available methods:
-* **defaultField**: name of field that must be used as default field. Default field is used for search queries when no particular field is configured in the query. Empty value removes default field setting.
-* **uniqueField**:  name of field that must be used as unique field. Unique field is used as a primary key. Empty value removes unique field setting.
+* **defaultField(string $name)**: name of field that must be used as default field. Default field is used for search queries when no particular field is configured in the query. Empty value removes default field setting.
+* **uniqueField(string $name)**:  name of field that must be used as unique field. Unique field is used as a primary key. Empty value removes unique field setting.
+
+## Web Crawler
+
+### Patterns
+
+Available methods for Insert and Delete classes:
+
+* **pattern(string $pattern)**: URL to insert or delete
+* **patterns(array $patterns)**: array of URL to insert or delete
+
+#### Insert inclusion patterns
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\Insert();
+$request->index('index_name')
+        ->pattern('http://www.website1.com/*')
+        ->patterns(array('http://www.cnn.com/sport/*', 'http://www.cbc.com/news/particular-page.html'));
+$response = $oss_api->submit($request);
+```
+
+#### List inclusion patterns
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+```
+
+#### Delete inclusion patterns
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\Delete();
+$request->index('index_name')
+        ->pattern('http://www.website1.com/*');
+$response = $oss_api->submit($request);
+```
+
+### Exclusion patterns
+
+#### Insert exclusion patterns
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\Insert();
+$request->index('index_name')
+        ->pattern('http://www.exclude.com/*')
+        ->patterns(array('http://www.exclude1.com/page1', 'http://www.exclude2.net/page1'));
+$response = $oss_api->submit($request);
+```
+
+#### List exclusion patterns
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+```
+
+#### Delete exclusion patterns
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\Delete();
+$request->index('index_name')
+        ->pattern('http://www.exclude1.com/page1');
+$response = $oss_api->submit($request);
+```
 
 # TODO
 
