@@ -168,6 +168,48 @@ $response = $oss_api->submit($request);
 
 # Client Documentation
 
+## How to make requests
+
+In this PHP client requests to OpenSearchServer's API are objects. Each request object must be submitted to a global handler that is in charge to send them to an OpenSearchServer instance and return a response.
+
+### Create an handler
+
+```php
+$url        = '<instance URL>';
+$app_key    = '<API key>';
+$login      = '<login>';
+$oss_api = new OpenSearchServer\Handler(array('url' => $url, 'key' => $app_key, 'login' => $login));
+```
+
+### Create a request
+
+Several types of objects are available, each being a mapping to one API. For instance objects of type `OpenSearchServer\Index\Create` will be used to create index and objects of type `OpenSearchServer\Search\Field\Search` will be used to search for documents.
+Each request object is a child of the abstract parent class `OpenSearchServer\Request`.
+
+For example here is the code to create a request that wil create an index when sent to an OpenSearchServer instance:
+ 
+```php
+$request = new OpenSearchServer\Index\Create();
+```
+
+After being created each type of request must be configured in a particular way, depending on its type, by calling some methods.
+
+For example this code will tell OpenSearchServer to name the new index "first_index":
+
+```php
+$request->index('first_index');
+```
+
+**Important**: method `index()` is really important and is shared by almost every type of requests. In the case of index creation it serves to give new index a name and in almost every other request it will be used to configure the index on which API call must be made.
+This method will not be documented further but will be displayed in code examples when needed.
+
+Once configured request must be sent to an OpenSearchServer thanks to the handler created before:
+
+```php
+$response = $oss_api->submit($request);
+```
+
+
 ## Work with index
 
 ### Create an empty index
@@ -318,8 +360,6 @@ $request->index('index_name')
 $response = $oss_api->submit($request);
 ```
 
-### Exclusion patterns
-
 #### Insert exclusion patterns
 
 ```php
@@ -347,10 +387,113 @@ $request->index('index_name')
 $response = $oss_api->submit($request);
 ```
 
+### Start crawler
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Start();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+```
+
+### Stop crawler
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Stop();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+```
+
+### Get crawler status
+
+```php
+$request = new OpenSearchServer\Crawler\Web\GetStatus();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+```
+
+## Autocompletion
+
+### Create an autocompletion
+
+Autocompletion are "sub-index" for OpenSearchServer. They need to be created and configured with fields to use for suggestions.
+
+```php
+$request = new OpenSearchServer\Autocompletion\Create();
+$request->index('00__test_file')
+        ->name('autocomplete')
+        ->field('autocomplete');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name(string $name)**: name of autocompletion item to create.
+* **field(string $name)**: name of field in main schema from which suggestion are returned.
+
+*TODO*: a bug need to be fixed for this class to be able to set several fields. See https://github.com/jaeksoft/opensearchserver/issues/709.
+
+### Build autocompletion
+
+Autocompletion sub-index need to be re-built frequently, when content on main index changes. This can be automatized with OpenSearchServer's Schedulers or done by calling this API.
+
+```php
+
+$request = new OpenSearchServer\Autocompletion\Build();
+$request->index('index_name')
+        ->name('autocomplete');
+$response = $oss_api->submit($request);
+``` 
+
+Available methods:
+
+* **name(string $name)**: name of autocompletion item to build.
+
+
+### Get list of existing autocompletion items
+
+Several autocompletion items can be built, each with particular fields for some specific purpose.
+
+```php
+$request = new OpenSearchServer\Autocompletion\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+```
+
+### Query autocompletion
+
+```php
+$request = new OpenSearchServer\Autocompletion\Query();
+$request->index('index_name')
+        ->name('autocomplete')
+        ->query('Three Musk')
+        ->rows(10);
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name(string $name)**: name of autocompletion item to query.
+* **query(string $keywords)**: keywords to use for suggestions. Usually beginning of a word.
+* **rows(int $numberOfRows)**: number of suggestions to return.
+
+### Delete an autocompletion item
+
+```php
+$request = new OpenSearchServer\Autocompletion\Delete();
+$request->index('index_name')
+        ->name('autocomplete');
+$response = $oss_api->submit($request);
+```
+Available methods:
+
+* **name(string $name)**: name of autocompletion item to delete.
+
 # TODO
 
-* Factory to work with response and get easy access to different type of results (loop through search results, ...).
+* Factory to work with responses and get easy access to different type of results (loop through search results, ...).
 * Register repository on packagist.
+
+
 
 ===========================
 
