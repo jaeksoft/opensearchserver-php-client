@@ -1,25 +1,49 @@
 OpenSearchServer PHP Client
 ======================================
-# For V2 API
+
+OpenSearchServer is an Open-Source professionnal search engine offering lots of advanced features:
+
+* Fully integrated solution: build your index, crawl your websites, filesystem or databases, configure your search queries
+* Complete user interface in browser
+* **Search features:** 
+  * Full-text, boolean and phonetic search
+  * Outer and inner join
+  * Clusters with faceting & collapsing
+  * Filtered search (date, distance)
+  * Geolocation using square or radius
+  * Several spell-checking algorithms
+  * Relevance customization
+  * Suggestion (auto-completion)
+* **Indexation features:**
+  * **17 languages**
+  * Special **analysis** for each language
+  * Numerous **filters**: n-gram, lemmatization, shingle, elisions, stripping diacritic, Etc.
+  * Automatic language detection
+  * **Named entity** recognition
+  * **Synonyms** (word and multi-terms)
+  * Automatic **classifications**
+  
+Find out all the awesome features offered by OpenSearchServer on our website: http://www.opensearchserver.com/
+
+
+======================================
 
 **Warning:** this PHP client is still under heavy development.
 
 This API connector is intended to be used with PHP 5 (any version >= 5.3) and [Composer](http://getcomposer.org/).
 It is based on the V2 API of OpenSearchServer.
 
-You can find more about the OSS API on the OSS WiKi
-http://www.open-search-server.com/documentation
 
-# How to test this development version
+# Setup
 
-* Create a folder for this project
+* Create a folder for your project
 
 ```shell
 mkdir ossphp_sandbox
 cd ossphp_sandbox
 ```
 
-* In this folder write these lines in a file named `composer.json`:
+* Create a file named `composer.json` with this content:
 
 ```json
 {
@@ -52,56 +76,104 @@ echo "<?php include_once '../vendor/autoload.php';" > index.php
 
 * Code can now be written in file `web/index.php`. Take examples from `vendor/opensearchserver/opensearchserver/examples/oss_examples.php`.
 
-# How to use this client
+# Quick start
 
-Create a global handler:
+A global handler must be created. It will be used to submit every request to your OpenSearchServer instance:
 
 ```php
-$url        = 'http://localhost:9090';
-$app_key    = 'xxxxxxxxxxxxxxxxxx';
-$login      = 'admin';
-$oss_api = new OpenSearchServer\Handler(array('url'=>$url, 'key' => $app_key, 'login' => $login ));
+$url        = '<instance URL>';
+$app_key    = '<API key>';
+$login      = '<login>';
+$oss_api = new OpenSearchServer\Handler(array('url' => $url, 'key' => $app_key, 'login' => $login));
 ```
 
-Create a new object for each Request and submit it with this handler. `submit()` returns an `OpenSearchServer\Response` object.
+Each API request is wrapped in a particular class. Requests must be instanciated, configured and then passed to `$oss_api->submit()` that will return an `OpenSearchServer\Response` object.
 
-For example:
+**Create an index:**
 
-## Create an index
+This code creates an index based on our "WEB_CRAWLER" template, which will automatically create an index'schema allowing to easily crawl a website.
 
 ```php
 $request = new OpenSearchServer\Index\Create();
-$request->index('00__test_file')->template(OpenSearchServer\Request::TEMPLATE_FILE_CRAWLER);
+$request->index('first_index')->template(OpenSearchServer\Request::TEMPLATE_WEB_CRAWLER);
 $response = $oss_api->submit($request);
 ```
+**Configure crawler:**
 
-## Index documents
+Add some allowed patterns:
 
 ```php
-$request = new OpenSearchServer\Document\Put();
-$request->index('00__test_file');
+$request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\Insert();
+$request->index('first_index')
+        ->patterns('http://www.my-website.com/*', 'http://www.your-website.net/*');
+$oss_api->submit($request);
+```
 
+> Note character `*`: it means our crawler will be allowed to follow any URL starting by these patterns.
+
+Add some start URLs for crawler:
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Url\Insert();
+$request->index('first_index')
+        ->urls('http://www.my-website.com', 'http://www.your-website.net');
+$oss_api->submit($request);
+```
+
+> Here we do not use `*` since we give real URL to our crawler: it will use these URLs as first entry points to those websites.
+
+Start crawler:
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Start();
+$request->index('first_index');
+$oss_api->submit($request);
+```
+
+**Index documents:**
+
+While crawler is running we can still manually index some documents:
+
+```php
 $document = new OpenSearchServer\Document\Document();
 $document   ->lang(OpenSearchServer\Request::LANG_FR)
-            ->field('title','Test The Count 2')
-            ->field('autocomplete','Test The Count 2')
-            ->field('uri', '2');
+            ->field('title','The Count Of Monte Cristo')
+            ->field('url', '1');
+
 $document2 = new OpenSearchServer\Document\Document();
 $document2  ->lang(OpenSearchServer\Request::LANG_FR)
-            ->field('title','Test The Count 3')
-            ->field('autocomplete','Test The Count 3')
-            ->field('uri', '3');
-$request->addDocuments(array($document, $document2));
+            ->field('title','The Three Musketeers')
+            ->field('url', '2');
+
+$request = new OpenSearchServer\Document\Put();
+$request->index('first_index')
+        ->addDocuments(array($document, $document2));
+$oss_api->submit($request);
+```
+
+> Here objects of type `OpenSearchServer\Document\Document()` are being used to create documents, but some other options exist: passing array, passing JSON, ... See documentation below to know all about this.
+
+**Search:**
+
+It is quite easy then to search for documents:
+
+```php
+$request = new OpenSearchServer\Search\Field\Search();
+$request->index('first_index')
+        ->query('The Count')
+        ->searchField('title')
+        ->returnedFields('title');
 $response = $oss_api->submit($request);
 ```
 
-# Full API reference
+# Client Documentation
 
-**TODO**
+*TODO*
 
 # TODO
 
-* Factory to work with response and get easy access to different type of results (loop through search results, ...)
+* Factory to work with response and get easy access to different type of results (loop through search results, ...).
+* Register repository on packagist.
 
 ===========================
 
