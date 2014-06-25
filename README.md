@@ -226,12 +226,13 @@ $response = $oss_api->submit($request);
 
 ### Create an empty index
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/index/create.html)
+
 ```php
 $request = new OpenSearchServer\Index\Create();
 $request->index('index_name');
 $response = $oss_api->submit($request);
 ```
-
 
 ### Create an index with a template
 
@@ -255,6 +256,8 @@ $response = $oss_api->submit($request);
 
 ###  Get list of index on an instance
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/index/list.html)
+
 ```php
 $request = new OpenSearchServer\Index\GetList();
 $response = $oss_api->submit($request);
@@ -262,11 +265,34 @@ $response = $oss_api->submit($request);
 
 > This class does not need a call to `->index()` before submission.
 
+
+### Delete an index
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/index/delete.html)
+
+```php
+$request = new OpenSearchServer\Index\Delete();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+```
+
+### Check if an index exists
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/index/exists.html)
+
+```php
+$request = new OpenSearchServer\Index\Exists();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+```
+
 ## Configure schema
 
 In OpenSearchServer each index must have a schema. A schema is a list of fields, each with some properties.
 
 ### Create a field
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/field/create_update.html)
 
 ```php
 $request = new OpenSearchServer\Field\Create();
@@ -289,6 +315,8 @@ Available methods:
 
 ### Get list of fields
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/field/list.html)
+
 ```php
 $request = new OpenSearchServer\Field\GetList();
 $request->index('index_name');
@@ -296,6 +324,8 @@ $response = $oss_api->submit($request);
 ```
 
 ### Get details of a specific field
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/field/get.html)
 
 ```php
 $request = new OpenSearchServer\Field\Get();
@@ -310,6 +340,8 @@ Available methods:
 
 ### Delete a field
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/field/delete.html)
+
 ```php
 $request = new OpenSearchServer\Field\Delete();
 $request->index('index_name')
@@ -322,6 +354,8 @@ Available methods:
 * **name(string $name)**: name of field to delete.
 
 ### Set default and unique field for an index
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/field/set_default_unique.html)
 
 ```php
 $request = new OpenSearchServer\Field\SetDefaultUnique();
@@ -347,6 +381,8 @@ Available methods for Insert and Delete classes:
 
 #### Insert inclusion patterns
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/WEB_crawler/inclusion_patterns/insert.html)
+
 ```php
 $request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\Insert();
 $request->index('index_name')
@@ -357,6 +393,8 @@ $response = $oss_api->submit($request);
 
 #### List inclusion patterns
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/WEB_crawler/inclusion_patterns/list.html)
+
 ```php
 $request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList();
 $request->index('index_name');
@@ -364,6 +402,8 @@ $response = $oss_api->submit($request);
 ```
 
 #### Delete inclusion patterns
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/WEB_crawler/inclusion_patterns/delete.html)
 
 ```php
 $request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\Delete();
@@ -373,6 +413,8 @@ $response = $oss_api->submit($request);
 ```
 
 #### Insert exclusion patterns
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/WEB_crawler/exclusion_patterns/insert.html)
 
 ```php
 $request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\Insert();
@@ -384,6 +426,8 @@ $response = $oss_api->submit($request);
 
 #### List exclusion patterns
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/WEB_crawler/exclusion_patterns/list.html)
+
 ```php
 $request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList();
 $request->index('index_name');
@@ -391,6 +435,8 @@ $response = $oss_api->submit($request);
 ```
 
 #### Delete exclusion patterns
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/WEB_crawler/exclusion_patterns/delete.html)
 
 ```php
 $request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\Delete();
@@ -401,6 +447,8 @@ $response = $oss_api->submit($request);
 
 ### Start crawler
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/WEB_crawler/start.html)
+
 ```php
 $request = new OpenSearchServer\Crawler\Web\Start();
 $request->index('index_name');
@@ -409,6 +457,8 @@ $response = $oss_api->submit($request);
 
 ### Stop crawler
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/WEB_crawler/stop.html)
+
 ```php
 $request = new OpenSearchServer\Crawler\Web\Stop();
 $request->index('index_name');
@@ -416,6 +466,8 @@ $response = $oss_api->submit($request);
 ```
 
 ### Get crawler status
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/WEB_crawler/status.html)
 
 ```php
 $request = new OpenSearchServer\Crawler\Web\GetStatus();
@@ -426,6 +478,8 @@ $response = $oss_api->submit($request);
 ## Autocompletion
 
 ### Create an autocompletion
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/auto-completion/create_update.html)
 
 Autocompletion are "sub-index" for OpenSearchServer. They need to be created and configured with fields to use for suggestions.
 
@@ -446,6 +500,9 @@ Available methods:
 
 ### Build autocompletion
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/auto-completion/build.html)
+
+
 Autocompletion sub-index need to be re-built frequently, when content on main index changes. This can be automatized with OpenSearchServer's Schedulers or done by calling this API.
 
 ```php
@@ -463,6 +520,8 @@ Available methods:
 
 ### Get list of existing autocompletion items
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/auto-completion/list.html)
+
 Several autocompletion items can be built, each with particular fields for some specific purpose.
 
 ```php
@@ -472,6 +531,8 @@ $response = $oss_api->submit($request);
 ```
 
 ### Query autocompletion
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/auto-completion/query.html)
 
 ```php
 $request = new OpenSearchServer\Autocompletion\Query();
@@ -490,6 +551,8 @@ Available methods:
 
 ### Delete an autocompletion item
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/auto-completion/delete.html)
+
 ```php
 $request = new OpenSearchServer\Autocompletion\Delete();
 $request->index('index_name')
@@ -503,6 +566,8 @@ Available methods:
 ## Documents
 
 ### Push documents
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/document/put_json.html)
 
 Add document with array notation:
 
