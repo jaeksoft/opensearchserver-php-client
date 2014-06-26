@@ -861,33 +861,33 @@ $results = $oss_api->submit($request);
 Available methods:
 
 * General options:
-  * **query**(string $query): search keywords
-  * **emptyReturnsAll**(boolean $value): if set to true and keywords are empty will return every documents of the index
-  * **operator**(string $operator): Set the default operator: OR or AND
-  * **lang**(string $lang):
-  * **enableLogs**(boolean value): Enable logging of this query
-  * **returnedFields**(array $fields): An array of fieldnames to return with results
-  * **rows**(int $rows):
-  * **template**(string $name): set name of query template to use
-  * **snippet**():
+  * **query(string $query):** search keywords
+  * **emptyReturnsAll(boolean $value):** if set to true and keywords are empty will return every documents of the index
+  * **operator(string $operator):** Set the default operator: OR or AND
+  * **lang(string $lang):**
+  * **enableLogs(boolean value):** Enale logging of this query
+  * **returnedFields(array $fields):** An array of fieldnames to return with results
+  * **rows(int $rows):**
+  * **template(string $name):** set name of query template to use
+  * **snippet():**
 * Sorting options
-  * **sort**(string $field, string $direction = self::SORT_DESC):
-  * **sorts**(array $sorts, string $direction = self::SORT_DESC): helper method. Calls `sort()` for each item in array.
+  * **sort(string $field, string $direction):**
+  * **sorts(array $sorts, string $direction):** helper method. Calls `sort()` for each item in array.
 * Scoring options
-  * **scoring**(string $field = null, int $weight = 1, boolean $ascending = false, type $type = OpenSearchServer\Request::SCORING_FIELD_ORDER):  
+  * **scoring(string $field, int $weight, boolean $ascending, type $type):**  
 * Facetting options
-  * **facet**(string $field, int $min = 0, boolean $multi = false, boolean $postCollapsing = false):
+  * **facet(string $field, int $min = 0, boolean $multi = false, boolean $postCollapsing = false):**
 * Filtering options
-  * **queryFilter**(string $filter):
-  * **negativeFilter**(string $filter):
-  * **geoFilter**(string $shape = OpenSearchServer\Request::GEO_FILTER_SQUARED, string $unit = OpenSearchServer\Request::GEO_FILTER_KILOMETERS, int $distance):
-  * **negativeGeoFilter**(string $shape = OpenSearchServer\Request::GEO_FILTER_SQUARED, string $unit = \OpenSearchServer\Request::GEO_FILTER_KILOMETERS, int $distance):
-  * **filter**(string $field):
-  * `filterField(string $field, string $filter, string $join = self::OPERATOR_OR, boolean $addQuotes = false)`:
+  * **queryFilter(string $filter):**
+  * **negativeFilter(string $filter):**
+  * **geoFilter(string $shape, string $unit, int $distance):**
+  * **negativeGeoFilter(string $shape, string $unit, int $distance):**
+  * **filter(string $field):**
+  * **filterField(string $field, string $filter, string $join, boolean $addQuotes):**
 * Collapsing options
-  * `collapsing($field, $max, $mode = OpenSearchServer\Request::COLLAPSING_MODE_OFF, $type = OpenSearchServer\Request::COLLAPSING_TYPE_FULL)`:
+  * **collapsing(string $field, int $max, string $mode, string $type):**
 * Join options
-  * **join**(string $indexName, string $queryTemplate, string $queryString, string $localField, string $foreignField, string $type = \OpenSearchServer\Request::JOIN_INNER, boolean $returnFields = true, boolean $returnScores = false, boolean $returnFacets = false):**
+  * **join(string $indexName, string $queryTemplate, string $queryString, string $localField, string $foreignField, string $type, boolean $returnFields, boolean $returnScores, boolean $returnFacets):**
 
 #### Search(field)
 
@@ -906,8 +906,8 @@ $request->index('index_name')
 
 Available methods:
 
-* `searchField(string $field, string $mode = OpenSearchServer\Search\Field\SearchField::SEARCH_MODE_PATTERN, int $boost = 1, int $phraseBoost = 1)`:
-* `searchFields(array $fields, string $mode = OpenSearchServer\Search\Field\SearchField::SEARCH_MODE_PATTERN, int $boost = 1, int $phraseBoost = 1)`: helper method. Calls `searchField()` for each item in array.
+* **searchField(string $field, string $mode, int $boost, int $phraseBoost):**
+* **searchFields(array $fields, string $mode, int $boost, int $phraseBoost):** helper method. Calls `searchField()` for each item in array.
 
 #### Search(pattern)
 
