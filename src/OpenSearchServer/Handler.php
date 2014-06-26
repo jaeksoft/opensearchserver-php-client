@@ -104,6 +104,7 @@ class Handler
             $request->getHeaders(),
             $request->getData()
             );
+            
         $response = ResponseFactory::createResponse($response, $request);
         return $response;
     }

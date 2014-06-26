@@ -1005,6 +1005,8 @@ As shown above it is possible to save several search templates for future use.
 
 ### List search templates
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/search_template/list.html)
+
 ```php
 $request = new OpenSearchServer\SearchTemplate\GetList();
 $request->index('index_name');
@@ -1017,6 +1019,8 @@ foreach($response as $key => $item) {
 
 ### Get details of a search template
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/search_template/get.html)
+
 ```php
 $request = new OpenSearchServer\SearchTemplate\Get();
 $request->index('index_name')
@@ -1025,6 +1029,8 @@ $response = $oss_api->submit($request);
 ```
 
 ### Delete a search template
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/search_template/delete.html)
  
 ```php
 $request = new OpenSearchServer\SearchTemplate\Delete();
@@ -1035,6 +1041,74 @@ $response = $oss_api->submit($request);
 
 ## Synonyms
 
+
+### Create a list of synonyms
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/synonyms/create_update.html)
+ 
+```php
+$request = new OpenSearchServer\Synonyms\Create();
+$request->index('index_name')
+        ->name('hyperonyms')
+        ->addSynonyms('couch,divan,sofa')
+        ->addSynonyms(array(
+            'car,vehicle,transportation device',
+            'keyboard,electronic device'
+        ));
+$response = $oss_api->submit($request);
+```
+
+### Check if a list of synonyms exists
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/synonyms/check.html)
+ 
+```php
+$request = new OpenSearchServer\Synonyms\Exists();
+$request->index('index_name')
+        ->name('___not_an_existing_list___');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+```
+
+### Get existing lists of synonyms
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/search_template/delete.html)
+ 
+```php
+$request = new OpenSearchServer\Synonyms\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+### Get synonyms of a list
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/synonyms/get.html)
+ 
+```php
+$request = new OpenSearchServer\Synonyms\Get();
+$request->index('index_name')
+        ->name('hyperonyms');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+### Delete a list of synonyms
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/search_template/delete.html)
+ 
+```php
+$request = new OpenSearchServer\Synonyms\Delete();
+$request->index('index_name')
+        ->name('hyperonyms');
+$response = $oss_api->submit($request);
+```
 
 
 ===========================

@@ -36,6 +36,7 @@ class ResponseFactory
             case 'OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList':
             case 'OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList':
             case 'OpenSearchServer\Autocompletion\GetList':
+            case 'OpenSearchServer\Synonyms\GetList':
                 $response = new ResponseIterable($response, $request);
                 if(!empty($response->getJsonValues()->items)) {
                     $response->setValues($response->getJsonValues()->items);
@@ -47,6 +48,22 @@ class ResponseFactory
                 if(!empty($response->getJsonValues()->templates)) {
                     $response->setValues($response->getJsonValues()->templates);
                 }
+                return $response;
+                break;
+            case 'OpenSearchServer\Synonyms\Get':
+                $response = new ResponseIterable($response, $request);
+                $content = $response->getRawContent();
+                if(!empty($content)) {
+                    $response->setValues(explode("\n", $content));
+                }
+                return $response;
+                break;
+            //Synonyms\Exists has a particular behaviour: existence is based on HTTP response code (200 / 404)
+            case 'OpenSearchServer\Synonyms\Exists':
+                $headers = $response->getHeaders();
+                $responseHttpCode = $headers[0];
+                $response = new \OpenSearchServer\Response\Response($response, $request);
+                $response->setSuccess(strpos($responseHttpCode, '200 OK') !== false);
                 return $response;
                 break;
             default:

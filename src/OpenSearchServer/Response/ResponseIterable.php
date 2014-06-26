@@ -9,6 +9,10 @@ class ResponseIterable extends Response implements \Iterator
     	return $this->values = $values;
     }
 
+    public function getValues() {
+        return $this->values;
+    }
+    
     /************************
      * Implements methods from Iterator
      ************************/
