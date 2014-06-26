@@ -3,8 +3,8 @@ OpenSearchServer PHP Client
 
 OpenSearchServer is an Open-Source professionnal search engine offering lots of advanced features:
 
-* Fully integrated solution: build your index, crawl your websites, filesystem or databases, configure your search queries
-* Complete user interface in browser
+* **Fully integrated solution**: build your index, **crawl** your websites, filesystem or databases, configure your search queries
+* **Complete user interface** in browser
 * **Search features:** 
   * **Full-text, boolean** and **phonetic** search
   * Outer and inner **join**
@@ -16,6 +16,7 @@ OpenSearchServer is an Open-Source professionnal search engine offering lots of 
   * Suggestion (auto-completion)
 * **Indexation features:**
   * **17 languages**
+  * **Crawlers**: web, filesystem (local, remote), database, mailboxes
   * Special **analysis** for each language
   * Numerous **filters**: n-gram, lemmatization, shingle, elisions, stripping diacritic, Etc.
   * Automatic language detection
@@ -98,7 +99,7 @@ $request = new OpenSearchServer\Index\Create();
 $request->index('first_index')->template(OpenSearchServer\Request::TEMPLATE_WEB_CRAWLER);
 $response = $oss_api->submit($request);
 ```
-**Configure crawler**
+**Configure web crawler**
 
 Add some allowed patterns:
 
@@ -163,18 +164,77 @@ $request->index('first_index')
         ->query('The Count')
         ->searchField('title')
         ->returnedFields('title');
-$response = $oss_api->submit($request);
+$results = $oss_api->submit($request);
+
+echo 'Total number of results: ' . $results->getTotalNumberFound() . '<br/>';
+echo 'Number of results in this set of results: ' . $results->getNumberOfResults();
+
+foreach($results as $key => $result) {
+    echo '<hr/>Result #'.$key.': <br/>';
+    echo '<li>Title: '.$result->getField('title').'</li>';
+    echo '</ul>';
+}  
 ```
 
 # Client Documentation
 
 **Table of contents**
 
-* [How to make requests](#how-to-make-requests)
-* [Work with index](#work-with-index)
-* [Configure schema](#configure-schema)
-* [Web crawler](#web-crawler)
-* [Autocompletion](#autocompletion)
+* **[How to make requests](#how-to-make-requests)**
+  * [Create an handler](#create-an-handler)
+  * [Create a request](#create-a-request)
+  * [Handle response](#handle-response)
+    * _[OpenSearchServer\Response\Response](#opensearchserverresponseresponse)_
+    * _[OpenSearchServer\Response\ResponseIterable](#opensearchserverresponseresponseiterable)_
+    * _[OpenSearchServer\Response\SearchResult](#opensearchserverresponsesearchresult)_
+* **[Work with index](#work-with-index)**
+  * [Create an empty index](#create-an-empty-index)
+  * [Create an index with a template](#create-an-index-with-a-template)
+  * [Get list of index on an instance](#get-list-of-index-on-an-instance)
+  * [Delete an index](#delete-an-index)
+  * [Check if an index exists](#check-if-an-index-exists)
+* **[Configure schema](#configure-schema)**
+  * [Create a field](#create-a-field)
+  * [Get list of fields](#get-list-of-fields)
+  * [Get details of a specific field](#get-details-of-a-specific-field)
+  * [Delete a field](#delete-a-field)
+  * [Set default and unique field for an index](#set-default-and-unique-field-for-an-index)
+* **[Web crawler](#web-crawler)**
+  * [Patterns](#patterns)
+    * _[Insert inclusion patterns](#insert-inclusion-patterns)_
+    * _[List inclusion patterns](#list-inclusion-patterns)_
+    * _[Delete inclusion patterns](#delete-inclusion-patterns)_
+    * _[Insert exclusion patterns](#insert-exclusion-patterns)_
+    * _[List exclusion patterns](#list-exclusion-patterns)_
+    * _[Delete exclusion patterns](#delete-exclusion-patterns)_
+  * [Start crawler](#start-crawler)
+  * [Stop crawler](#stop-crawler)
+  * [Get crawler status](#get-crawler-status)
+* **[Autocompletion](#autocompletion)**
+  * [Create an autocompletion](#create-an-autocompletion)
+  * [Build autocompletion](#build-autocompletion)
+  * [Get list of existing autocompletion items](#get-list-of-existing-autocompletion-items)
+  * [Query autocompletion](#query-autocompletion)
+  * [Delete an autocompletion item](#delete-an-autocompletion-item)
+* **[Documents](#documents)**
+  * [Push documents](#push-documents)
+  * [Delete documents](#delete-documents)
+* **[Execute search queries](#run-search-queries)**
+  * [Search options](#search-options)
+  * [Search(field)](#searchfield)
+    * _[Save a Search(field) query template](#save-a-searchfield-query-template)_
+  * [Search(pattern)](#searchpattern)
+    * _[Save a Search(pattern) query template](#save-a-searchpattern-query-template)_
+* **[Search templates](#query-templates)**
+  * [List search template](#list-search-templates)
+  * [Get details of a search template](#get-details-of-a-search-template)
+  * [Delete a search template](#delete-a-search-template)
+* **[Synonyms](#synonyms)**
+  * [Create a list of synonyms](#create-a-list-of-synoyms)
+  * [Check if a list of synonyms exists](#check-if-a-list-of-synonyms-exists)
+  * [Get existing lists of synonyms](#get-existing-lists-of-synonyms)
+  * [Get synonyms of a list](#get-synonyms-of-a-list)
+  * [Delete a list of synonyms](#delete-a-list-of-synonyms)
 
 ## How to make requests
 
@@ -221,7 +281,130 @@ Once configured request must be sent to an OpenSearchServer instance thanks to t
 $response = $oss_api->submit($request);
 ```
 
+### Handle response
 
+Several types of responses can be returned by `submit()`. Internally this method uses a Factory that builds a response depending on the type of Request given.
+
+3 types of responses are available.
+
+#### OpenSearchServer\Response\Response
+
+Main Response class.
+
+* Methods:
+  * **isSuccess():** true if everything went well, false if there was a problem during execution of request.
+  * **getInfo():** some requests can return some information. For example `Index deleted: 00__test_file`.
+  * **getRawContent():** return raw JSON content of response.
+  * **getJsonValues():** return an array of values built from JSON response.
+* Example:
+  
+```php
+$request = new OpenSearchServer\Index\Create();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+print_r($response->isSuccess());
+```
+
+#### OpenSearchServer\Response\ResponseIterable
+
+Extends OpenSearchServer\Response\Response. Used when response contain iterable values. This class implements `\Iterator` and can thus be used in a loop structure.
+
+* Example: loop through suggestions of an autocompletion query:
+
+```php
+$request = new OpenSearchServer\Autocompletion\Query();
+$request->index('00__test_file')
+        ->name('autocomplete')
+        ->query('count of')
+        ->rows(10);
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+* Requests that use this type of response:
+  * OpenSearchServer\Autocompletion\Query
+  * OpenSearchServer\Index\GetList
+  * OpenSearchServer\Field\GetList
+  * OpenSearchServer\Autocompletion\GetList
+  * OpenSearchServer\SearchTemplate\GetList
+  * OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList
+  * OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList
+
+#### OpenSearchServer\Response\SearchResult
+
+Extends OpenSearchServer\Response\ResponseIterable. Used for search results.
+
+* Methods:
+  * **getResults():** return array of objects of type OpenSearchServer\Response\Result.
+  * **getQuery():** return query executed by OpenSearchServer
+  * **getRows():** return number of rows asked
+  * **getStart():** return starting offset
+  * **getTotalNumberFound():** return total number of results found in index for this query
+  * **getTime():** return query duration, in ms
+  * **getCollapsedDocCount():** return number of total collapsed docs 
+  * **getMaxScore():** return max score in this results set
+  * **getNumberOfResults():** return number of results in this results set
+* Example: this class being iterable it can also be used in a loop structure:
+
+```php
+$request = new OpenSearchServer\Search\Field\Search();
+$request->index('index_name')
+        ->query('house')
+        //using a pre-configured query template
+        ->template('search');
+$results = $oss_api->submit($request);
+
+echo 'Total number of results: ' . $results->getTotalNumberFound() . '<br/>';
+echo 'Number of results in this set of results: ' . $results->getNumberOfResults();
+
+foreach($results as $key => $result) {
+    echo '<hr/>Result #'.$key.': <br/>';
+    print_r($result);
+}
+```
+
+This class creates object of type **OpenSearchServer\Response\Result**:
+* Methods:
+  * **getPos():**
+  * **getScore():**
+  * **getCollapsedCount():**
+  * **getField($fieldName, $returnFirstValueOnly = true):** return value of a field 
+    * `$fieldName` is the name of the field to return. `$returnFirstValueOnly` can be set to false to get every values of a multivalued field. Often fields will have only one value, thus default value for this parameter is `true`. 
+  * **getSnippet($fieldName, $returnFirstValueOnly = true):** return value of a snippet 
+    * `$fieldName` is the name of the field from which the snippet has been created. `$returnFirstValueOnly` can be set to false to get every snippets if several snippets where asked.
+  * **getAvailableFields($returnAllWithoutValues = false):** return all available fields for this result.
+    *  `$returnAllWithoutValues` can be set to true to return fields that have been configured as `returnedFields` in the query even if they have no value for this result.
+  * **getAvailableSnippets($returnAllWithoutValues = false):** return all available snippets for this result.
+    *  `$returnAllWithoutValues` can be set to true to return snippets that have been asked the query even if they have no value for this result.
+* Example:
+
+```php    
+$request = new OpenSearchServer\Search\Field\Search();
+$request->index('index_name')
+        ->query('house')
+        //using a pre-configured query template
+        ->template('search');
+$results = $oss_api->submit($request);
+
+echo 'Total number of results: ' . $results->getTotalNumberFound() . '<br/>';
+echo 'Number of results in this set of results: ' . $results->getNumberOfResults();
+
+foreach($results as $key => $result) {
+    echo '<hr/>Result #'.$key.': <br/>';
+    echo 'Available fields:</br>- ';
+    echo implode('<br/>- ', $result->getAvailableFields());
+    echo '<br/>Available snippets:</br>- ';
+    echo implode('<br/>- ', $result->getAvailableSnippets());
+    echo '<ul>';
+    echo '<li>Title:'.$result->getSnippet('title').'</li>';
+    echo '<li>Url:'.$result->getField('url').'</li>';
+    echo '</ul>';
+}    
+```
+  
 ## Work with index
 
 ### Create an empty index
@@ -261,6 +444,10 @@ $response = $oss_api->submit($request);
 ```php
 $request = new OpenSearchServer\Index\GetList();
 $response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 ```
 
 > This class does not need a call to `->index()` before submission.
@@ -321,6 +508,10 @@ Available methods:
 $request = new OpenSearchServer\Field\GetList();
 $request->index('index_name');
 $response = $oss_api->submit($request); 
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 ```
 
 ### Get details of a specific field
@@ -399,6 +590,10 @@ $response = $oss_api->submit($request);
 $request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList();
 $request->index('index_name');
 $response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 ```
 
 #### Delete inclusion patterns
@@ -432,6 +627,10 @@ $response = $oss_api->submit($request);
 $request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList();
 $request->index('index_name');
 $response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 ```
 
 #### Delete exclusion patterns
@@ -528,6 +727,10 @@ Several autocompletion items can be built, each with particular fields for some 
 $request = new OpenSearchServer\Autocompletion\GetList();
 $request->index('index_name');
 $response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 ```
 
 ### Query autocompletion
@@ -541,6 +744,10 @@ $request->index('index_name')
         ->query('Three Musk')
         ->rows(10);
 $response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 ```
 
 Available methods:
@@ -636,7 +843,6 @@ Available methods for object of type OpenSearchServer\Document\Document:
 
 [Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/document/delete_by_JSON.html)
 
-
 ```php
 $request = new OpenSearchServer\Document\Delete();
 $request->index('index_name')
@@ -652,11 +858,280 @@ Available methods:
 * **value(string $value)**: value of the field to delete.
 * **values(array $values)**: helper method. Call `value()` for each item in array.
 
-# TODO
+## Execute search queries
 
-* Factory to work with responses and get easy access to different type of results (loop through search results, ...).
-* Register repository on packagist.
+### Search options
 
+Two types of search queries exist in OpenSearchServer : Search field and Search pattern.
+
+They both offer lots of common options and only differ in the way of specfiying searched fields:
+
+```php
+$request = new ...;
+$request->index('index_name')
+        ->emptyReturnsAll()
+        ->query('house')
+        //set operator to use when multiple keywords
+        ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
+        //set lang of keywords
+        ->lang('FRENCH')
+        //enable logging
+        ->enableLog()
+        //set returned fields
+        ->returnedFields(array('title', 'url'))
+        //set static filter
+        ->filter('status:1')
+        //set another static filter, different way
+        ->filterField('year', '[0 TO 1990]')
+        //set another static filter, with yet a different way
+        ->filterField('category', array('files', 'archives'))
+        //set number of results
+        ->rows(5)
+        //configure sorting
+        ->sort('date', OpenSearchServer\Search\Search::SORT_DESC)
+        //set facets (min 1, multivalued field)
+        ->facet('category', 1, true)
+        //set snippets
+        ->snippet('title')
+        ->snippet('content', 'b', '...', 200, 1, OpenSearchServer\Search\Search::SNIPPET_SENTENCE_FRAGMENTER);
+$results = $oss_api->submit($request);
+```
+
+Available methods:
+
+* General options:
+  * **query(string $query):** search keywords
+  * **emptyReturnsAll(boolean $value):** if set to true and keywords are empty will return every documents of the index
+  * **operator(string $operator):** Set the default operator: OR or AND
+  * **lang(string $lang):**
+  * **enableLogs(boolean value):** Enale logging of this query
+  * **returnedFields(array $fields):** An array of fieldnames to return with results
+  * **rows(int $rows):**
+  * **template(string $name):** set name of query template to use. If set, query will use given registered query template but will override every parameters defined in the query object.
+  * **snippet():**
+* Sorting options
+  * **sort(string $field, string $direction):**
+  * **sorts(array $sorts, string $direction):** helper method. Calls `sort()` for each item in array.
+* Scoring options
+  * **scoring(string $field, int $weight, boolean $ascending, type $type):**  
+* Facetting options
+  * **facet(string $field, int $min = 0, boolean $multi = false, boolean $postCollapsing = false):**
+* Filtering options
+  * **queryFilter(string $filter):**
+  * **negativeFilter(string $filter):**
+  * **geoFilter(string $shape, string $unit, int $distance):**
+  * **negativeGeoFilter(string $shape, string $unit, int $distance):**
+  * **filter(string $field):**
+  * **filterField(string $field, string $filter, string $join, boolean $addQuotes):**
+* Collapsing options
+  * **collapsing(string $field, int $max, string $mode, string $type):**
+* Join options
+  * **join(string $indexName, string $queryTemplate, string $queryString, string $localField, string $foreignField, string $type, boolean $returnFields, boolean $returnScores, boolean $returnFacets):**
+
+### Search(field)
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/searching_using_fields/search.html)
+
+Fields that must be searched are specified precisely in this kind of query:
+
+```php
+$request = new OpenSearchServer\Search\Field\Search();
+$request->index('index_name')
+        ...
+        //set some search fields
+        ->searchFields(array('content', 'url'))
+        //set a specific different search field with Term & Phrase, term boost = 5 and phrase boost = 10
+        ->searchField('title', OpenSearchServer\Search\Field\Search::SEARCH_MODE_TERM_AND_PHRASE, 5, 10)
+        ...
+$results = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **searchField(string $field, string $mode, int $boost, int $phraseBoost):**
+* **searchFields(array $fields, string $mode, int $boost, int $phraseBoost):** helper method. Calls `searchField()` for each item in array.
+
+#### Save a Search(field) query template
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/searching_using_fields/template_create_update.html)
+
+Query template can be registered to be used later without having to give every parameters. They can also be edited with the administration interface.
+
+
+```php
+$request = new OpenSearchServer\Search\Field\Put();
+$request->index('index_name')
+        ->emptyReturnsAll()
+        ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
+        ->searchFields(array('content', 'url'))
+        ...
+        ->template('template_name');
+$results = $oss_api->submit($request);
+```
+
+### Search(pattern)
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/searching_using_patterns/search.html)
+
+With this kind of query searched fields are configured with a pattern language:
+
+```php
+$request = new OpenSearchServer\Search\Pattern\Search();
+$request->index('index_name')
+        ...
+        //configure search pattern
+        ->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10')
+        //configure pattern to use for snippets
+        ->patternSnippetQuery('title:($$) OR content:($$)')
+        ...
+$results = $oss_api->submit($request);
+```
+
+#### Save a Search(pattern) query template
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/searching_using_patterns/template_create_update.html)
+
+Query template can be registered to be used later without having to give every parameters. They can also be edited with the administration interface.
+
+
+```php
+$request = new OpenSearchServer\Search\Pattern\Put();
+$request->index('index_name')
+        ->emptyReturnsAll()
+        ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
+        ->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10')
+        ...
+        ->template('template_name');
+$results = $oss_api->submit($request);
+```
+## Search templates
+
+As shown above it is possible to save several search templates for future use. 
+
+### List search templates
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/search_template/list.html)
+
+```php
+$request = new OpenSearchServer\SearchTemplate\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+### Get details of a search template
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/search_template/get.html)
+
+```php
+$request = new OpenSearchServer\SearchTemplate\Get();
+$request->index('index_name')
+        ->name('template_name')
+$response = $oss_api->submit($request);
+```
+
+### Delete a search template
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/search_template/delete.html)
+ 
+```php
+$request = new OpenSearchServer\SearchTemplate\Delete();
+$request->index('index_name')
+        ->name('template_name')
+$response = $oss_api->submit($request);
+```
+
+## Synonyms
+
+
+### Create a list of synonyms
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/synonyms/create_update.html)
+ 
+```php
+$request = new OpenSearchServer\Synonyms\Create();
+$request->index('index_name')
+        ->name('hyperonyms')
+        ->addSynonyms('couch,divan,sofa')
+        ->addSynonyms(array(
+            'car,vehicle,transportation device',
+            'keyboard,electronic device'
+        ));
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name(string $name):** name of list to create
+* **addSynonyms(array/string $list):** synonyms to add. One array entry for each group of synonyms. The synonyms within a group are separated by commas.
+                    Example: couch,sofa,divan
+
+### Check if a list of synonyms exists
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/synonyms/check.html)
+ 
+```php
+$request = new OpenSearchServer\Synonyms\Exists();
+$request->index('index_name')
+        ->name('___not_an_existing_list___');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+```
+
+Available methods:
+
+* **name(string $name):** name of list to check
+
+### Get existing lists of synonyms
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/search_template/delete.html)
+ 
+```php
+$request = new OpenSearchServer\Synonyms\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+### Get synonyms of a list
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/synonyms/get.html)
+ 
+```php
+$request = new OpenSearchServer\Synonyms\Get();
+$request->index('index_name')
+        ->name('hyperonyms');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+Available methods:
+
+* **name(string $name):** name of list to get
+
+### Delete a list of synonyms
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/search_template/delete.html)
+ 
+```php
+$request = new OpenSearchServer\Synonyms\Delete();
+$request->index('index_name')
+        ->name('hyperonyms');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name(string $name):** name of list to delete
 
 
 ===========================

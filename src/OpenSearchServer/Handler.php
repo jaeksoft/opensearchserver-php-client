@@ -7,7 +7,7 @@ use Symfony\Component\OptionsResolver\Options;
 use Buzz\Browser;
 use Buzz\Client\Curl;
 use OpenSearchServer\Request;
-use OpenSearchServer\Response;
+use OpenSearchServer\Response\ResponseFactory;
 
 class Handler
 {
@@ -104,8 +104,9 @@ class Handler
             $request->getHeaders(),
             $request->getData()
             );
-            var_dump($response);
-        return new Response($response, $request);
+            
+        $response = ResponseFactory::createResponse($response, $request);
+        return $response;
     }
     
     public function setUser($value)

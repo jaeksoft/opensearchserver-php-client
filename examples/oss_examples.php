@@ -15,19 +15,126 @@ echo '<hr/><h2>Index\Create</h2>';
 $request = new OpenSearchServer\Index\Create();
 $request->index('00__test');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 //create an index with FILE_CRAWLER template
 $request = new OpenSearchServer\Index\Create();
 $request->index('00__test_file')->template(OpenSearchServer\Request::TEMPLATE_FILE_CRAWLER);
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 //create an index with WEB_CRAWLER template
 $request = new OpenSearchServer\Index\Create();
 $request->index('00__test_web')->template(OpenSearchServer\Request::TEMPLATE_WEB_CRAWLER);
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+/**
+ * ## Synonyms\Create
+ * Create a list of synonyms
+ */
+echo '<hr/><h2>Synonyms\Create</h2>';
+$request = new OpenSearchServer\Synonyms\Create();
+$request->index('00__test_file')
+        ->name('synonyms')
+        ->addSynonyms('couch,divan,sofa')
+        ->addSynonyms(array(
+            'toto,tata,titi',
+            'lorem,lorim,loram'
+        ));
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getinfo());
+
+
+$request = new OpenSearchServer\Synonyms\Create();
+$request->index('00__test_file')
+        ->name('hyperonyms')
+        ->addSynonyms('couch,divan,sofa')
+        ->addSynonyms(array(
+            'car,vehicle,transportation device',
+            'keyboard,electronic device'
+        ));
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getinfo());
+
+/**
+ * ## Synonyms\GetList
+ * Get existing lists of synonyms
+ */
+echo '<hr/><h2>Synonyms\GetList</h2>';
+$request = new OpenSearchServer\Synonyms\GetList();
+$request->index('00__test_file');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+/**
+ * ## Synonyms\Exists
+ * Check if a list of synonyms exists
+ */
+echo '<hr/><h2>Synonyms\Exists</h2>';
+$request = new OpenSearchServer\Synonyms\Exists();
+$request->index('00__test_file')
+        ->name('hyperonyms');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+
+/**
+ * ## Synonyms\Exists
+ * Check if a list of synonyms exists
+ */
+echo '<hr/><h2>Synonyms\Exists - not an existing list</h2>';
+$request = new OpenSearchServer\Synonyms\Exists();
+$request->index('00__test_file')
+        ->name('___not_an_existing_list___');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+
+/**
+ * ## Synonyms\Get
+ * Get synonyms of a list
+ */
+echo '<hr/><h2>Synonyms\Get</h2>';
+$request = new OpenSearchServer\Synonyms\Get();
+$request->index('00__test_file')
+        ->name('hyperonyms');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+/**
+ * ## Synonyms\Delete
+ * Delete a list of synonyms
+ */
+echo '<hr/><h2>Synonyms\Delete</h2>';
+$request = new OpenSearchServer\Synonyms\Delete();
+$request->index('00__test_file')
+        ->name('hyperonyms');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getinfo());
+
+/**
+ * ## Synonyms\GetList
+ * Get existing lists of synonyms
+ */
+echo '<hr/><h2>Synonyms\GetList</h2>';
+$request = new OpenSearchServer\Synonyms\GetList();
+$request->index('00__test_file');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Document\Put
@@ -79,42 +186,24 @@ $document2->lang(OpenSearchServer\Request::LANG_FR)
 $request->addDocuments(array($document, $document2));
 
 $response = $oss_api->submit($request);
-var_dump($oss_api->getLastRequest());
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
-/**
- * ## Search\Pattern\Search
- * Execute a Search(pattern) query
- */
-echo '<hr/><h2>Search\Pattern\Search</h2>';
-$request = new OpenSearchServer\Search\Pattern\Search();
-$request->index('00__test_file')
-        ->query('count')
-        ->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10')
-        ->patternSnippetQuery('title:($$) OR content:($$)')
-        ->returnedFields(array('title', 'uri'))
-        ->rows(4);
-$response = $oss_api->submit($request);
-var_dump($response);
-
-/**
- * ## Search\Pattern\Put
- * Save a Search(pattern) template
- */
-echo '<hr/><h2>Search\Pattern\Put</h2>';
+echo '<hr/><h2>Search\Field\Search</h2>';
 //build request
-$request = new OpenSearchServer\Search\Pattern\Put();
+$request = new OpenSearchServer\Search\Field\Search();
 $request->index('00__test_file')
+        ->emptyReturnsAll()
         //set operator to use when multiple keywords
         ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
         //set lang of keywords
         ->lang('FRENCH')
         //enable logging
         ->enableLog()
-        //set search pattern
-        ->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10 OR url:($$)^5 OR urlSplit:($$)^5 OR urlExact:($$)^5 OR urlPhonetic:($$)^5 OR content:($$) OR contentExact:($$) OR contentPhonetic:($$) OR full:($$)^0.1 OR fullExact:($$)^0.1 OR fullPhonetic:($$)^0.1')
-        //set snippet pattern
-        ->patternSnippetQuery('title:($$) OR content:($$)')
+        //set some search fields
+        ->searchFields(array('content', 'url'))
+        //set a specific different search field with Term & Phrase, term boost = 5 and phrase boost = 10
+        ->searchField('title', OpenSearchServer\Search\Field\Search::SEARCH_MODE_TERM_AND_PHRASE, 5, 10)
         //set returned fields
         ->returnedFields(array('title', 'url'))
         //set static filter
@@ -131,15 +220,82 @@ $request->index('00__test_file')
         ->facet('category', 1, true)
         //set snippets
         ->snippet('title')
-        ->snippet('content', 'b', '...', 200, 1, OpenSearchServer\Search\Search::SNIPPET_SENTENCE_FRAGMENTER)
-        //give this template a name
-        ->template('new_template_pattern');
-//dump JSON encoded content
+        ->snippet('content', 'b', '...', 200, 1, OpenSearchServer\Search\Search::SNIPPET_SENTENCE_FRAGMENTER);
 echo '<pre style="word-wrap: break-word;">'; print_r($request->getData()); echo '</pre>';
-//send request
 $response = $oss_api->submit($request);
-//dump response
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+/**
+ * ## Index\GetList
+ * Get list of index on the OpenSearchServer instance
+ */
+echo '<hr/><h2>Index\GetList</h2>';
+$request = new OpenSearchServer\Index\GetList();
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+/**
+ * ## Field\GetList
+ * Get list of fields in one index
+ */
+echo '<hr/><h2>Field\GetList</h2>';
+$request = new OpenSearchServer\Field\GetList();
+$request->index('00__test_web');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+/**
+ * ## Search\Pattern\Search
+ */
+echo '<hr/><h2>Search\Pattern\Search</h2>';
+//build request
+$request = new OpenSearchServer\Search\Field\Search();
+$request->index('gendarmerie_test')
+        ->query('maison')
+        ->template('search');
+$results = $oss_api->submit($request);
+
+echo 'Total number of results: ' . $results->getTotalNumberFound() . '<br/>';
+echo 'Number of results in this set of results: ' . $results->getNumberOfResults();
+
+foreach($results as $key => $result) {
+    echo '<hr/>Result #'.$key.': <br/>';
+    echo 'Available fields:</br>- ';
+    echo implode('<br/>- ', $result->getAvailableFields());
+    echo '<br/>Available snippets:</br>- ';
+    echo implode('<br/>- ', $result->getAvailableSnippets());
+    echo '<ul>';
+    echo '<li>Title:'.$result->getSnippet('title').'</li>';
+    echo '<li>Url:'.$result->getField('url').'</li>';
+    echo '</ul>';
+}
+
+/**
+ * ## Search\Pattern\Search
+ * Execute a Search(pattern) query
+ */
+echo '<hr/><h2>Search\Pattern\Search</h2>';
+$request = new OpenSearchServer\Search\Pattern\Search();
+$request->index('00__test_file')
+        ->query('count')
+        ->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10')
+        ->patternSnippetQuery('title:($$) OR content:($$)')
+        ->returnedFields(array('title', 'uri'))
+        ->rows(4);
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## MoreLikeThis\Create
@@ -167,7 +323,8 @@ $request->index('00__test_file')
         //give this template a name
         ->template('template_mlt');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 /**
  * ## MoreLikeThis\Search
@@ -190,8 +347,11 @@ $request = new OpenSearchServer\MoreLikeThis\Delete();
 $request->index('00__test_file')
         ->template('template_mlt');
 $response = $oss_api->submit($request);
-var_dump($oss_api->getLastRequest());
 var_dump($response);
+var_dump($oss_api->getLastRequest());
+var_dump($response->getOriginalResponse());
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 
 
@@ -205,8 +365,8 @@ $request->index('00__test_web')
         ->pattern('http://www.exclude.com/*')
         ->patterns(array('http://www.exclude1.com/page1', 'http://www.exclude2.net/page1'));
 $response = $oss_api->submit($request);
-var_dump($response);
-
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 /**
  * ## Crawler\Web\Patterns\Exclusion\GetList
  * Get list of exclusion patterns
@@ -215,7 +375,10 @@ echo '<hr/><h2>Crawler\Web\Patterns\Exclusion\GetList</h2>';
 $request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList();
 $request->index('00__test_web');
 $response = $oss_api->submit($request);
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Crawler\Web\Patterns\Exclusion\Delete
@@ -226,7 +389,8 @@ $request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\Delete();
 $request->index('00__test_web')
         ->pattern('http://www.exclude1.com/page1');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 
 /**
@@ -237,7 +401,10 @@ echo '<hr/><h2>Crawler\Web\Patterns\Exclusion\GetList</h2>';
 $request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList();
 $request->index('00__test_web');
 $response = $oss_api->submit($request);
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Crawler\Web\Patterns\Inclusion\Insert
@@ -249,7 +416,8 @@ $request->index('00__test_web')
         ->pattern('http://www.alexandre-toyer.fr/*')
         ->patterns(array('http://www.lemonde.fr', 'http://www.20minutes.fr/'));
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 /**
  * ## Crawler\Web\Patterns\Inclusion\GetList
@@ -259,7 +427,10 @@ echo '<hr/><h2>Crawler\Web\Patterns\Inclusion\GetList</h2>';
 $request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList();
 $request->index('00__test_web');
 $response = $oss_api->submit($request);
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Crawler\Web\Patterns\Inclusion\Delete
@@ -270,8 +441,8 @@ $request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\Delete();
 $request->index('00__test_web')
         ->patterns(array('http://www.lemonde.fr', 'http://www.20minutes.fr/'));
 $response = $oss_api->submit($request);
-var_dump($oss_api->getLastRequest());
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 /**
  * ## Crawler\Web\Url\Insert
@@ -282,8 +453,8 @@ $request = new OpenSearchServer\Crawler\Web\Url\Insert();
 $request->index('00__test_web')
         ->urls(array('http://www.lemonde.fr', 'http://www.20minutes.fr'));
 $response = $oss_api->submit($request);
-var_dump($oss_api->getLastRequest());
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 
 /**
@@ -296,8 +467,8 @@ $request->index('00__test_file')
         ->name('test_autocomplete')
         ->field('autocomplete');
 $response = $oss_api->submit($request);
-var_dump($oss_api->getLastRequest());
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 /**
  * ## Autocompletion\GetList
@@ -308,7 +479,10 @@ $request = new OpenSearchServer\Autocompletion\GetList();
 $request->index('00__test_file');
 $response = $oss_api->submit($request);
 var_dump($oss_api->getLastRequest());
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Autocompletion\Build
@@ -319,8 +493,8 @@ $request = new OpenSearchServer\Autocompletion\Build();
 $request->index('00__test_file')
         ->name('test_autocomplete');
 $response = $oss_api->submit($request);
-var_dump($oss_api->getLastRequest());
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 	
 /**
  * ## Autocompletion\Query
@@ -334,7 +508,10 @@ $request->index('00__test_file')
         ->rows(10);
 $response = $oss_api->submit($request);
 var_dump($oss_api->getLastRequest());
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 	
 /**
  * ## Autocompletion\Delete
@@ -345,8 +522,8 @@ $request = new OpenSearchServer\Autocompletion\Delete();
 $request->index('00__test_file')
         ->name('test_autocomplete');
 $response = $oss_api->submit($request);
-var_dump($oss_api->getLastRequest());
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 	
 /**
  * ## Document\Delete
@@ -359,8 +536,8 @@ $request->index('00__test_file')
         ->field('uri')
         ->value('2');
 $response = $oss_api->submit($request);
-var_dump($oss_api->getLastRequest());
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 /**
  * ## Field\Create
@@ -374,8 +551,8 @@ $request->index('00__test')
         ->indexed(true);
 $response = $oss_api->submit($request);
 
-var_dump($oss_api->getLastRequest());
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 $request = new OpenSearchServer\Field\Create();
 $request->index('00__test')
@@ -384,7 +561,8 @@ $request->index('00__test')
         ->analyzer('TextAnalyzer')
         ->stored(true);
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 $request = new OpenSearchServer\Field\Create();
 $request->index('00__test')
@@ -394,7 +572,8 @@ $request->index('00__test')
         ->stored(true)
         ->copyOf('title');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 /**
  * ## Field\GetList
@@ -404,7 +583,10 @@ echo '<hr/><h2>Field\GetList</h2>';
 $request = new OpenSearchServer\Field\GetList();
 $request->index('00__test');
 $response = $oss_api->submit($request);
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Field\Get
@@ -415,7 +597,8 @@ $request = new OpenSearchServer\Field\Get();
 $request->index('00__test')
         ->name('titleStandard');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 /**
  * ## Field\Delete
@@ -426,7 +609,8 @@ $request = new OpenSearchServer\Field\Delete();
 $request->index('00__test')
         ->name('titleStandard');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 /**
  * ## Field\SetDefaultUnique
@@ -439,7 +623,8 @@ $request->index('00__test_file')
         //remove unique field for this index
         ->uniqueField();
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 /**
  * ## Index\GetList
@@ -448,7 +633,10 @@ var_dump($response);
 echo '<hr/><h2>Index\GetList</h2>';
 $request = new OpenSearchServer\Index\GetList();
 $response = $oss_api->submit($request);
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Index\Exists
@@ -458,12 +646,14 @@ echo '<hr/><h2>Index\Exists</h2>';
 $request = new OpenSearchServer\Index\Exists();
 $request->index('00__test');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 $request = new OpenSearchServer\Index\Exists();
 $request->index('non_existent_index');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 /**
  * ## Search\Field\Search
@@ -477,7 +667,8 @@ $request->index('00__test_file')
         ->returnedFields('title')
         ->rows(4);
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 /**
  * ## Search\Field\Put
@@ -521,8 +712,10 @@ $request->index('00__test_file')
 echo '<pre style="word-wrap: break-word;">'; print_r($request->getData()); echo '</pre>';
 //send request
 $response = $oss_api->submit($request);
-//dump response
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## SearchTemplate\GetList
@@ -532,7 +725,10 @@ echo '<hr/><h2>SearchTemplate\GetList</h2>';
 $request = new OpenSearchServer\SearchTemplate\GetList();
 $request->index('00__test_file');
 $response = $oss_api->submit($request);
-print_r($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## SearchTemplate\Get
@@ -543,7 +739,9 @@ $request = new OpenSearchServer\SearchTemplate\Get();
 $request->index('00__test_file')
         ->name('new_template');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+var_dump($response->getRawContent());
 
 /**
  * ## SearchTemplate\Delete
@@ -554,7 +752,8 @@ $request = new OpenSearchServer\SearchTemplate\Delete();
 $request->index('00__test_file')
         ->name('new_template');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 
 /**
  * ## Index\Delete
@@ -564,10 +763,13 @@ echo '<hr/><h2>Index\Delete</h2>';
 $request = new OpenSearchServer\Index\Delete();
 $request->index('00__test_web');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 $request->index('00__test_file');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 $request->index('00__test');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
