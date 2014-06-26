@@ -883,9 +883,9 @@ Available methods:
   * **geoFilter**(string $shape = OpenSearchServer\Request::GEO_FILTER_SQUARED, string $unit = OpenSearchServer\Request::GEO_FILTER_KILOMETERS, int $distance):
   * **negativeGeoFilter**(string $shape = OpenSearchServer\Request::GEO_FILTER_SQUARED, string $unit = \OpenSearchServer\Request::GEO_FILTER_KILOMETERS, int $distance):
   * **filter**(string $field):
-  * **filterField**(string $field, string $filter, string $join = self::OPERATOR_OR, boolean $addQuotes = false):
+  * `filterField(string $field, string $filter, string $join = self::OPERATOR_OR, boolean $addQuotes = false)`:
 * Collapsing options
-  * **collapsing**($field, $max, $mode = OpenSearchServer\Request::COLLAPSING_MODE_OFF, $type = OpenSearchServer\Request::COLLAPSING_TYPE_FULL):
+  * `collapsing($field, $max, $mode = OpenSearchServer\Request::COLLAPSING_MODE_OFF, $type = OpenSearchServer\Request::COLLAPSING_TYPE_FULL)`:
 * Join options
   * **join**(string $indexName, string $queryTemplate, string $queryString, string $localField, string $foreignField, string $type = \OpenSearchServer\Request::JOIN_INNER, boolean $returnFields = true, boolean $returnScores = false, boolean $returnFacets = false):**
 
@@ -906,8 +906,8 @@ $request->index('index_name')
 
 Available methods:
 
-* **searchField**(string $field, string $mode = OpenSearchServer\Search\Field\SearchField::SEARCH_MODE_PATTERN, int $boost = 1, int $phraseBoost = 1):
-* **searchFields**(array $fields, string $mode = OpenSearchServer\Search\Field\SearchField::SEARCH_MODE_PATTERN, int $boost = 1, int $phraseBoost = 1): helper method. Calls `searchField()` for each item in array.
+* `searchField(string $field, string $mode = OpenSearchServer\Search\Field\SearchField::SEARCH_MODE_PATTERN, int $boost = 1, int $phraseBoost = 1)`:
+* `searchFields(array $fields, string $mode = OpenSearchServer\Search\Field\SearchField::SEARCH_MODE_PATTERN, int $boost = 1, int $phraseBoost = 1)`: helper method. Calls `searchField()` for each item in array.
 
 #### Search(pattern)
 
