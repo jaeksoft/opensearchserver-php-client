@@ -219,7 +219,7 @@ foreach($results as $key => $result) {
 * **[Documents](#documents)**
   * [Push documents](#push-documents)
   * [Delete documents](#delete-documents)
-* [Run search queries](#run-search-queries)
+* **[Run search queries](#run-search-queries)**
   * [Search options](#search-options)
   * [Search(field)](#searchfield)
   * [Search(pattern)](#searchpattern)
