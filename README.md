@@ -3,8 +3,8 @@ OpenSearchServer PHP Client
 
 OpenSearchServer is an Open-Source professionnal search engine offering lots of advanced features:
 
-* Fully integrated solution: build your index, crawl your websites, filesystem or databases, configure your search queries
-* Complete user interface in browser
+* **Fully integrated solution**: build your index, **crawl** your websites, filesystem or databases, configure your search queries
+* **Complete user interface** in browser
 * **Search features:** 
   * **Full-text, boolean** and **phonetic** search
   * Outer and inner **join**
@@ -16,6 +16,7 @@ OpenSearchServer is an Open-Source professionnal search engine offering lots of 
   * Suggestion (auto-completion)
 * **Indexation features:**
   * **17 languages**
+  * **Crawlers**: web, filesystem (local, remote), database, mailboxes
   * Special **analysis** for each language
   * Numerous **filters**: n-gram, lemmatization, shingle, elisions, stripping diacritic, Etc.
   * Automatic language detection
