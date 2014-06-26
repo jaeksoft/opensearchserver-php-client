@@ -219,10 +219,17 @@ foreach($results as $key => $result) {
 * **[Documents](#documents)**
   * [Push documents](#push-documents)
   * [Delete documents](#delete-documents)
-* **[Run search queries](#run-search-queries)**
+* **[Execute search queries](#run-search-queries)**
   * [Search options](#search-options)
   * [Search(field)](#searchfield)
+    * _[Save a Search(field) query template](#save-a-searchfield-query-template)_
   * [Search(pattern)](#searchpattern)
+    * _[Save a Search(pattern) query template](#save-a-searchpattern-query-template)_
+* **[Search templates](#query-templates)
+  * [List search template](#list-search-templates)
+  * [Get details of a search template](#get-details-of-a-search-template)
+  * [Delete a search template](#delete-a-search-template)
+* **[Synonyms](#synonyms)
 
 ## How to make requests
 
@@ -432,6 +439,10 @@ $response = $oss_api->submit($request);
 ```php
 $request = new OpenSearchServer\Index\GetList();
 $response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 ```
 
 > This class does not need a call to `->index()` before submission.
@@ -492,6 +503,10 @@ Available methods:
 $request = new OpenSearchServer\Field\GetList();
 $request->index('index_name');
 $response = $oss_api->submit($request); 
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 ```
 
 ### Get details of a specific field
@@ -570,6 +585,10 @@ $response = $oss_api->submit($request);
 $request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList();
 $request->index('index_name');
 $response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 ```
 
 #### Delete inclusion patterns
@@ -603,6 +622,10 @@ $response = $oss_api->submit($request);
 $request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList();
 $request->index('index_name');
 $response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 ```
 
 #### Delete exclusion patterns
@@ -699,6 +722,10 @@ Several autocompletion items can be built, each with particular fields for some 
 $request = new OpenSearchServer\Autocompletion\GetList();
 $request->index('index_name');
 $response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 ```
 
 ### Query autocompletion
@@ -712,6 +739,10 @@ $request->index('index_name')
         ->query('Three Musk')
         ->rows(10);
 $response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 ```
 
 Available methods:
@@ -807,7 +838,6 @@ Available methods for object of type OpenSearchServer\Document\Document:
 
 [Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/document/delete_by_JSON.html)
 
-
 ```php
 $request = new OpenSearchServer\Document\Delete();
 $request->index('index_name')
@@ -823,7 +853,7 @@ Available methods:
 * **value(string $value)**: value of the field to delete.
 * **values(array $values)**: helper method. Call `value()` for each item in array.
 
-## Run search queries
+## Execute search queries
 
 ### Search options
 
@@ -872,7 +902,7 @@ Available methods:
   * **enableLogs(boolean value):** Enale logging of this query
   * **returnedFields(array $fields):** An array of fieldnames to return with results
   * **rows(int $rows):**
-  * **template(string $name):** set name of query template to use
+  * **template(string $name):** set name of query template to use. If set, query will use given registered query template but will override every parameters defined in the query object.
   * **snippet():**
 * Sorting options
   * **sort(string $field, string $direction):**
@@ -895,6 +925,8 @@ Available methods:
 
 ### Search(field)
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/searching_using_fields/search.html)
+
 Fields that must be searched are specified precisely in this kind of query:
 
 ```php
@@ -906,6 +938,7 @@ $request->index('index_name')
         //set a specific different search field with Term & Phrase, term boost = 5 and phrase boost = 10
         ->searchField('title', OpenSearchServer\Search\Field\Search::SEARCH_MODE_TERM_AND_PHRASE, 5, 10)
         ...
+$results = $oss_api->submit($request);
 ```
 
 Available methods:
@@ -913,7 +946,27 @@ Available methods:
 * **searchField(string $field, string $mode, int $boost, int $phraseBoost):**
 * **searchFields(array $fields, string $mode, int $boost, int $phraseBoost):** helper method. Calls `searchField()` for each item in array.
 
+#### Save a Search(field) query template
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/searching_using_fields/template_create_update.html)
+
+Query template can be registered to be used later without having to give every parameters. They can also be edited with the administration interface.
+
+
+```php
+$request = new OpenSearchServer\Search\Field\Put();
+$request->index('index_name')
+        ->emptyReturnsAll()
+        ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
+        ->searchFields(array('content', 'url'))
+        ...
+        ->template('template_name');
+$results = $oss_api->submit($request);
+```
+
 ### Search(pattern)
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/searching_using_patterns/search.html)
 
 With this kind of query searched fields are configured with a pattern language:
 
@@ -926,9 +979,63 @@ $request->index('index_name')
         //configure pattern to use for snippets
         ->patternSnippetQuery('title:($$) OR content:($$)')
         ...
+$results = $oss_api->submit($request);
 ```
 
+#### Save a Search(pattern) query template
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/searching_using_patterns/template_create_update.html)
+
+Query template can be registered to be used later without having to give every parameters. They can also be edited with the administration interface.
+
+
+```php
+$request = new OpenSearchServer\Search\Pattern\Put();
+$request->index('index_name')
+        ->emptyReturnsAll()
+        ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
+        ->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10')
+        ...
+        ->template('template_name');
+$results = $oss_api->submit($request);
+```
+## Search templates
+
+As shown above it is possible to save several search templates for future use. 
+
+### List search templates
+
+```php
+$request = new OpenSearchServer\SearchTemplate\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+### Get details of a search template
+
+```php
+$request = new OpenSearchServer\SearchTemplate\Get();
+$request->index('index_name')
+        ->name('template_name')
+$response = $oss_api->submit($request);
+```
+
+### Delete a search template
  
+```php
+$request = new OpenSearchServer\SearchTemplate\Delete();
+$request->index('index_name')
+        ->name('template_name')
+$response = $oss_api->submit($request);
+```
+
+## Synonyms
+
+
 
 ===========================
 
