@@ -171,8 +171,7 @@ echo 'Number of results in this set of results: ' . $results->getNumberOfResults
 
 foreach($results as $key => $result) {
     echo '<hr/>Result #'.$key.': <br/>';
-    echo '<li>Title: '.$result->getSnippet('title').'</li>';
-    echo '<li>Url: '.$result->getField('url').'</li>';
+    echo '<li>Title: '.$result->getField('title').'</li>';
     echo '</ul>';
 }  
 ```
