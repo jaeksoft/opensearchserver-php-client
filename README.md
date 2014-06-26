@@ -225,11 +225,11 @@ foreach($results as $key => $result) {
     * _[Save a Search(field) query template](#save-a-searchfield-query-template)_
   * [Search(pattern)](#searchpattern)
     * _[Save a Search(pattern) query template](#save-a-searchpattern-query-template)_
-* **[Search templates](#query-templates)
+* **[Search templates](#query-templates)**
   * [List search template](#list-search-templates)
   * [Get details of a search template](#get-details-of-a-search-template)
   * [Delete a search template](#delete-a-search-template)
-* **[Synonyms](#synonyms)
+* **[Synonyms](#synonyms)**
 
 ## How to make requests
 
