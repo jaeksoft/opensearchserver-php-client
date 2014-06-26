@@ -98,7 +98,7 @@ $request = new OpenSearchServer\Index\Create();
 $request->index('first_index')->template(OpenSearchServer\Request::TEMPLATE_WEB_CRAWLER);
 $response = $oss_api->submit($request);
 ```
-**Configure crawler**
+**Configure web crawler**
 
 Add some allowed patterns:
 
@@ -190,8 +190,25 @@ $response = $oss_api->submit($request);
   * [Delete a field](#delete-a-field)
   * [Set default and unique field for an index](#set-default-and-unique-field-for-an-index)
 * **[Web crawler](#web-crawler)**
+  * [Patterns](#patterns)
+    * _[Insert inclusion patterns](#insert-inclusion-patterns)_
+    * _[List inclusion patterns](#list-inclusion-patterns)_
+    * _[Delete inclusion patterns](#delete-inclusion-patterns)_
+    * _[Insert exclusion patterns](#insert-exclusion-patterns)_
+    * _[List exclusion patterns](#list-exclusion-patterns)_
+    * _[Delete exclusion patterns](#delete-exclusion-patterns)_
+  * [Start crawler](#start-crawler)
+  * [Stop crawler](#stop-crawler)
+  * [Get crawler status](#get-crawler-status)
 * **[Autocompletion](#autocompletion)**
+  * [Create an autocompletion](#create-an-autocompletion)
+  * [Build autocompletion](#build-autocompletion)
+  * [Get list of existing autocompletion items](#get-list-of-existing-autocompletion-items)
+  * [Query autocompletion](#query-autocompletion)
+  * [Delete an autocompletion item](#delete-an-autocompletion-item)
 * **[Documents](#documents)**
+  * [Push documents](#push-documents)
+  * [Delete documents](#delete-documents)
 
 ## How to make requests
 
