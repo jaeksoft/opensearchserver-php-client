@@ -163,7 +163,17 @@ $request->index('first_index')
         ->query('The Count')
         ->searchField('title')
         ->returnedFields('title');
-$response = $oss_api->submit($request);
+$results = $oss_api->submit($request);
+
+echo 'Total number of results: ' . $results->getTotalNumberFound() . '<br/>';
+echo 'Number of results in this set of results: ' . $results->getNumberOfResults();
+
+foreach($results as $key => $result) {
+    echo '<hr/>Result #'.$key.': <br/>';
+    echo '<li>Title: '.$result->getSnippet('title').'</li>';
+    echo '<li>Url: '.$result->getField('url').'</li>';
+    echo '</ul>';
+}  
 ```
 
 # Client Documentation
@@ -808,13 +818,6 @@ Available methods:
 * **field(string $name)**: name of field on which base deletion.
 * **value(string $value)**: value of the field to delete.
 * **values(array $values)**: helper method. Call `value()` for each item in array.
-
-# TODO
-
-* Factory to work with responses and get easy access to different type of results (loop through search results, ...).
-* Register repository on packagist.
-
-
 
 ===========================
 
