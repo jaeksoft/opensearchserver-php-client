@@ -171,8 +171,24 @@ $response = $oss_api->submit($request);
 **Table of contents**
 
 * [How to make requests](#how-to-make-requests)
+  * [Create an handler](#create-an-handler)
+  * [Create a request](#create-a-request)
+  * [Handle response](#handle-response)
+    * [OpenSearchServer\Response\Response](#opensearchserverresponseresponse)
+    * [OpenSearchServer\Response\ResponseIterable](#opensearchserverresponseresponseiterable)
+    * [OpenSearchServer\Response\SearchResult](#opensearchserverresponsesearchresult)
 * [Work with index](#work-with-index)
+  * [Create an empty index](#create-an-empty-index)
+  * [Create an index with a template](#create-an-index-with-a-template)
+  * [Get list of index on an instance](#get-list-of-index-on-an-instance)
+  * [Delete an index](#delete-an-index)
+  * [Check if an index exists](#check-if-an-index-exists)
 * [Configure schema](#configure-schema)
+  * [Create a field](#create-a-field)
+  * [Get list of fields](#get-list-of-fields)
+  * [Get details of a specific field](#get-details-of-a-specific-field]
+  * [Delete a field](#delete-a-field)
+  * [Set default and unique field for an index](#set-default-and-unique-field-for-an-index)
 * [Web crawler](#web-crawler)
 * [Autocompletion](#autocompletion)
 * [Documents](#documents)
@@ -313,7 +329,7 @@ This class creates object of type **OpenSearchServer\Response\Result**:
   * **getScore():**
   * **getCollapsedCount():**
   * **getField($fieldName, $returnFirstValueOnly = true):** return value of a field 
-  * `$fieldName` is the name of the field to return. `$returnFirstValueOnly` can be set to false to get every values of a multivalued field. Often fields will have only one value, thus default value for this parameter is `true`. 
+    * `$fieldName` is the name of the field to return. `$returnFirstValueOnly` can be set to false to get every values of a multivalued field. Often fields will have only one value, thus default value for this parameter is `true`. 
   * **getSnippet($fieldName, $returnFirstValueOnly = true):** return value of a snippet 
     * `$fieldName` is the name of the field from which the snippet has been created. `$returnFirstValueOnly` can be set to false to get every snippets if several snippets where asked.
   * **getAvailableFields($returnAllWithoutValues = false):** return all available fields for this result.
