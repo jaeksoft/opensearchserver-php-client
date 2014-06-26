@@ -230,6 +230,11 @@ foreach($results as $key => $result) {
   * [Get details of a search template](#get-details-of-a-search-template)
   * [Delete a search template](#delete-a-search-template)
 * **[Synonyms](#synonyms)**
+  * [Create a list of synonyms](#create-a-list-of-synoyms)
+  * [Check if a list of synonyms exists](#check-if-a-list-of-synonyms-exists)
+  * [Get existing lists of synonyms](#get-existing-lists-of-synonyms)
+  * [Get synonyms of a list](#get-synonyms-of-a-list)
+  * [Delete a list of synonyms](#delete-a-list-of-synonyms)
 
 ## How to make requests
 
