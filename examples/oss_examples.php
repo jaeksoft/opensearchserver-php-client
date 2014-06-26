@@ -82,6 +82,43 @@ $response = $oss_api->submit($request);
 //var_dump($oss_api->getLastRequest());
 //var_dump($response);
 
+echo '<hr/><h2>Search\Field\Search</h2>';
+//build request
+$request = new OpenSearchServer\Search\Field\Search();
+$request->index('00__test_file')
+        ->emptyReturnsAll()
+        //set operator to use when multiple keywords
+        ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
+        //set lang of keywords
+        ->lang('FRENCH')
+        //enable logging
+        ->enableLog()
+        //set some search fields
+        ->searchFields(array('content', 'url'))
+        //set a specific different search field with Term & Phrase, term boost = 5 and phrase boost = 10
+        ->searchField('title', OpenSearchServer\Search\Field\Search::SEARCH_MODE_TERM_AND_PHRASE, 5, 10)
+        //set returned fields
+        ->returnedFields(array('title', 'url'))
+        //set static filter
+        ->filter('status:1')
+        //set another static filter, different way
+        ->filterField('year', '[0 TO 1990]')
+        //set another static filter, with yet a different way
+        ->filterField('category', array('files', 'archives'))
+        //set number of results
+        ->rows(5)
+        //configure sorting
+        ->sort('date', OpenSearchServer\Search\Search::SORT_DESC)
+        //set facets (min 1, multivalued field)
+        ->facet('category', 1, true)
+        //set snippets
+        ->snippet('title')
+        ->snippet('content', 'b', '...', 200, 1, OpenSearchServer\Search\Search::SNIPPET_SENTENCE_FRAGMENTER);
+echo '<pre style="word-wrap: break-word;">'; print_r($request->getData()); echo '</pre>';
+$response = $oss_api->submit($request);
+print_r($response);
+exit;
+
 /**
  * ## Index\GetList
  * Get list of index on the OpenSearchServer instance

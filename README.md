@@ -819,6 +819,113 @@ Available methods:
 * **value(string $value)**: value of the field to delete.
 * **values(array $values)**: helper method. Call `value()` for each item in array.
 
+## Run search queries
+
+### Search options
+
+Two types of search queries exist in OpenSearchServer : Search field and Search pattern.
+
+They both offer lots of common options and only differ in the way of specfiying searched fields:
+
+```php
+$request = new ...;
+$request->index('index_name')
+        ->emptyReturnsAll()
+        ->query('house')
+        //set operator to use when multiple keywords
+        ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
+        //set lang of keywords
+        ->lang('FRENCH')
+        //enable logging
+        ->enableLog()
+        //set returned fields
+        ->returnedFields(array('title', 'url'))
+        //set static filter
+        ->filter('status:1')
+        //set another static filter, different way
+        ->filterField('year', '[0 TO 1990]')
+        //set another static filter, with yet a different way
+        ->filterField('category', array('files', 'archives'))
+        //set number of results
+        ->rows(5)
+        //configure sorting
+        ->sort('date', OpenSearchServer\Search\Search::SORT_DESC)
+        //set facets (min 1, multivalued field)
+        ->facet('category', 1, true)
+        //set snippets
+        ->snippet('title')
+        ->snippet('content', 'b', '...', 200, 1, OpenSearchServer\Search\Search::SNIPPET_SENTENCE_FRAGMENTER);
+$results = $oss_api->submit($request);
+```
+
+Available methods:
+
+* General options:
+  * **query(string $query):** search keywords
+  * **emptyReturnsAll(boolean $value):** if set to true and keywords are empty will return every documents of the index
+  * **operator(string $operator):** Set the default operator: OR or AND
+  * **lang(string $lang):**
+  * **enableLogs(boolean value):** Enale logging of this query
+  * **returnedFields(array $fields):** An array of fieldnames to return with results
+  * **rows(int $rows):**
+  * **template(string $name):** set name of query template to use
+  * **snippet():**
+* Sorting options
+  * **sort(string $field, string $direction = self::SORT_DESC):**
+  * **sorts(array $sorts, string $direction = self::SORT_DESC):** helper method. Calls `sort()` for each item in array.
+* Scoring options
+  * **scoring(string $field = null, int $weight = 1, boolean $ascending = false, type $type = OpenSearchServer\Request::SCORING_FIELD_ORDER):**  
+* Facetting options
+  * **facet(string $field, int $min = 0, boolean $multi = false, boolean $postCollapsing = false):**
+* Filtering options
+  * **queryFilter(string $filter):**
+  * **negativeFilter(string $filter):**
+  * **geoFilter(string $shape = OpenSearchServer\Request::GEO_FILTER_SQUARED, string $unit = OpenSearchServer\Request::GEO_FILTER_KILOMETERS, int $distance):**
+  * **negativeGeoFilter(string $shape = OpenSearchServer\Request::GEO_FILTER_SQUARED, string $unit = \OpenSearchServer\Request::GEO_FILTER_KILOMETERS, int $distance):**
+  * **filter(string $field):**
+  * **filterField(string $field, string $filter, string $join = self::OPERATOR_OR, boolean $addQuotes = false):**
+* Collapsing options
+  * **collapsing($field, $max, $mode = OpenSearchServer\Request::COLLAPSING_MODE_OFF, $type = OpenSearchServer\Request::COLLAPSING_TYPE_FULL):**
+* Join options
+  * **join(string $indexName, string $queryTemplate, string $queryString, string $localField, string $foreignField, string $type = \OpenSearchServer\Request::JOIN_INNER, boolean $returnFields = true, boolean $returnScores = false, boolean $returnFacets = false):**
+
+#### Search(field)
+
+Fields that must be searched are specified precisely in this kind of query:
+
+```php
+$request = new OpenSearchServer\Search\Field\Search();
+$request->index('index_name')
+        ...
+        //set some search fields
+        ->searchFields(array('content', 'url'))
+        //set a specific different search field with Term & Phrase, term boost = 5 and phrase boost = 10
+        ->searchField('title', OpenSearchServer\Search\Field\Search::SEARCH_MODE_TERM_AND_PHRASE, 5, 10)
+        ...
+```
+
+Available methods:
+
+* **searchField(string $field, string $mode = OpenSearchServer\Search\Field\SearchField::SEARCH_MODE_PATTERN, int $boost = 1, int $phraseBoost = 1):**
+* **searchFields(array $fields, string $mode = OpenSearchServer\Search\Field\SearchField::SEARCH_MODE_PATTERN, int $boost = 1, int $phraseBoost = 1):** helper method. Calls `searchField()` for each item in array.
+
+#### Search(pattern)
+
+With this kind of query searched fields are configured with a pattern language:
+
+```php
+$request = new OpenSearchServer\Search\Pattern\Search();
+$request->index('index_name')
+        ...
+        //configure search pattern
+        ->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10')
+        //configure pattern to use for snippets
+        ->patternSnippetQuery('title:($$) OR content:($$)')
+        ...
+```
+
+ 
+
 ===========================
 
 OpenSearchServer PHP Client
