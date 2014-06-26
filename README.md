@@ -1058,6 +1058,12 @@ $request->index('index_name')
 $response = $oss_api->submit($request);
 ```
 
+Available methods:
+
+* **name(string $name):** name of list to create
+* **addSynonyms(array/string $list):** synonyms to add. One array entry for each group of synonyms. The synonyms within a group are separated by commas.
+                    Example: couch,sofa,divan
+
 ### Check if a list of synonyms exists
 
 [Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/synonyms/check.html)
@@ -1069,6 +1075,10 @@ $request->index('index_name')
 $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
 ```
+
+Available methods:
+
+* **name(string $name):** name of list to check
 
 ### Get existing lists of synonyms
 
@@ -1099,6 +1109,10 @@ foreach($response as $key => $item) {
 }
 ```
 
+Available methods:
+
+* **name(string $name):** name of list to get
+
 ### Delete a list of synonyms
 
 [Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/search_template/delete.html)
@@ -1109,6 +1123,10 @@ $request->index('index_name')
         ->name('hyperonyms');
 $response = $oss_api->submit($request);
 ```
+
+Available methods:
+
+* **name(string $name):** name of list to delete
 
 
 ===========================
