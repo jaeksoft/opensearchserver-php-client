@@ -174,9 +174,9 @@ $response = $oss_api->submit($request);
   * [Create an handler](#create-an-handler)
   * [Create a request](#create-a-request)
   * [Handle response](#handle-response)
-    * [OpenSearchServer\Response\Response](#opensearchserverresponseresponse)
-    * [OpenSearchServer\Response\ResponseIterable](#opensearchserverresponseresponseiterable)
-    * [OpenSearchServer\Response\SearchResult](#opensearchserverresponsesearchresult)
+    * _[OpenSearchServer\Response\Response](#opensearchserverresponseresponse)_
+    * _[OpenSearchServer\Response\ResponseIterable](#opensearchserverresponseresponseiterable)_
+    * _[OpenSearchServer\Response\SearchResult](#opensearchserverresponsesearchresult)_
 * **[Work with index](#work-with-index)**
   * [Create an empty index](#create-an-empty-index)
   * [Create an index with a template](#create-an-index-with-a-template)
