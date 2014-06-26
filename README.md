@@ -219,6 +219,10 @@ foreach($results as $key => $result) {
 * **[Documents](#documents)**
   * [Push documents](#push-documents)
   * [Delete documents](#delete-documents)
+* [Run search queries](#run-search-queries)
+  * [Search options](#search-options)
+  * [Search(field)](#searchfield)
+  * [Search(pattern)](#searchpattern)
 
 ## How to make requests
 
@@ -889,7 +893,7 @@ Available methods:
 * Join options
   * **join(string $indexName, string $queryTemplate, string $queryString, string $localField, string $foreignField, string $type, boolean $returnFields, boolean $returnScores, boolean $returnFacets):**
 
-#### Search(field)
+### Search(field)
 
 Fields that must be searched are specified precisely in this kind of query:
 
@@ -909,7 +913,7 @@ Available methods:
 * **searchField(string $field, string $mode, int $boost, int $phraseBoost):**
 * **searchFields(array $fields, string $mode, int $boost, int $phraseBoost):** helper method. Calls `searchField()` for each item in array.
 
-#### Search(pattern)
+### Search(pattern)
 
 With this kind of query searched fields are configured with a pattern language:
 
