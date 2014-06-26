@@ -175,6 +175,7 @@ $response = $oss_api->submit($request);
 * [Configure schema](#configure-schema)
 * [Web crawler](#web-crawler)
 * [Autocompletion](#autocompletion)
+* [Documents](#documents)
 
 ## How to make requests
 
@@ -221,7 +222,121 @@ Once configured request must be sent to an OpenSearchServer instance thanks to t
 $response = $oss_api->submit($request);
 ```
 
+### Handle response
 
+Several types of responses can be returned by `submit()`. Internally this method uses a Factory that build a response depending on the type of Request given.
+
+3 types of responses are available:
+
+* **OpenSearchServer\Response\Response:** main Response class.
+  * Methods:
+    * **isSuccess():** true if everything went well, false if there was a problem during execution of request.
+    * **getInfo():** some requests can return some information. For example `Index deleted: 00__test_file`.
+    * **getRawContent():** return raw JSON content of response.
+    * **getJsonValues():** return an array of values built from JSON response.
+  * Example:
+  
+```php
+$request = new OpenSearchServer\Index\Create();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+print_r($response->isSuccess());
+```
+
+* **OpenSearchServer\Response\ResponseIterable:** extends OpenSearchServer\Response\Response. Used when response contain iterable values. This class implements `\Iterator` and can thus be used in a loop structure.
+  * Example: loop through suggestions of an autocompletion query:
+
+```php
+$request = new OpenSearchServer\Autocompletion\Query();
+$request->index('00__test_file')
+        ->name('autocomplete')
+        ->query('count of')
+        ->rows(10);
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+  * Requests that use this type of response:
+    * OpenSearchServer\Autocompletion\Query
+    * OpenSearchServer\Index\GetList
+    * OpenSearchServer\Field\GetList
+    * OpenSearchServer\Autocompletion\GetList
+    * OpenSearchServer\SearchTemplate\GetList
+    * OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList
+    * OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList
+
+* **OpenSearchServer\Response\SearchResult:** extends OpenSearchServer\Response\ResponseIterable. Used for search results.
+  * Methods:
+    * **getResults():** return array of objects of type OpenSearchServer\Response\Result.
+    * **getQuery():** return query executed by OpenSearchServer
+    * **getRows():** return number of rows asked
+    * **getStart():** return starting offset
+    * **getTotalNumberFound():** return total number of results found in index for this query
+    * **getTime():** return query duration, in ms
+    * **getCollapsedDocCount():** return number of total collapsed docs 
+    * **getMaxScore():** return max score in this results set
+    * **getNumberOfResults():** return number of results in this results set
+  * Example: this class being iterable it can also be used in a loop structure:
+
+```php
+$request = new OpenSearchServer\Search\Field\Search();
+$request->index('index_name')
+        ->query('house')
+        //using a pre-configured query template
+        ->template('search');
+$results = $oss_api->submit($request);
+
+echo 'Total number of results: ' . $results->getTotalNumberFound() . '<br/>';
+echo 'Number of results in this set of results: ' . $results->getNumberOfResults();
+
+foreach($results as $key => $result) {
+    echo '<hr/>Result #'.$key.': <br/>';
+    print_r($result);
+}
+```
+
+  * This class creates object of type **OpenSearchServer\Response\Result**:
+    * Methods:
+      * **getPos():**
+      * **getScore():**
+      * **getCollapsedCount():**
+      * **getField($fieldName, $returnFirstValueOnly = true):** return value of a field 
+        * `$fieldName` is the name of the field to return. `$returnFirstValueOnly` can be set to false to get every values of a multivalued field. Often fields will have only one value, thus default value for this parameter is `true`. 
+      * **getSnippet($fieldName, $returnFirstValueOnly = true):** return value of a snippet 
+        * `$fieldName` is the name of the field from which the snippet has been created. `$returnFirstValueOnly` can be set to false to get every snippets if several snippets where asked.
+      * **getAvailableFields($returnAllWithoutValues = false):** return all available fields for this result.
+        *  `$returnAllWithoutValues` can be set to true to return fields that have been configured as `returnedFields` in the query even if they have no value for this result.
+      * **getAvailableSnippets($returnAllWithoutValues = false):** return all available snippets for this result.
+        *  `$returnAllWithoutValues` can be set to true to return snippets that have been asked the query even if they have no value for this result.
+    * Example:
+
+```php    
+$request = new OpenSearchServer\Search\Field\Search();
+$request->index('index_name')
+        ->query('house')
+        //using a pre-configured query template
+        ->template('search');
+$results = $oss_api->submit($request);
+
+echo 'Total number of results: ' . $results->getTotalNumberFound() . '<br/>';
+echo 'Number of results in this set of results: ' . $results->getNumberOfResults();
+
+foreach($results as $key => $result) {
+    echo '<hr/>Result #'.$key.': <br/>';
+    echo 'Available fields:</br>- ';
+    echo implode('<br/>- ', $result->getAvailableFields());
+    echo '<br/>Available snippets:</br>- ';
+    echo implode('<br/>- ', $result->getAvailableSnippets());
+    echo '<ul>';
+    echo '<li>Title:'.$result->getSnippet('title').'</li>';
+    echo '<li>Url:'.$result->getField('url').'</li>';
+    echo '</ul>';
+}    
+```
+  
 ## Work with index
 
 ### Create an empty index

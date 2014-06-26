@@ -15,19 +15,19 @@ echo '<hr/><h2>Index\Create</h2>';
 $request = new OpenSearchServer\Index\Create();
 $request->index('00__test');
 $response = $oss_api->submit($request);
-var_dump($response);
+//var_dump($response);
 
 //create an index with FILE_CRAWLER template
 $request = new OpenSearchServer\Index\Create();
 $request->index('00__test_file')->template(OpenSearchServer\Request::TEMPLATE_FILE_CRAWLER);
 $response = $oss_api->submit($request);
-var_dump($response);
+//var_dump($response);
 
 //create an index with WEB_CRAWLER template
 $request = new OpenSearchServer\Index\Create();
 $request->index('00__test_web')->template(OpenSearchServer\Request::TEMPLATE_WEB_CRAWLER);
 $response = $oss_api->submit($request);
-var_dump($response);
+//var_dump($response);
 
 /**
  * ## Document\Put
@@ -79,8 +79,61 @@ $document2->lang(OpenSearchServer\Request::LANG_FR)
 $request->addDocuments(array($document, $document2));
 
 $response = $oss_api->submit($request);
-var_dump($oss_api->getLastRequest());
-var_dump($response);
+//var_dump($oss_api->getLastRequest());
+//var_dump($response);
+
+/**
+ * ## Index\GetList
+ * Get list of index on the OpenSearchServer instance
+ */
+echo '<hr/><h2>Index\GetList</h2>';
+$request = new OpenSearchServer\Index\GetList();
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+/**
+ * ## Field\GetList
+ * Get list of fields in one index
+ */
+echo '<hr/><h2>Field\GetList</h2>';
+$request = new OpenSearchServer\Field\GetList();
+$request->index('00__test_web');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+/**
+ * ## Search\Pattern\Put
+ * Save a Search(pattern) template
+ */
+echo '<hr/><h2>Search\Pattern\Search</h2>';
+//build request
+$request = new OpenSearchServer\Search\Field\Search();
+$request->index('gendarmerie_test')
+        ->query('maison')
+        ->template('search');
+$results = $oss_api->submit($request);
+
+
+echo 'Total number of results: ' . $results->getTotalNumberFound() . '<br/>';
+echo 'Number of results in this set of results: ' . $results->getNumberOfResults();
+
+foreach($results as $key => $result) {
+    echo '<hr/>Result #'.$key.': <br/>';
+    echo 'Available fields:</br>- ';
+    echo implode('<br/>- ', $result->getAvailableFields());
+    echo '<br/>Available snippets:</br>- ';
+    echo implode('<br/>- ', $result->getAvailableSnippets());
+    echo '<ul>';
+    echo '<li>Title:'.$result->getSnippet('title').'</li>';
+    echo '<li>Url:'.$result->getField('url').'</li>';
+    echo '</ul>';
+}
 
 /**
  * ## Search\Pattern\Search
@@ -95,51 +148,7 @@ $request->index('00__test_file')
         ->returnedFields(array('title', 'uri'))
         ->rows(4);
 $response = $oss_api->submit($request);
-var_dump($response);
-
-/**
- * ## Search\Pattern\Put
- * Save a Search(pattern) template
- */
-echo '<hr/><h2>Search\Pattern\Put</h2>';
-//build request
-$request = new OpenSearchServer\Search\Pattern\Put();
-$request->index('00__test_file')
-        //set operator to use when multiple keywords
-        ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
-        //set lang of keywords
-        ->lang('FRENCH')
-        //enable logging
-        ->enableLog()
-        //set search pattern
-        ->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10 OR url:($$)^5 OR urlSplit:($$)^5 OR urlExact:($$)^5 OR urlPhonetic:($$)^5 OR content:($$) OR contentExact:($$) OR contentPhonetic:($$) OR full:($$)^0.1 OR fullExact:($$)^0.1 OR fullPhonetic:($$)^0.1')
-        //set snippet pattern
-        ->patternSnippetQuery('title:($$) OR content:($$)')
-        //set returned fields
-        ->returnedFields(array('title', 'url'))
-        //set static filter
-        ->filter('status:1')
-        //set another static filter, different way
-        ->filterField('year', '[0 TO 1990]')
-        //set another static filter, with yet a different way
-        ->filterField('category', array('files', 'archives'))
-        //set number of results
-        ->rows(5)
-        //configure sorting
-        ->sort('date', OpenSearchServer\Search\Search::SORT_DESC)
-        //set facets (min 1, multivalued field)
-        ->facet('category', 1, true)
-        //set snippets
-        ->snippet('title')
-        ->snippet('content', 'b', '...', 200, 1, OpenSearchServer\Search\Search::SNIPPET_SENTENCE_FRAGMENTER)
-        //give this template a name
-        ->template('new_template_pattern');
-//dump JSON encoded content
-echo '<pre style="word-wrap: break-word;">'; print_r($request->getData()); echo '</pre>';
-//send request
-$response = $oss_api->submit($request);
-//dump response
-var_dump($response);
+//var_dump($response);
 
 /**
  * ## MoreLikeThis\Create
@@ -215,7 +224,10 @@ echo '<hr/><h2>Crawler\Web\Patterns\Exclusion\GetList</h2>';
 $request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList();
 $request->index('00__test_web');
 $response = $oss_api->submit($request);
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Crawler\Web\Patterns\Exclusion\Delete
@@ -237,7 +249,10 @@ echo '<hr/><h2>Crawler\Web\Patterns\Exclusion\GetList</h2>';
 $request = new OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList();
 $request->index('00__test_web');
 $response = $oss_api->submit($request);
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Crawler\Web\Patterns\Inclusion\Insert
@@ -259,7 +274,10 @@ echo '<hr/><h2>Crawler\Web\Patterns\Inclusion\GetList</h2>';
 $request = new OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList();
 $request->index('00__test_web');
 $response = $oss_api->submit($request);
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Crawler\Web\Patterns\Inclusion\Delete
@@ -308,7 +326,10 @@ $request = new OpenSearchServer\Autocompletion\GetList();
 $request->index('00__test_file');
 $response = $oss_api->submit($request);
 var_dump($oss_api->getLastRequest());
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Autocompletion\Build
@@ -334,7 +355,10 @@ $request->index('00__test_file')
         ->rows(10);
 $response = $oss_api->submit($request);
 var_dump($oss_api->getLastRequest());
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 	
 /**
  * ## Autocompletion\Delete
@@ -404,7 +428,10 @@ echo '<hr/><h2>Field\GetList</h2>';
 $request = new OpenSearchServer\Field\GetList();
 $request->index('00__test');
 $response = $oss_api->submit($request);
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Field\Get
@@ -448,7 +475,10 @@ var_dump($response);
 echo '<hr/><h2>Index\GetList</h2>';
 $request = new OpenSearchServer\Index\GetList();
 $response = $oss_api->submit($request);
-var_dump($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## Index\Exists
@@ -532,7 +562,10 @@ echo '<hr/><h2>SearchTemplate\GetList</h2>';
 $request = new OpenSearchServer\SearchTemplate\GetList();
 $request->index('00__test_file');
 $response = $oss_api->submit($request);
-print_r($response);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
 
 /**
  * ## SearchTemplate\Get

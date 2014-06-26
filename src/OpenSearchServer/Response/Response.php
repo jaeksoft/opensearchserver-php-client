@@ -1,5 +1,5 @@
 <?php
-namespace OpenSearchServer;
+namespace OpenSearchServer\Response;
 
 use Buzz\Message\Response as BuzzResponse;
 
@@ -11,7 +11,7 @@ class Response
 	protected $info;
 	protected $jsonValues;
 	
-    public function __construct(BuzzResponse $response, Request $request)
+    public function __construct(BuzzResponse $response, \OpenSearchServer\Request $request)
     {
 		$this->rawContent = $response->getContent();
 		if(!empty($this->rawContent)) {
@@ -32,7 +32,7 @@ class Response
 		$this->request = $request;
     }    
 
-    public function getSuccess() {
+    public function isSuccess() {
     	return $this->success;
     }
     public function getInfo() {
