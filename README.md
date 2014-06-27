@@ -178,7 +178,7 @@ foreach($results as $key => $result) {
 
 # Client Documentation
 
-**Table of contents**
+## Table of contents
 
 * **[How to make requests](#how-to-make-requests)**
   * [Create an handler](#create-an-handler)
@@ -193,6 +193,7 @@ foreach($results as $key => $result) {
   * [Get list of index on an instance](#get-list-of-index-on-an-instance)
   * [Delete an index](#delete-an-index)
   * [Check if an index exists](#check-if-an-index-exists)
+* **[Instance monitoring](#instance-monitoring)**
 * **[Configure schema](#configure-schema)**
   * [Create a field](#create-a-field)
   * [Get list of fields](#get-list-of-fields)
@@ -497,9 +498,9 @@ $request->index('index_name');
 $response = $oss_api->submit($request);
 ```
 
-## Monitor
+## Instance monitoring
 
-Several instance wide monitoring properties can be retrieved:
+Several instance-wide monitoring properties can be retrieved:
 
 ```php
 $request = new OpenSearchServer\Monitor\Monitor();
