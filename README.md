@@ -183,7 +183,7 @@ foreach($results as $key => $result) {
 * **[How to make requests](#how-to-make-requests)**
   * [Create an handler](#create-an-handler)
   * [Create a request](#create-a-request)
-  * [Handle response](#handle-response)
+  * [Handle response and search results](#handle-response-and-search-results)
     * _[OpenSearchServer\Response\Response](#opensearchserverresponseresponse)_
     * _[OpenSearchServer\Response\ResponseIterable](#opensearchserverresponseresponseiterable)_
     * _[OpenSearchServer\Response\SearchResult](#opensearchserverresponsesearchresult)_
@@ -281,7 +281,7 @@ Once configured request must be sent to an OpenSearchServer instance thanks to t
 $response = $oss_api->submit($request);
 ```
 
-### Handle response
+### Handle response and search results
 
 Several types of responses can be returned by `submit()`. Internally this method uses a Factory that builds a response depending on the type of Request given.
 
@@ -340,6 +340,7 @@ Extends OpenSearchServer\Response\ResponseIterable. Used for search results.
 * Methods:
   * **getResults():** return array of objects of type OpenSearchServer\Response\Result
   * **getFacets():** return an array of facets for this query. Each facet is an array with key being name of field and values being array in the form `<text value> => <number of occurrences>`
+
 Example of array of facets:
 
 ```
