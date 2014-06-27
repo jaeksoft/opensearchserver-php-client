@@ -528,8 +528,8 @@ This would display for example:
 * java.vm.version: 24.51-b03
 * java.vm.vendor: Oracle Corporation
 * java.vendor.url: http://java.oracle.com/
-
-...
+* ...
+* ...
 
 ---
 
