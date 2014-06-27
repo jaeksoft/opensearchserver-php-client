@@ -1,10 +1,9 @@
 <?php
 
 //initiate API wrapper
-$url 		= 'http://localhost:9090';
 $app_key 	= '54a51ee4f27cbbcb7a771352b980567f';
 $login      = 'admin';
-$oss_api    = new OpenSearchServer\Handler(array('url'=>$url, 'key' => $app_key, 'login' => $login ));
+$oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ));
 
 /**
  * ## Index\Create
@@ -259,8 +258,8 @@ foreach($response as $key => $item) {
 echo '<hr/><h2>Search\Pattern\Search</h2>';
 //build request
 $request = new OpenSearchServer\Search\Field\Search();
-$request->index('gendarmerie_test')
-        ->query('maison')
+$request->index('00__test_web')
+        ->query('count')
         ->template('search');
 $results = $oss_api->submit($request);
 

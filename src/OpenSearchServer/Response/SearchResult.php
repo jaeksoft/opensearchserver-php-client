@@ -55,7 +55,7 @@ class SearchResult extends ResponseIterable
      * Return total number of results found in index for this query
      */
     public function getTotalNumberFound() {
-        return $this->numFound;
+        return max(0, $this->numFound);
     }
     
     /**

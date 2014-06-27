@@ -21,9 +21,16 @@ class Handler
      */
     public function __construct(array $options = array())
     {
-        $resolver = new OptionsResolver();
-        $this->setDefaultOptions($resolver);
-        $this->options = $resolver->resolve($options);
+        //Handle options
+        if(empty($options['key']) || empty($options['login'])) {
+        	throw new \Exception('Parameters \'key\' and \'login\' are required');
+    	}
+        $defaultOptions = array(
+            'url' => 'http://localhost:9090',
+            'prefix' => '/services/rest/index/'
+        );
+        
+        $this->options = array_merge($defaultOptions, $options);
 
         $this->init();
     }
@@ -68,7 +75,6 @@ class Handler
         $client->setVerifyPeer(false);
 
         $this->client = $client;
-
         $this->browser = new Browser($client);
     }
 
