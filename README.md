@@ -210,7 +210,7 @@ foreach($results as $key => $result) {
   * [Start crawler](#start-crawler)
   * [Stop crawler](#stop-crawler)
   * [Get crawler status](#get-crawler-status)
-* **[REST crawler](#rest-crawler)
+* **[REST crawler](#rest-crawler)**
   * [List existing REST crawlers](#list-existing-rest-crawlers)
   * [Execute a REST crawler](#execute-a-rest-crawler)
 * **[Autocompletion](#autocompletion)**
@@ -497,6 +497,40 @@ $request->index('index_name');
 $response = $oss_api->submit($request);
 ```
 
+## Monitor
+
+Several instance wide monitoring properties can be retrieved:
+
+```php
+$request = new OpenSearchServer\Monitor\Monitor();
+$request->full();
+$response = $oss_api->submit($request);
+echo '<ul>';
+foreach($response as $propName => $value) {
+    echo '<li>'.$propName.': '.$value.'</li>';
+}
+echo '</ul>';
+```
+
+This would display for example:
+
+---
+* availableProcessors: 4
+* freeMemory: 38656976
+* memoryRate: 12.958230285108
+* maxMemory: 1879048192
+* totalMemory: 298319872
+* indexCount: 59
+* freeDiskSpace: 24181137408
+* freeDiskRate: 23.061161199939
+* java.runtime.name: Java(TM) SE Runtime Environment
+* sun.boot.library.path: C:\Program Files\Java\jre7\bin
+* java.vm.version: 24.51-b03
+* java.vm.vendor: Oracle Corporation
+* java.vendor.url: http://java.oracle.com/
+...
+---
+
 ## Configure schema
 
 In OpenSearchServer each index must have a schema. A schema is a list of fields, each with some properties.
@@ -697,6 +731,35 @@ $request = new OpenSearchServer\Crawler\Web\GetStatus();
 $request->index('index_name');
 $response = $oss_api->submit($request);
 ```
+
+
+## REST crawler
+
+### List existing REST crawlers
+
+```php
+$request = new OpenSearchServer\Crawler\Rest\GetList();
+$request->index('00__test_file');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+### Execute a REST crawler
+
+```php
+$request = new OpenSearchServer\Crawler\Rest\Execute();
+$request->index('00__test_file')
+        ->name('test__crawler');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name(string $name)**: name of REST crawler to execute.
+
 
 ## Autocompletion
 
