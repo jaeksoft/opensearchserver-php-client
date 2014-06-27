@@ -529,7 +529,12 @@ This would display for example:
 * java.vm.vendor: Oracle Corporation
 * java.vendor.url: http://java.oracle.com/
 ...
+
 ---
+
+Available methods:
+
+* **full(boolean $full):** if set to true return every available properties. Otherwise return only some basic properties.
 
 ## Configure schema
 
