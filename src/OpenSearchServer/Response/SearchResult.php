@@ -5,8 +5,6 @@ use Buzz\Message\Response as BuzzResponse;
 
 class SearchResult extends ResponseIterable
 {
-    protected $position;
-    
     protected $query;
     protected $rows;
     protected $start;
@@ -14,6 +12,7 @@ class SearchResult extends ResponseIterable
     protected $time;
     protected $collapsedDocCount;
     protected $maxScore;
+    protected $facets = array();
     
     
     public function __construct(BuzzResponse $response, \OpenSearchServer\Request $request)
@@ -24,6 +23,11 @@ class SearchResult extends ResponseIterable
 		    foreach($this->jsonValues->documents as $result) {
 		        $this->values[] = new Result($result);
 		    }
+		}
+		
+		//handle facets
+		if(!empty($this->jsonValues->facets)) {
+		    $this->buildFacetsArray($this->jsonValues->facets);
 		}
 		
         $this->query = (!empty($this->jsonValues->query)) ? $this->jsonValues->query : null;
@@ -55,7 +59,7 @@ class SearchResult extends ResponseIterable
      * Return total number of results found in index for this query
      */
     public function getTotalNumberFound() {
-        return $this->numFound;
+        return max(0, $this->numFound);
     }
     
     /**
@@ -86,5 +90,26 @@ class SearchResult extends ResponseIterable
         return count($this->values);
     }
     
+    /**
+     * Return facets array 
+     */
+    public function getFacets() {
+        return $this->facets;
+    }
     
+    
+    /**
+     * Build array of facets based on JSON results
+     * @param array $facetsJson Array of JSON values for facets
+     */
+    private function buildFacetsArray($facetsJson) {
+        foreach($facetsJson as $facetObj) {
+            //build array of term with <term> => <number of occurences>
+            $terms = array();
+            foreach($facetObj->terms as $termObj) {
+                $terms[$termObj->term] = $termObj->count;
+            }
+            $this->facets[$facetObj->fieldName] = $terms;
+        }
+    }
 }

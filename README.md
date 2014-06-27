@@ -183,7 +183,7 @@ foreach($results as $key => $result) {
 * **[How to make requests](#how-to-make-requests)**
   * [Create an handler](#create-an-handler)
   * [Create a request](#create-a-request)
-  * [Handle response](#handle-response)
+  * [Handle response and search results](#handle-response-and-search-results)
     * _[OpenSearchServer\Response\Response](#opensearchserverresponseresponse)_
     * _[OpenSearchServer\Response\ResponseIterable](#opensearchserverresponseresponseiterable)_
     * _[OpenSearchServer\Response\SearchResult](#opensearchserverresponsesearchresult)_
@@ -210,6 +210,9 @@ foreach($results as $key => $result) {
   * [Start crawler](#start-crawler)
   * [Stop crawler](#stop-crawler)
   * [Get crawler status](#get-crawler-status)
+* **[REST crawler](#rest-crawler)**
+  * [List existing REST crawlers](#list-existing-rest-crawlers)
+  * [Execute a REST crawler](#execute-a-rest-crawler)
 * **[Autocompletion](#autocompletion)**
   * [Create an autocompletion](#create-an-autocompletion)
   * [Build autocompletion](#build-autocompletion)
@@ -281,7 +284,7 @@ Once configured request must be sent to an OpenSearchServer instance thanks to t
 $response = $oss_api->submit($request);
 ```
 
-### Handle response
+### Handle response and search results
 
 Several types of responses can be returned by `submit()`. Internally this method uses a Factory that builds a response depending on the type of Request given.
 
@@ -326,9 +329,10 @@ foreach($response as $key => $item) {
 
 * Requests that use this type of response:
   * OpenSearchServer\Autocompletion\Query
+  * OpenSearchServer\Autocompletion\GetList
+  * OpenSearchServer\Crawler\Rest\GetList
   * OpenSearchServer\Index\GetList
   * OpenSearchServer\Field\GetList
-  * OpenSearchServer\Autocompletion\GetList
   * OpenSearchServer\SearchTemplate\GetList
   * OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList
   * OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList
@@ -338,7 +342,27 @@ foreach($response as $key => $item) {
 Extends OpenSearchServer\Response\ResponseIterable. Used for search results.
 
 * Methods:
-  * **getResults():** return array of objects of type OpenSearchServer\Response\Result.
+  * **getResults():** return array of objects of type OpenSearchServer\Response\Result
+  * **getFacets():** return an array of facets for this query. Each facet is an array with key being name of field and values being array in the form `<text value> => <number of occurrences>`
+
+Example of array of facets:
+
+```
+Array (size=3)
+  'host' => 
+    array (size=7)
+      'http://www.bbc.com' => int 149
+      'http://www.facebook.com' => int 47
+  'lang' => 
+    array (size=2)
+      'en' => int 43
+      'es' => int 12
+  'contentBaseType' => 
+    array (size=2)
+      'pdf' => int 9
+      'text/html' => int 41
+```
+  
   * **getQuery():** return query executed by OpenSearchServer
   * **getRows():** return number of rows asked
   * **getStart():** return starting offset
@@ -472,6 +496,46 @@ $request = new OpenSearchServer\Index\Exists();
 $request->index('index_name');
 $response = $oss_api->submit($request);
 ```
+
+## Monitor
+
+Several instance wide monitoring properties can be retrieved:
+
+```php
+$request = new OpenSearchServer\Monitor\Monitor();
+$request->full();
+$response = $oss_api->submit($request);
+echo '<ul>';
+foreach($response as $propName => $value) {
+    echo '<li>'.$propName.': '.$value.'</li>';
+}
+echo '</ul>';
+```
+
+This would display for example:
+
+---
+* availableProcessors: 4
+* freeMemory: 38656976
+* memoryRate: 12.958230285108
+* maxMemory: 1879048192
+* totalMemory: 298319872
+* indexCount: 59
+* freeDiskSpace: 24181137408
+* freeDiskRate: 23.061161199939
+* java.runtime.name: Java(TM) SE Runtime Environment
+* sun.boot.library.path: C:\Program Files\Java\jre7\bin
+* java.vm.version: 24.51-b03
+* java.vm.vendor: Oracle Corporation
+* java.vendor.url: http://java.oracle.com/
+* ...
+* ...
+
+---
+
+Available methods:
+
+* **full(boolean $full):** if set to true return every available properties. Otherwise return only some basic properties.
 
 ## Configure schema
 
@@ -673,6 +737,35 @@ $request = new OpenSearchServer\Crawler\Web\GetStatus();
 $request->index('index_name');
 $response = $oss_api->submit($request);
 ```
+
+
+## REST crawler
+
+### List existing REST crawlers
+
+```php
+$request = new OpenSearchServer\Crawler\Rest\GetList();
+$request->index('00__test_file');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+### Execute a REST crawler
+
+```php
+$request = new OpenSearchServer\Crawler\Rest\Execute();
+$request->index('00__test_file')
+        ->name('test__crawler');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name(string $name)**: name of REST crawler to execute.
+
 
 ## Autocompletion
 

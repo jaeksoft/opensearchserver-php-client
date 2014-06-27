@@ -21,42 +21,17 @@ class Handler
      */
     public function __construct(array $options = array())
     {
-        $resolver = new OptionsResolver();
-        $this->setDefaultOptions($resolver);
-        $this->options = $resolver->resolve($options);
+        //Handle options
+        if(empty($options['key']) || empty($options['login'])) {
+        	throw new \Exception('Parameters \'key\' and \'login\' are required');
+    	}
+        $defaultOptions = array(
+            'url' => 'http://localhost:9090'
+        );
+        
+        $this->options = array_merge($defaultOptions, $options);
 
         $this->init();
-    }
-
-    /**
-     * Set our default options.
-     * 
-     * @param OptionsResolverInterface $resolver
-     */
-    protected function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver
-            ->setDefaults(array(
-                'url' => function (Options $options) {
-                    return 'http://localhost:9090';
-                },
-                'prefix' => function (Options $options) {
-                	return '/services/rest/index/';
-                }
-            ))
-            ->setRequired(array(
-                'key',
-                'login'
-            ))
-            ->setOptional(array(
-                'prefix'
-            ))
-            ->setAllowedTypes(array(
-                'url' => 'string',
-                'key' => 'string',
-                'login' => 'string',
-                'prefix' => 'string'
-            ));
     }
 
     /**
@@ -68,7 +43,6 @@ class Handler
         $client->setVerifyPeer(false);
 
         $this->client = $client;
-
         $this->browser = new Browser($client);
     }
 
@@ -87,7 +61,7 @@ class Handler
      * @param OpenSearchServer\Request $request
      */
     private function buildUrl($request) {
-    	return $this->options['url'] . $this->options['prefix'] . $request->getPath() . '?' . http_build_query(array_merge($this->getParameters(), $request->getParameters())) . $this->getURLStringCredentials();
+    	return $this->options['url'] . $request->getUrlPrefix() . $request->getPath() . '?' . http_build_query(array_merge($this->getParameters(), $request->getParameters())) . $this->getURLStringCredentials();
     }
     
     /**

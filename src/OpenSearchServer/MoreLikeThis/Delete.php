@@ -1,9 +1,9 @@
 <?php
 namespace OpenSearchServer\MoreLikeThis;
 
-use OpenSearchServer\Request;
+use OpenSearchServer\RequestJson;
 
-class Delete extends Request
+class Delete extends RequestJson
 {
 	/**
 	 * Specify the name of search template to delete

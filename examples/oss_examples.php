@@ -1,10 +1,27 @@
 <?php
 
 //initiate API wrapper
-$url 		= 'http://localhost:9090';
 $app_key 	= '54a51ee4f27cbbcb7a771352b980567f';
 $login      = 'admin';
-$oss_api    = new OpenSearchServer\Handler(array('url'=>$url, 'key' => $app_key, 'login' => $login ));
+$oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ));
+
+
+
+/**
+ * ## Monitor\Monitor
+ * Get monitoring information on instance
+ */
+echo '<hr/><h2>Monitor\Monitor</h2>';
+//create an empty index
+$request = new OpenSearchServer\Monitor\Monitor();
+$request->full();
+$response = $oss_api->submit($request);
+echo '<ul>';
+foreach($response as $propName => $value) {
+    echo '<li>'.$propName.': '.$value.'</li>';
+}
+echo '</ul>';
+//var_dump($response->getValues());
 
 /**
  * ## Index\Create
@@ -137,6 +154,32 @@ foreach($response as $key => $item) {
 }
 
 /**
+ * ## Crawler\Rest\GetList
+ * Get existing lists of REST crawler
+ */
+echo '<hr/><h2>Crawler\Rest\GetList</h2>';
+$request = new OpenSearchServer\Crawler\Rest\GetList();
+$request->index('00__test_file');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+/**
+ * ## Crawler\Rest\GetList
+ * Execute a REST crawler
+ */
+echo '<hr/><h2>Crawler\Rest\Execute</h2>';
+$request = new OpenSearchServer\Crawler\Rest\Execute();
+$request->index('00__test_file')
+        ->name('test__crawler');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+
+
+/**
  * ## Document\Put
  * Add documents in index
  */
@@ -253,31 +296,6 @@ foreach($response as $key => $item) {
     print_r($item);
 }
 
-/**
- * ## Search\Pattern\Search
- */
-echo '<hr/><h2>Search\Pattern\Search</h2>';
-//build request
-$request = new OpenSearchServer\Search\Field\Search();
-$request->index('gendarmerie_test')
-        ->query('maison')
-        ->template('search');
-$results = $oss_api->submit($request);
-
-echo 'Total number of results: ' . $results->getTotalNumberFound() . '<br/>';
-echo 'Number of results in this set of results: ' . $results->getNumberOfResults();
-
-foreach($results as $key => $result) {
-    echo '<hr/>Result #'.$key.': <br/>';
-    echo 'Available fields:</br>- ';
-    echo implode('<br/>- ', $result->getAvailableFields());
-    echo '<br/>Available snippets:</br>- ';
-    echo implode('<br/>- ', $result->getAvailableSnippets());
-    echo '<ul>';
-    echo '<li>Title:'.$result->getSnippet('title').'</li>';
-    echo '<li>Url:'.$result->getField('url').'</li>';
-    echo '</ul>';
-}
 
 /**
  * ## Search\Pattern\Search
@@ -347,9 +365,6 @@ $request = new OpenSearchServer\MoreLikeThis\Delete();
 $request->index('00__test_file')
         ->template('template_mlt');
 $response = $oss_api->submit($request);
-var_dump($response);
-var_dump($oss_api->getLastRequest());
-var_dump($response->getOriginalResponse());
 var_dump($response->isSuccess());
 var_dump($response->getInfo());
 

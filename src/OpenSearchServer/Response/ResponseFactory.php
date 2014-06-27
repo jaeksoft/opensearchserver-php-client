@@ -12,6 +12,9 @@ class ResponseFactory
             case 'OpenSearchServer\Search\Field\Search':
                 return new \OpenSearchServer\Response\SearchResult($response, $request);
                 break;
+            case 'OpenSearchServer\Monitor\Monitor':
+                return new \OpenSearchServer\Response\ResponseMonitor($response, $request);
+                break;
             case 'OpenSearchServer\Autocompletion\Query':
                 $response = new ResponseIterable($response, $request);
                 if(!empty($response->getJsonValues()->terms)) {
@@ -37,6 +40,7 @@ class ResponseFactory
             case 'OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList':
             case 'OpenSearchServer\Autocompletion\GetList':
             case 'OpenSearchServer\Synonyms\GetList':
+            case 'OpenSearchServer\Crawler\Rest\GetList':
                 $response = new ResponseIterable($response, $request);
                 if(!empty($response->getJsonValues()->items)) {
                     $response->setValues($response->getJsonValues()->items);
