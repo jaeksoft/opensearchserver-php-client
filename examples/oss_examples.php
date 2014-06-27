@@ -14,7 +14,6 @@ $oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $
 echo '<hr/><h2>Monitor\Monitor</h2>';
 //create an empty index
 $request = new OpenSearchServer\Monitor\Monitor();
-$request->full();
 $response = $oss_api->submit($request);
 echo '<ul>';
 foreach($response as $propName => $value) {
@@ -49,6 +48,50 @@ $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
 var_dump($response->getInfo());
 
+
+
+/**
+ * ## Spellcheck\GetList
+ * Get list of spellcheck templates
+ */
+echo '<hr/><h2>Spellcheck\GetList</h2>';
+$request = new OpenSearchServer\SpellCheck\GetList();
+$request->index('00__test_file');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getinfo());
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+/**
+ * ## Spellcheck\Search
+ * Use an existing template to make a search
+ */
+echo '<hr/><h2>Spellcheck\Search</h2>';
+$request = new OpenSearchServer\SpellCheck\Search();
+$request->index('gendarmerie_test')
+        ->query('"meison de kate"')
+        ->template('spellcheck_oneword');
+$response = $oss_api->submit($request);
+print_r($response->getRawContent());
+var_dump($oss_api->getLastRequest());
+
+
+/**
+ * ## Spellcheck\Delete
+ * Delete a spellcheck template
+ */
+echo '<hr/><h2>Spellcheck\Delete</h2>';
+$request = new OpenSearchServer\SpellCheck\Delete();
+$request->index('00__test_file')
+        ->template('spellcheck');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getinfo());
+
+exit;
 /**
  * ## Synonyms\Create
  * Create a list of synonyms
