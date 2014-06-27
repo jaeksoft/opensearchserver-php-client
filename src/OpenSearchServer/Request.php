@@ -76,6 +76,12 @@ class Request
     protected $jsonValues;
     
     /**
+     * Prefix to use in URL. Defaults to /services/rest/index/ but some Request may override it (like Monitor for example)
+     * @var string $urlPrefix
+     */
+    protected $urlPrefix = '/services/rest/index/';
+    
+    /**
      * Construct an instance of Request 
      * @param array $jsonValues JSON values to send with the request. If set will be used 
      * even if some values are defined later by calling other methods.
@@ -136,6 +142,14 @@ class Request
     	return $this->parameters;
     }
     
+    
+    public function setUrlPrefix($prefix) {
+        $this->urlPrefix = $prefix;
+    }
+    
+    public function getUrlPrefix() {
+        return $this->urlPrefix;
+    }
     
     protected function checkPathIndexNeeded() {
     	if(empty($this->options['index'])) {

@@ -326,9 +326,10 @@ foreach($response as $key => $item) {
 
 * Requests that use this type of response:
   * OpenSearchServer\Autocompletion\Query
+  * OpenSearchServer\Autocompletion\GetList
+  * OpenSearchServer\Crawler\Rest\GetList
   * OpenSearchServer\Index\GetList
   * OpenSearchServer\Field\GetList
-  * OpenSearchServer\Autocompletion\GetList
   * OpenSearchServer\SearchTemplate\GetList
   * OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList
   * OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList
