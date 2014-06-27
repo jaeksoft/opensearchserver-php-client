@@ -338,7 +338,26 @@ foreach($response as $key => $item) {
 Extends OpenSearchServer\Response\ResponseIterable. Used for search results.
 
 * Methods:
-  * **getResults():** return array of objects of type OpenSearchServer\Response\Result.
+  * **getResults():** return array of objects of type OpenSearchServer\Response\Result
+  * **getFacets():** return an array of facets for this query. Each facet is an array with key being name of field and values being array in the form `<text value> => <number of occurrences>`
+Example of array of facets:
+
+```
+Array (size=3)
+  'host' => 
+    array (size=7)
+      'http://www.bbc.com' => int 149
+      'http://www.facebook.com' => int 47
+  'lang' => 
+    array (size=2)
+      'en' => int 43
+      'es' => int 12
+  'contentBaseType' => 
+    array (size=2)
+      'pdf' => int 9
+      'text/html' => int 41
+```
+  
   * **getQuery():** return query executed by OpenSearchServer
   * **getRows():** return number of rows asked
   * **getStart():** return starting offset

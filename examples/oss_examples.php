@@ -5,6 +5,37 @@ $app_key 	= '54a51ee4f27cbbcb7a771352b980567f';
 $login      = 'admin';
 $oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ));
 
+
+/**
+ * ## Search\Pattern\Search
+ */
+echo '<hr/><h2>Search\Pattern\Search</h2>';
+//build request
+$request = new OpenSearchServer\Search\Field\Search();
+$request->index('gendarmerie_test')
+        ->query('maison')
+        ->template('search');
+$results = $oss_api->submit($request);
+
+echo 'Total number of results: ' . $results->getTotalNumberFound() . '<br/>';
+echo 'Number of results in this set of results: ' . $results->getNumberOfResults();
+
+echo '<br/>Facets:';
+var_dump($results->getFacets());
+
+foreach($results as $key => $result) {
+    echo '<hr/>Result #'.$key.': <br/>';
+    echo 'Available fields:</br>- ';
+    echo implode('<br/>- ', $result->getAvailableFields());
+    echo '<br/>Available snippets:</br>- ';
+    echo implode('<br/>- ', $result->getAvailableSnippets());
+    echo '<ul>';
+    echo '<li>Title:'.$result->getSnippet('title').'</li>';
+    echo '<li>Url:'.$result->getField('url').'</li>';
+    echo '</ul>';
+    
+}
+
 /**
  * ## Index\Create
  * Create index
@@ -252,31 +283,6 @@ foreach($response as $key => $item) {
     print_r($item);
 }
 
-/**
- * ## Search\Pattern\Search
- */
-echo '<hr/><h2>Search\Pattern\Search</h2>';
-//build request
-$request = new OpenSearchServer\Search\Field\Search();
-$request->index('00__test_web')
-        ->query('count')
-        ->template('search');
-$results = $oss_api->submit($request);
-
-echo 'Total number of results: ' . $results->getTotalNumberFound() . '<br/>';
-echo 'Number of results in this set of results: ' . $results->getNumberOfResults();
-
-foreach($results as $key => $result) {
-    echo '<hr/>Result #'.$key.': <br/>';
-    echo 'Available fields:</br>- ';
-    echo implode('<br/>- ', $result->getAvailableFields());
-    echo '<br/>Available snippets:</br>- ';
-    echo implode('<br/>- ', $result->getAvailableSnippets());
-    echo '<ul>';
-    echo '<li>Title:'.$result->getSnippet('title').'</li>';
-    echo '<li>Url:'.$result->getField('url').'</li>';
-    echo '</ul>';
-}
 
 /**
  * ## Search\Pattern\Search

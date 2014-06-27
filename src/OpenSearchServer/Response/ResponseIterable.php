@@ -4,6 +4,7 @@ namespace OpenSearchServer\Response;
 class ResponseIterable extends Response implements \Iterator
 {
 	protected $values;
+    protected $position;
 	
     public function setValues($values) {
     	return $this->values = $values;
