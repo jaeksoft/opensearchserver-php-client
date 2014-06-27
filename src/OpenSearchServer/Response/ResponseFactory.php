@@ -47,6 +47,18 @@ class ResponseFactory
                 }
                 return $response;
                 break;
+            case 'OpenSearchServer\Spellcheck\GetList':
+                $response = new ResponseIterable($response, $request);
+                $values = $response->getJsonValues();
+                if(!empty($values)) {
+                    $templates = array();
+                    foreach($values as $obj) {
+                        $templates[] = $obj->name;
+                    }
+                    $response->setValues($templates);
+                }
+                return $response;
+                break;
             case 'OpenSearchServer\SearchTemplate\GetList':
                 $response = new ResponseIterable($response, $request);
                 if(!empty($response->getJsonValues()->templates)) {
@@ -69,6 +81,9 @@ class ResponseFactory
                 $response = new \OpenSearchServer\Response\Response($response, $request);
                 $response->setSuccess(strpos($responseHttpCode, '200 OK') !== false);
                 return $response;
+                break;
+            case 'OpenSearchServer\SpellCheck\Search':
+                return new \OpenSearchServer\Response\SpellCheckResult($response, $request);
                 break;
             default:
                 return new \OpenSearchServer\Response\Response($response, $request);
