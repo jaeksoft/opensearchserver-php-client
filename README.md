@@ -210,6 +210,9 @@ foreach($results as $key => $result) {
   * [Start crawler](#start-crawler)
   * [Stop crawler](#stop-crawler)
   * [Get crawler status](#get-crawler-status)
+* **[REST crawler](#rest-crawler)
+  * [List existing REST crawlers](#list-existing-rest-crawlers)
+  * [Execute a REST crawler](#execute-a-rest-crawler)
 * **[Autocompletion](#autocompletion)**
   * [Create an autocompletion](#create-an-autocompletion)
   * [Build autocompletion](#build-autocompletion)
