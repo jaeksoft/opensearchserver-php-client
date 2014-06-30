@@ -61,7 +61,16 @@ class Handler
      * @param OpenSearchServer\Request $request
      */
     private function buildUrl($request) {
-    	return $this->options['url'] . $request->getUrlPrefix() . $request->getPath() . '?' . http_build_query(array_merge($this->getParameters(), $request->getParameters())) . $this->getURLStringCredentials();
+    	return $this->options['url'] . $request->getUrlPrefix() . $request->getPath() . '?' . $this->getUrlPartParameters($request);
+    }
+    
+    private function getUrlPartParameters($request) {
+        $url = http_build_query(array_merge($this->getParameters(), $request->getParameters()));
+        //replace [0], [1], ... by nothing since OSS V2 API expects array values to have same parameter name
+        $url = preg_replace('/%5B[0-9]+%5D=/simU', '=', $url);
+        $url .= $this->getURLStringCredentials();
+        
+        return $url;
     }
     
     /**

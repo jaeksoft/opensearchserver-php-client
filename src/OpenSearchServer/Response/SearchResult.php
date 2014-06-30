@@ -3,9 +3,8 @@ namespace OpenSearchServer\Response;
 
 use Buzz\Message\Response as BuzzResponse;
 
-class SearchResult extends ResponseIterable
+class SearchResult extends ResponseResults
 {
-    protected $query;
     protected $rows;
     protected $start;
     protected $numFound;
@@ -18,13 +17,7 @@ class SearchResult extends ResponseIterable
     public function __construct(BuzzResponse $response, \OpenSearchServer\Request $request)
     {
 		parent::__construct($response, $request);
-        //build array of results objects
-		if(!empty($this->jsonValues->documents)) {
-		    foreach($this->jsonValues->documents as $result) {
-		        $this->values[] = new Result($result);
-		    }
-		}
-		
+
 		//handle facets
 		if(!empty($this->jsonValues->facets)) {
 		    $this->buildFacetsArray($this->jsonValues->facets);
@@ -38,15 +31,7 @@ class SearchResult extends ResponseIterable
         $this->collapsedDocCount = (!empty($this->jsonValues->collapsedDocCount)) ? $this->jsonValues->collapsedDocCount : null;
         $this->maxScore = (!empty($this->jsonValues->maxScore)) ? $this->jsonValues->maxScore : null;
     }
-    
-    public function getResults() {
-        return $this->values;
-    }
 
-    public function getQuery() {
-        return $this->query;
-    }
-    
     public function getRows() {
         return $this->rows;
     }

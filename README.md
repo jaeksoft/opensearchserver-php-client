@@ -187,6 +187,8 @@ foreach($results as $key => $result) {
     * _[OpenSearchServer\Response\Response](#opensearchserverresponseresponse)_
     * _[OpenSearchServer\Response\ResponseIterable](#opensearchserverresponseresponseiterable)_
     * _[OpenSearchServer\Response\SearchResult](#opensearchserverresponsesearchresult)_
+    * _[OpenSearchServer\Response\MoreLikeThisResult](#opensearchserverresponsemorelikethisresult)_
+    * _[OpenSearchServer\Response\SpellCheckResult](#opensearchserverresponsespellcheckresult)_
 * **[Work with index](#work-with-index)**
   * [Create an empty index](#create-an-empty-index)
   * [Create an index with a template](#create-an-index-with-a-template)
@@ -222,6 +224,9 @@ foreach($results as $key => $result) {
   * [Delete an autocompletion item](#delete-an-autocompletion-item)
 * **[Documents](#documents)**
   * [Push documents](#push-documents)
+    * _[Add document with array notation](#add-document-with-array-notation)_
+    * _[Add documents by creating OpenSearchServer\Document\Document objects](#add-documents-by-creating-opensearchserverdocumentdocument-objects)_
+    * _[Add documents by pushing text file](#add-documents-by-pushing-text-file)_
   * [Delete documents](#delete-documents)
 * **[Execute search queries](#run-search-queries)**
   * [Search options](#search-options)
@@ -239,6 +244,16 @@ foreach($results as $key => $result) {
   * [Get existing lists of synonyms](#get-existing-lists-of-synonyms)
   * [Get synonyms of a list](#get-synonyms-of-a-list)
   * [Delete a list of synonyms](#delete-a-list-of-synonyms)
+* **[More like this queries](#more-like-this-queries)**
+  * [Create a more like this query template](#create-a-more-like-this-query-template)
+  * [Delete a more like this query template](#delete-a-more-like-this-query-template)
+  * [Get list of more like this query templates](#get-list-of-more-like-this-query-templates)
+  * [Get details of a more like this query template](#get-details-of-a-more-like-this-query-template)
+  * [Execute a more like this search](#execute-a-more-like-this-search)
+* **[Spellcheck queries](#spellcheck-queries)**
+  * [Get list of spellcheck query templates](#get-list-of-spellcheck-query-templates)
+  * [Delete a spellcheck query template](#delete-a-spellcheck-query-template)
+  * [Execute a spellcheck search](#execute-a-spellcheck-search)
 
 ## How to make requests
 
@@ -289,8 +304,6 @@ $response = $oss_api->submit($request);
 
 Several types of responses can be returned by `submit()`. Internally this method uses a Factory that builds a response depending on the type of Request given.
 
-3 types of responses are available.
-
 #### OpenSearchServer\Response\Response
 
 Main Response class.
@@ -335,9 +348,12 @@ foreach($response as $key => $item) {
   * OpenSearchServer\Index\GetList
   * OpenSearchServer\Field\GetList
   * OpenSearchServer\SearchTemplate\GetList
+  * OpenSearchServer\MoreLikeThis\GetList
+  * OpenSearchServer\Synonyms\GetList
+  * OpenSearchServer\Crawler\Rest\GetList
   * OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList
   * OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList
-
+  
 #### OpenSearchServer\Response\SearchResult
 
 Extends OpenSearchServer\Response\ResponseIterable. Used for search results.
@@ -372,7 +388,8 @@ Array (size=3)
   * **getCollapsedDocCount():** return number of total collapsed docs 
   * **getMaxScore():** return max score in this results set
   * **getNumberOfResults():** return number of results in this results set
-* Example: this class being iterable it can also be used in a loop structure:
+
+Example: this class being iterable it can also be used in a loop structure:
 
 ```php
 $request = new OpenSearchServer\Search\Field\Search();
@@ -429,7 +446,48 @@ foreach($results as $key => $result) {
     echo '</ul>';
 }    
 ```
+
+### OpenSearchServer\Response\MoreLikeThisResult
   
+This kind of response looks like OpenSearchServer\Response\SearchResult but with fewer features, since results returned by MoreLikeThis query are simpler.
+
+* Methods:
+  * **getResults():** return array of objects of type OpenSearchServer\Response\Result  
+  * **getQuery():** return query
+
+### OpenSearchServer\Response\SpellCheckResult
+
+This response is returned by SpellCheck queries. It is used to access spell check suggestions for each asked field.
+
+Example:
+
+```php
+$request = new OpenSearchServer\SpellCheck\Search();
+$request->index('index_name')
+        ->query('houze')
+        ->template('spellcheck');
+$response = $oss_api->submit($request);
+var_dump($response->getBestSpellSuggestion('title'));
+var_dump($response->getSpellSuggestionsArray('title'));
+```
+
+Available methods:
+
+
+* **getSpellSuggestionsArray(string $fieldname):**  return the spell suggestions for one field as array, key is searched word and value is array of suggestions: key is suggestion and value frequency. Array will be sorted with more frequent suggestions at the beginning.
+  * Example of result
+
+```  
+  array (size=3)
+  'houze' => 
+    array (size=2)
+      'house' => int 12
+      'houzz' => int 6
+```
+   
+* **getBestSpellSuggestion(string $fieldname):** return best spell suggestion for this field.
+* **getSpellSuggest(string $fieldname):** helper method, alias to `getBestSpellSuggestion()`. 
+
 ## Work with index
 
 ### Create an empty index
@@ -870,7 +928,7 @@ Available methods:
 
 [Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/document/put_json.html)
 
-Add document with array notation:
+### Add document with array notation
 
 ```php
 $request = new OpenSearchServer\Document\Put();
@@ -902,7 +960,7 @@ $request->addDocument(array(
 $response = $oss_api->submit($request);
 ```
 
-Add documents by creating OpenSearchServer\Document\Document objects:
+#### Add documents by creating OpenSearchServer\Document\Document objects
 
 ```php
 $document = new OpenSearchServer\Document\Document();
@@ -932,6 +990,41 @@ Available methods for object of type OpenSearchServer\Document\Document:
 
 * **lang(string $lang)**: set lang of indexation. Used by some Analyzers to transform text.
 * **field(string $name, string $value, int $boost)**: give value to a field, with an optionnal boost. You would probably prefer to use boost at query time.
+
+#### Add documents by pushing text file
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/document/put_text.html)
+
+Text files in CSV or TTL can be pushed to OpenSearchServer, with a regexp pattern to match fields.
+
+```php
+$data = <<<TEXT
+4;The Three Musketeers;In 1625 France, d'Artagnan-a poor young nobleman-leaves his family in Gascony and travels to Paris with the intention of joining the Musketeers of the Guard. However, en route, at an inn in Meung-sur-Loire, an older man derides d'Artagnan's horse and, feeling insulted, d'Artagnan demands to fight a duel with him. The older man's companions beat d'Artagnan unconscious with a pot and a metal tong that breaks his sword. His letter of introduction to Monsieur de Tréville, the commander of the Musketeers, is stolen. D'Artagnan resolves to avenge himself upon the man, who is later revealed to be the Comte de Rochefort, an agent of Cardinal Richelieu, who is in Meung to pass orders from the Cardinal to Milady de Winter, another of his agents.;en
+5;Twenty Years After;The action begins under Queen Anne of Austria regency and Cardinal Mazarin ruling. D'Artagnan, who seemed to have a promising career ahead of him at the end of The Three Musketeers, has for twenty years remained a lieutenant in the Musketeers, and seems unlikely to progress, despite his ambition and the debt the queen owes him;en
+6;The Vicomte de Bragelonne;The principal heroes of the novel are the musketeers. The novel's length finds it frequently broken into smaller parts. The narrative is set between 1660 and 1667 against the background of the transformation of Louis XIV from child monarch to Sun King.;en";
+TEXT;
+$request = new OpenSearchServer\Document\PutText();
+$request->index('00__test_file')
+        ->pattern('(.*?);(.*?);(.*?);(.*?)')
+        ->data($data)
+        ->langpos(4)
+        ->buffersize(100)
+        ->charset('UTF-8')
+        ->fields(array('uri', 'title', 'content', 'lang'));
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **pattern(string $pattern):** REGEXP pattern to use for mapping values to fields.
+* **data(string $data):**
+* **langpos(int $pos):** position of language in mapped fields (index start at 1)
+* **buffersize(int $bufferSize)**
+* **charset(string $charset):** charset of sent text
+* **field(string $fieldname):** one field mapping. Can be called several times to map several fields.
+* **fields(array $fields):** help method. Calls `field()` for each item in array.
+
+
 
 ### Delete documents
 
@@ -1011,12 +1104,17 @@ Available methods:
 * Facetting options
   * **facet(string $field, int $min = 0, boolean $multi = false, boolean $postCollapsing = false):**
 * Filtering options
-  * **queryFilter(string $filter):**
-  * **negativeFilter(string $filter):**
-  * **geoFilter(string $shape, string $unit, int $distance):**
-  * **negativeGeoFilter(string $shape, string $unit, int $distance):**
-  * **filter(string $field):**
-  * **filterField(string $field, string $filter, string $join, boolean $addQuotes):**
+  * **queryFilter(string $filter):** add a filter with a pattern query. For example : `lang:en`.
+  * **negativeFilter(string $filter):** add a negative query filter.
+  * **geoFilter(string $shape, string $unit, int $distance):** add a geo filter.
+  * **negativeGeoFilter(string $shape, string $unit, int $distance):** add a negative geo filter
+  * **filter(string $field):** helper method, alias to `queryFilter()`.
+  * **filterField(string $field, string / array $filter, string $join, boolean $addQuotes):** other way to add a query filter.
+    * Parameters:
+      * `$field`: name of field on which apply filter.
+      * `$filter`: value(s) on which filter.
+      * `$join`: if $filter is an array of values, type of join to use between values: OR or AND.
+      * `$addQuotes`: whether to add quotes around filtered values or not.
 * Collapsing options
   * **collapsing(string $field, int $max, string $mode, string $type):**
 * Join options
@@ -1227,6 +1325,167 @@ Available methods:
 
 * **name(string $name):** name of list to delete
 
+
+## More like this queries
+
+### Create a more like this query template
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/more-like-this/template_create_update.html)
+
+```php
+$request = new OpenSearchServer\MoreLikeThis\Create();
+$request->index('index_name')
+        //set lang of keywords
+        ->lang('FRENCH')
+        //set some search fields
+        ->fields(array('title', 'content', 'uri'))
+        //set returned fields
+        ->returnedFields(array('title', 'uri'))
+        ->minWordLen(1)
+        ->maxWordLen(100)
+        ->minDocFreq(1)
+        ->minTermFreq(1)
+        ->maxNumTokensParsed(5000)
+        ->maxQueryTerms(25)
+        ->boost(true)
+        ->filterField('lang', 'en')
+        ->rows(10)
+        //give this template a name
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **template(string $template):** name of more like this query template to create
+* **likeText(string $likeText):** searched text
+* **analyzerName(string $analyzer):** name of analyzer to apply on searched text
+* **fields(array $fields):** array of fieldnames to use
+* **minWordLen(int $value):** minimum length of words
+* **maxWordLen(int $value):** maximum length of words
+* **minDocFreq(int $value):** minimum frequency of document
+* **minTermFreq(int $value):** minimum frequency of term
+* **maxNumTokensParsed(int $value):** number of max token to parse
+* **maxQueryTerms(int $value):** number of max query terms to use
+* **boost(boolean $value):** enable boost
+* **stopWords(string $value):** name of an existing stop words list 
+* **returnedFields(array $fields):** An array of fieldnames to return with results
+* Filtering options
+  * **queryFilter(string $filter):** add a filter with a pattern query. For example : `lang:en`.
+  * **negativeFilter(string $filter):** add a negative query filter.
+  * **geoFilter(string $shape, string $unit, int $distance):** add a geo filter.
+  * **negativeGeoFilter(string $shape, string $unit, int $distance):** add a negative geo filter
+  * **filter(string $field):** helper method, alias to `queryFilter()`.
+  * **filterField(string $field, string / array $filter, string $join, boolean $addQuotes):** other way to add a query filter.
+    * Parameters:
+      * `$field`: name of field on which apply filter.
+      * `$filter`: value(s) on which filter.
+      * `$join`: if $filter is an array of values, type of join to use between values: OR or AND.
+      * `$addQuotes`: whether to add quotes around filtered values or not.
+  
+### Delete a more like this query template
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/more-like-this/delete.html)
+
+```php
+$request = new OpenSearchServer\MoreLikeThis\Delete();
+$request->index('index_name')
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **template(string $template):** name of more like this query template to delete.
+
+### Get list of more like this query templates
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/more-like-this/list.html)
+
+```php
+$request = new OpenSearchServer\MoreLikeThis\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+  
+### Get details of a more like this query template
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/more-like-this/get.html)
+
+```php
+$request = new OpenSearchServer\MoreLikeThis\Get();
+$request->index('index_name')
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **template(string $template):** name of more like this query template to retrieve.
+
+### Execute a more like this search
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/more-like-this/template_query.html)
+
+```php
+$request = new OpenSearchServer\MoreLikeThis\Search();
+$request->index('index_name')
+        ->likeText('count')
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item->getField('title'));
+}
+```
+
+Available methods:
+
+* **template(string $template):** name of more like this query template to use
+
+Every other methods of `OpenSearchServer\MoreLikeThis\Create` can be used there.
+
+
+## Spellcheck queries
+
+It is not possible at the moment to create Spellcheck query templates through API. Spellcheck query templates can be listed, deleted and used for a search.
+
+### Get list of spellcheck query templates
+
+```php
+$request = new OpenSearchServer\SpellCheck\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+### Delete a spellcheck query template
+
+```php
+$request = new OpenSearchServer\SpellCheck\Delete();
+$request->index('index_name')
+        ->template('spellcheck');
+$response = $oss_api->submit($request);
+```
+
+### Execute a spellcheck search
+
+```php
+$request = new OpenSearchServer\SpellCheck\Search();
+$request->index('index_name')
+        ->query('house')
+        ->template('spellcheck');
+$response = $oss_api->submit($request);
+var_dump($response->getBestSpellSuggestion('title'));
+var_dump($response->getSpellSuggestionsArray('title'));
+```
 
 ===========================
 

@@ -60,6 +60,7 @@ class ResponseFactory
                 return $response;
                 break;
             case 'OpenSearchServer\SearchTemplate\GetList':
+            case 'OpenSearchServer\MoreLikeThis\GetList':
                 $response = new ResponseIterable($response, $request);
                 if(!empty($response->getJsonValues()->templates)) {
                     $response->setValues($response->getJsonValues()->templates);
@@ -84,6 +85,9 @@ class ResponseFactory
                 break;
             case 'OpenSearchServer\SpellCheck\Search':
                 return new \OpenSearchServer\Response\SpellCheckResult($response, $request);
+                break;
+            case 'OpenSearchServer\MoreLikeThis\Search':
+                return new \OpenSearchServer\Response\MoreLikeThisResult($response, $request);
                 break;
             default:
                 return new \OpenSearchServer\Response\Response($response, $request);

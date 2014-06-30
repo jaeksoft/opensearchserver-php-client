@@ -10,8 +10,8 @@ class Get extends Request
 	 * @param string $name
 	 * @return OpenSearchServer\MoreLikeThis\Get
 	 */
-	public function name($name) {
-		$this->options['name'] = $name;
+	public function template($name) {
+		$this->options['template'] = $name;
 		return $this;
 	}
 	
@@ -32,9 +32,9 @@ class Get extends Request
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-    	if(empty($this->options['name'])) {
-    		throw new \Exception('Method "name($name)" must be called before submitting request.');
+    	if(empty($this->options['template'])) {
+    		throw new \Exception('Method "template($template)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/morelikethis/template/'.$this->options['name'];
+        return $this->options['index'].'/morelikethis/template/'.$this->options['template'];
     }
 }

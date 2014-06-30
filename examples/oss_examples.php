@@ -49,6 +49,156 @@ var_dump($response->isSuccess());
 var_dump($response->getInfo());
 
 
+echo '<hr/><h2>Document\Put</h2>';
+//Add document with array notation
+$request = new OpenSearchServer\Document\Put();
+$request->index('00__test_file');
+
+$request->addDocument(array(
+	'lang' => OpenSearchServer\Request::LANG_FR,
+	'fields' => array(
+        array(
+    		'name' => 'uri',
+    		'value' => '1'
+		),
+		array(
+    		'name' => 'title',
+    		'value' => 'The Count Of Monte-Cristo, Alexandre Dumas'
+		),
+		array(
+    		'name' => 'autocomplete',
+    		'value' => 'The Count Of Monte-Cristo, Alexandre Dumas'
+		),
+		array(
+    		'name' => 'content',
+    		'value' => '"Very true," said Monte Cristo; "it is unnecessary, we know each other so well!"
+"On the contrary," said the count, "we know so little of each other."
+"Indeed?" said Monte Cristo, with the same indomitable coolness; "let us see. Are you not the soldier Fernand who deserted on the eve of the battle of Waterloo? Are you not the Lieutenant Fernand who served as guide and spy to the French army in Spain? Are you not the Captain Fernand who betrayed, sold, and murdered his benefactor, Ali? And have not all these Fernands, united, made Lieutenant-General, the Count of Morcerf, peer of France?"
+"Oh," cried the general, as if branded with a hot iron, "wretch,-to reproach me with my shame when about, perhaps, to kill me! No, I did not say I was a stranger to you.'
+),
+        )
+    ));
+
+//Add documents by creating Document objects
+$document = new OpenSearchServer\Document\Document();
+$document->lang(OpenSearchServer\Request::LANG_FR)
+         ->field('title','Test The Count 2')
+         ->field('autocomplete','Test The Count 2')
+         ->field('uri', '2');
+
+$document2 = new OpenSearchServer\Document\Document();
+$document2->lang(OpenSearchServer\Request::LANG_FR)
+          ->field('title','Test The Count 3')
+          ->field('autocomplete','Test The Count 3')
+          ->field('uri', '3');
+
+$request->addDocuments(array($document, $document2));
+
+$response = $oss_api->submit($request);
+//var_dump($response->isSuccess());
+//var_dump($response->getInfo());
+
+
+//Add document by pushing texxt
+
+$data = <<<TEXT
+4;The Three Musketeers;In 1625 France, d'Artagnan-a poor young nobleman-leaves his family in Gascony and travels to Paris with the intention of joining the Musketeers of the Guard. However, en route, at an inn in Meung-sur-Loire, an older man derides d'Artagnan's horse and, feeling insulted, d'Artagnan demands to fight a duel with him. The older man's companions beat d'Artagnan unconscious with a pot and a metal tong that breaks his sword. His letter of introduction to Monsieur de Tréville, the commander of the Musketeers, is stolen. D'Artagnan resolves to avenge himself upon the man, who is later revealed to be the Comte de Rochefort, an agent of Cardinal Richelieu, who is in Meung to pass orders from the Cardinal to Milady de Winter, another of his agents.;en
+5;Twenty Years After;The action begins under Queen Anne of Austria regency and Cardinal Mazarin ruling. D'Artagnan, who seemed to have a promising career ahead of him at the end of The Three Musketeers, has for twenty years remained a lieutenant in the Musketeers, and seems unlikely to progress, despite his ambition and the debt the queen owes him;en
+6;The Vicomte de Bragelonne;The principal heroes of the novel are the musketeers. The novel's length finds it frequently broken into smaller parts. The narrative is set between 1660 and 1667 against the background of the transformation of Louis XIV from child monarch to Sun King.;en";
+TEXT;
+$request = new OpenSearchServer\Document\PutText();
+$request->index('00__test_file')
+        ->pattern('(.*?);(.*?);(.*?);(.*?)')
+        ->data($data)
+        ->langpos(4)
+        ->buffersize(100)
+        ->charset('UTF-8')
+        ->fields(array('uri', 'title', 'content', 'lang'));
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+/**
+ * ## MoreLikeThis\Create
+ * Create a more like this template
+ */
+echo '<hr/><h2>MoreLikeThis\Create</h2>';
+//build request
+$request = new OpenSearchServer\MoreLikeThis\Create();
+$request->index('00__test_file')
+        //set lang of keywords
+        ->lang('FRENCH')
+        //set some search fields
+        ->fields(array('title', 'content', 'uri'))
+        //set returned fields
+        ->returnedFields(array('title', 'uri'))
+        ->minWordLen(1)
+        ->maxWordLen(100)
+        ->minDocFreq(1)
+        ->minTermFreq(1)
+        ->maxNumTokensParsed(5000)
+        ->maxQueryTerms(25)
+        ->boost(true)
+        //->filterField('lang', 'en')
+        ->rows(10)
+        //give this template a name
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+/**
+ * ## MoreLikeThis\GetList
+ * Get list of more like this templates
+ */
+echo '<hr/><h2>MoreLikeThis\GetList</h2>';
+$request = new OpenSearchServer\MoreLikeThis\GetList();
+$request->index('00__test_file');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+/**
+ * ## MoreLikeThis\Search
+ * Run a Morelikethis query, with or without a template
+ */
+echo '<hr/><h2>MoreLikeThis\Search</h2>';
+$request = new OpenSearchServer\MoreLikeThis\Search();
+$request->index('00__test_file')
+        ->likeText('count')
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item->getField('title'));
+}
+
+/**
+ * ## MoreLikeThis\Get
+ * Get a morelikethis template
+ */
+echo '<hr/><h2>MoreLikeThis\Get</h2>';
+$request = new OpenSearchServer\MoreLikeThis\Get();
+$request->index('00__test_file')
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+var_dump($response);
+
+/**
+ * ## MoreLikeThis\Delete
+ * Delete a morelikethis template
+ */
+echo '<hr/><h2>MoreLikeThis\Delete</h2>';
+$request = new OpenSearchServer\MoreLikeThis\Delete();
+$request->index('00__test_file')
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+
 
 /**
  * ## Spellcheck\GetList
@@ -73,10 +223,10 @@ echo '<hr/><h2>Spellcheck\Search</h2>';
 $request = new OpenSearchServer\SpellCheck\Search();
 $request->index('00__test_file')
         ->query('"meison de kate"')
-        ->template('spellcheck_oneword');
+        ->template('spellcheck');
 $response = $oss_api->submit($request);
-print_r($response->getRawContent());
-var_dump($oss_api->getLastRequest());
+var_dump($response->getBestSpellSuggestion('titleExact'));
+var_dump($response->getSpellSuggestionsArray('titleExact'));
 
 
 /**
@@ -250,7 +400,7 @@ $request->addDocument(array(
     		'value' => '"Very true," said Monte Cristo; "it is unnecessary, we know each other so well!"
 "On the contrary," said the count, "we know so little of each other."
 "Indeed?" said Monte Cristo, with the same indomitable coolness; "let us see. Are you not the soldier Fernand who deserted on the eve of the battle of Waterloo? Are you not the Lieutenant Fernand who served as guide and spy to the French army in Spain? Are you not the Captain Fernand who betrayed, sold, and murdered his benefactor, Ali? And have not all these Fernands, united, made Lieutenant-General, the Count of Morcerf, peer of France?"
-"Oh," cried the general, as if branded with a hot iron, "wretch,—to reproach me with my shame when about, perhaps, to kill me! No, I did not say I was a stranger to you.'
+"Oh," cried the general, as if branded with a hot iron, "wretch,-to reproach me with my shame when about, perhaps, to kill me! No, I did not say I was a stranger to you.'
 ),
         )
     ));
@@ -522,11 +672,13 @@ echo '<hr/><h2>Autocompletion\Create</h2>';
 $request = new OpenSearchServer\Autocompletion\Create();
 $request->index('00__test_file')
         ->name('test_autocomplete')
-        ->field('autocomplete');
+        ->fields(array('title','content','autocomplete'));
 $response = $oss_api->submit($request);
+var_dump($oss_api->getLastRequest());
 var_dump($response->isSuccess());
 var_dump($response->getInfo());
 
+exit;
 /**
  * ## Autocompletion\GetList
  * List avalaible autocompletions
