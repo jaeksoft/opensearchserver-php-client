@@ -294,8 +294,6 @@ $response = $oss_api->submit($request);
 
 Several types of responses can be returned by `submit()`. Internally this method uses a Factory that builds a response depending on the type of Request given.
 
-3 types of responses are available.
-
 #### OpenSearchServer\Response\Response
 
 Main Response class.
@@ -340,9 +338,12 @@ foreach($response as $key => $item) {
   * OpenSearchServer\Index\GetList
   * OpenSearchServer\Field\GetList
   * OpenSearchServer\SearchTemplate\GetList
+  * OpenSearchServer\MoreLikeThis\GetList
+  * OpenSearchServer\Synonyms\GetList
+  * OpenSearchServer\Crawler\Rest\GetList
   * OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList
   * OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList
-
+  
 #### OpenSearchServer\Response\SearchResult
 
 Extends OpenSearchServer\Response\ResponseIterable. Used for search results.
@@ -434,7 +435,15 @@ foreach($results as $key => $result) {
     echo '</ul>';
 }    
 ```
+
+### OpenSearchServer\Response\MoreLikeThisResult
   
+This kind of response looks like OpenSearchServer\Response\SearchResult but with fewer features, since results returned by MoreLikeThis query are simpler.
+
+* Methods:
+  * **getResults():** return array of objects of type OpenSearchServer\Response\Result  
+  * **getQuery():** return query
+
 ## Work with index
 
 ### Create an empty index
