@@ -224,9 +224,9 @@ foreach($results as $key => $result) {
   * [Delete an autocompletion item](#delete-an-autocompletion-item)
 * **[Documents](#documents)**
   * [Push documents](#push-documents)
-    * [Add document with array notation](#add-document-with-array-notation)
-    * [Add documents by creating OpenSearchServer\Document\Document objects](#add-documents-by-creating-opensearchserverdocumentdocument-objects)
-    * [Add documents by pushing text file](#add-documents-by-pushing-text-file)
+    * _[Add document with array notation](#add-document-with-array-notation)_
+    * _[Add documents by creating OpenSearchServer\Document\Document objects](#add-documents-by-creating-opensearchserverdocumentdocument-objects)_
+    * _[Add documents by pushing text file](#add-documents-by-pushing-text-file)_
   * [Delete documents](#delete-documents)
 * **[Execute search queries](#run-search-queries)**
   * [Search options](#search-options)
