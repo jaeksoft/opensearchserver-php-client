@@ -49,6 +49,139 @@ var_dump($response->isSuccess());
 var_dump($response->getInfo());
 
 
+echo '<hr/><h2>Document\Put</h2>';
+//Add document with array notation
+$request = new OpenSearchServer\Document\Put();
+$request->index('00__test_file');
+
+$request->addDocument(array(
+	'lang' => OpenSearchServer\Request::LANG_FR,
+	'fields' => array(
+        array(
+    		'name' => 'uri',
+    		'value' => '1'
+		),
+		array(
+    		'name' => 'title',
+    		'value' => 'The Count Of Monte-Cristo, Alexandre Dumas'
+		),
+		array(
+    		'name' => 'autocomplete',
+    		'value' => 'The Count Of Monte-Cristo, Alexandre Dumas'
+		),
+		array(
+    		'name' => 'content',
+    		'value' => '"Very true," said Monte Cristo; "it is unnecessary, we know each other so well!"
+"On the contrary," said the count, "we know so little of each other."
+"Indeed?" said Monte Cristo, with the same indomitable coolness; "let us see. Are you not the soldier Fernand who deserted on the eve of the battle of Waterloo? Are you not the Lieutenant Fernand who served as guide and spy to the French army in Spain? Are you not the Captain Fernand who betrayed, sold, and murdered his benefactor, Ali? And have not all these Fernands, united, made Lieutenant-General, the Count of Morcerf, peer of France?"
+"Oh," cried the general, as if branded with a hot iron, "wretch,—to reproach me with my shame when about, perhaps, to kill me! No, I did not say I was a stranger to you.'
+),
+        )
+    ));
+
+//Add documents by creating Document objects
+$document = new OpenSearchServer\Document\Document();
+$document->lang(OpenSearchServer\Request::LANG_FR)
+         ->field('title','Test The Count 2')
+         ->field('autocomplete','Test The Count 2')
+         ->field('uri', '2');
+
+$document2 = new OpenSearchServer\Document\Document();
+$document2->lang(OpenSearchServer\Request::LANG_FR)
+          ->field('title','Test The Count 3')
+          ->field('autocomplete','Test The Count 3')
+          ->field('uri', '3');
+
+$request->addDocuments(array($document, $document2));
+
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+
+/**
+ * ## MoreLikeThis\Create
+ * Create a more like this template
+ */
+echo '<hr/><h2>MoreLikeThis\Create</h2>';
+//build request
+$request = new OpenSearchServer\MoreLikeThis\Create();
+$request->index('00__test_file')
+        //set lang of keywords
+        ->lang('FRENCH')
+        //set some search fields
+        ->fields(array('title', 'content', 'uri'))
+        //set returned fields
+        ->returnedFields(array('title', 'uri'))
+        ->minWordLen(1)
+        ->maxWordLen(100)
+        ->minDocFreq(1)
+        ->minTermFreq(1)
+        ->maxNumTokensParsed(5000)
+        ->maxQueryTerms(25)
+        ->boost(true)
+        //->filterField('lang', 'en')
+        ->rows(10)
+        //give this template a name
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+/**
+ * ## MoreLikeThis\GetList
+ * Get list of more like this templates
+ */
+echo '<hr/><h2>MoreLikeThis\GetList</h2>';
+$request = new OpenSearchServer\MoreLikeThis\GetList();
+$request->index('00__test_file');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+/**
+ * ## MoreLikeThis\Search
+ * Run a Morelikethis query, with or without a template
+ */
+echo '<hr/><h2>MoreLikeThis\Search</h2>';
+$request = new OpenSearchServer\MoreLikeThis\Search();
+$request->index('00__test_file')
+        ->likeText('count')
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item->getField('title'));
+}
+
+/**
+ * ## MoreLikeThis\Get
+ * Get a morelikethis template
+ */
+echo '<hr/><h2>MoreLikeThis\Get</h2>';
+$request = new OpenSearchServer\MoreLikeThis\Get();
+$request->index('00__test_file')
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+var_dump($response);
+
+/**
+ * ## MoreLikeThis\Delete
+ * Delete a morelikethis template
+ */
+echo '<hr/><h2>MoreLikeThis\Delete</h2>';
+$request = new OpenSearchServer\MoreLikeThis\Delete();
+$request->index('00__test_file')
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+
+exit;
+
 
 /**
  * ## Spellcheck\GetList

@@ -1011,12 +1011,17 @@ Available methods:
 * Facetting options
   * **facet(string $field, int $min = 0, boolean $multi = false, boolean $postCollapsing = false):**
 * Filtering options
-  * **queryFilter(string $filter):**
-  * **negativeFilter(string $filter):**
-  * **geoFilter(string $shape, string $unit, int $distance):**
-  * **negativeGeoFilter(string $shape, string $unit, int $distance):**
-  * **filter(string $field):**
-  * **filterField(string $field, string $filter, string $join, boolean $addQuotes):**
+  * **queryFilter(string $filter):** add a filter with a pattern query. For example : `lang:en`.
+  * **negativeFilter(string $filter):** add a negative query filter.
+  * **geoFilter(string $shape, string $unit, int $distance):** add a geo filter.
+  * **negativeGeoFilter(string $shape, string $unit, int $distance):** add a negative geo filter
+  * **filter(string $field):** helper method, alias to `queryFilter()`.
+  * **filterField(string $field, string / array $filter, string $join, boolean $addQuotes):** other way to add a query filter.
+    * Parameters:
+      * `$field`: name of field on which apply filter.
+      * `$filter`: value(s) on which filter.
+      * `$join`: if $filter is an array of values, type of join to use between values: OR or AND.
+      * `$addQuotes`: whether to add quotes around filtered values or not.
 * Collapsing options
   * **collapsing(string $field, int $max, string $mode, string $type):**
 * Join options
@@ -1228,6 +1233,106 @@ Available methods:
 * **name(string $name):** name of list to delete
 
 
+## More like this queries
+
+### Create a more like this query template
+
+```php
+$request = new OpenSearchServer\MoreLikeThis\Create();
+$request->index('index_name')
+        //set lang of keywords
+        ->lang('FRENCH')
+        //set some search fields
+        ->fields(array('title', 'content', 'uri'))
+        //set returned fields
+        ->returnedFields(array('title', 'uri'))
+        ->minWordLen(1)
+        ->maxWordLen(100)
+        ->minDocFreq(1)
+        ->minTermFreq(1)
+        ->maxNumTokensParsed(5000)
+        ->maxQueryTerms(25)
+        ->boost(true)
+        ->filterField('lang', 'en')
+        ->rows(10)
+        //give this template a name
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **template(string $template):** name of more like this query template to create
+* **likeText(string $likeText):** searched text
+* **analyzerName(string $analyzer):** name of analyzer to apply on searched text
+* **fields(array $fields):** array of fieldnames to use
+* **minWordLen(int $value):** minimum length of words
+* **maxWordLen(int $value):** maximum length of words
+* **minDocFreq(int $value):** minimum frequency of document
+* **minTermFreq(int $value):** minimum frequency of term
+* **maxNumTokensParsed(int $value):** number of max token to parse
+* **maxQueryTerms(int $value):** number of max query terms to use
+* **boost(boolean $value):** enable boost
+* **stopWords(string $value):** name of an existing stop words list 
+* **returnedFields(array $fields):** An array of fieldnames to return with results
+* Filtering options
+  * **queryFilter(string $filter):** add a filter with a pattern query. For example : `lang:en`.
+  * **negativeFilter(string $filter):** add a negative query filter.
+  * **geoFilter(string $shape, string $unit, int $distance):** add a geo filter.
+  * **negativeGeoFilter(string $shape, string $unit, int $distance):** add a negative geo filter
+  * **filter(string $field):** helper method, alias to `queryFilter()`.
+  * **filterField(string $field, string / array $filter, string $join, boolean $addQuotes):** other way to add a query filter.
+    * Parameters:
+      * `$field`: name of field on which apply filter.
+      * `$filter`: value(s) on which filter.
+      * `$join`: if $filter is an array of values, type of join to use between values: OR or AND.
+      * `$addQuotes`: whether to add quotes around filtered values or not.
+  
+### Delete a more like this query template
+
+```php
+$request = new OpenSearchServer\MoreLikeThis\Delete();
+$request->index('index_name')
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **template(string $template):** name of more like this query template to delete.
+
+### Get details of a more like this query template
+
+```php
+$request = new OpenSearchServer\MoreLikeThis\Get();
+$request->index('index_name')
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **template(string $template):** name of more like this query template to retrieve.
+
+### Execute a more like this search
+
+```php
+$request = new OpenSearchServer\MoreLikeThis\Search();
+$request->index('index_name')
+        ->likeText('count')
+        ->template('template_mlt');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item->getField('title'));
+}
+```
+
+Available methods:
+
+* **template(string $template):** name of more like this query template to use
+
+Every other methods of `OpenSearchServer\MoreLikeThis\Create` can be used there.
 ===========================
 
 OpenSearchServer PHP Client
