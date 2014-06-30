@@ -11,7 +11,8 @@ class Create extends RequestJson
 	 * @return OpenSearchServer\Field\Create
 	 */
 	public function name($name) {
-		$this->data['name'] = $name;
+		$this->options['name'] = $name;
+		//$this->data['name'] = $name;
 		return $this;
 	}
 	
@@ -87,6 +88,9 @@ class Create extends RequestJson
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-        return $this->options['index'].'/field';
+		if(empty($this->options['name'])) {
+    		throw new \Exception('Method "name($name)" must be called before submitting request.');
+    	}
+        return $this->options['index'].'/field/'.$this->options['name'];
     }
 }
