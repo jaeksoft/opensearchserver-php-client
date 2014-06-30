@@ -378,7 +378,8 @@ Array (size=3)
   * **getCollapsedDocCount():** return number of total collapsed docs 
   * **getMaxScore():** return max score in this results set
   * **getNumberOfResults():** return number of results in this results set
-* Example: this class being iterable it can also be used in a loop structure:
+
+Example: this class being iterable it can also be used in a loop structure:
 
 ```php
 $request = new OpenSearchServer\Search\Field\Search();
