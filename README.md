@@ -224,6 +224,9 @@ foreach($results as $key => $result) {
   * [Delete an autocompletion item](#delete-an-autocompletion-item)
 * **[Documents](#documents)**
   * [Push documents](#push-documents)
+    * [Add document with array notation](#add-document-with-array-notation)
+    * [Add documents by creating OpenSearchServer\Document\Document objects](#add-documents-by-creating-opensearchserverdocumentdocument-objects)
+    * [Add documents by pushing text file](#add-documents-by-pushing-text-file)
   * [Delete documents](#delete-documents)
 * **[Execute search queries](#run-search-queries)**
   * [Search options](#search-options)
@@ -925,7 +928,7 @@ Available methods:
 
 [Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/document/put_json.html)
 
-Add document with array notation:
+### Add document with array notation
 
 ```php
 $request = new OpenSearchServer\Document\Put();
@@ -957,7 +960,7 @@ $request->addDocument(array(
 $response = $oss_api->submit($request);
 ```
 
-Add documents by creating OpenSearchServer\Document\Document objects:
+#### Add documents by creating OpenSearchServer\Document\Document objects
 
 ```php
 $document = new OpenSearchServer\Document\Document();
@@ -987,6 +990,41 @@ Available methods for object of type OpenSearchServer\Document\Document:
 
 * **lang(string $lang)**: set lang of indexation. Used by some Analyzers to transform text.
 * **field(string $name, string $value, int $boost)**: give value to a field, with an optionnal boost. You would probably prefer to use boost at query time.
+
+#### Add documents by pushing text file
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/document/put_text.html)
+
+Text files in CSV or TTL can be pushed to OpenSearchServer, with a regexp pattern to match fields.
+
+```php
+$data = <<<TEXT
+4;The Three Musketeers;In 1625 France, d'Artagnan-a poor young nobleman-leaves his family in Gascony and travels to Paris with the intention of joining the Musketeers of the Guard. However, en route, at an inn in Meung-sur-Loire, an older man derides d'Artagnan's horse and, feeling insulted, d'Artagnan demands to fight a duel with him. The older man's companions beat d'Artagnan unconscious with a pot and a metal tong that breaks his sword. His letter of introduction to Monsieur de Tréville, the commander of the Musketeers, is stolen. D'Artagnan resolves to avenge himself upon the man, who is later revealed to be the Comte de Rochefort, an agent of Cardinal Richelieu, who is in Meung to pass orders from the Cardinal to Milady de Winter, another of his agents.;en
+5;Twenty Years After;The action begins under Queen Anne of Austria regency and Cardinal Mazarin ruling. D'Artagnan, who seemed to have a promising career ahead of him at the end of The Three Musketeers, has for twenty years remained a lieutenant in the Musketeers, and seems unlikely to progress, despite his ambition and the debt the queen owes him;en
+6;The Vicomte de Bragelonne;The principal heroes of the novel are the musketeers. The novel's length finds it frequently broken into smaller parts. The narrative is set between 1660 and 1667 against the background of the transformation of Louis XIV from child monarch to Sun King.;en";
+TEXT;
+$request = new OpenSearchServer\Document\PutText();
+$request->index('00__test_file')
+        ->pattern('(.*?);(.*?);(.*?);(.*?)')
+        ->data($data)
+        ->langpos(4)
+        ->buffersize(100)
+        ->charset('UTF-8')
+        ->fields(array('uri', 'title', 'content', 'lang'));
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **pattern(string $pattern):** REGEXP pattern to use for mapping values to fields.
+* **data(string $data):**
+* **langpos(int $pos):** position of language in mapped fields (index start at 1)
+* **buffersize(int $bufferSize)**
+* **charset(string $charset):** charset of sent text
+* **field(string $fieldname):** one field mapping. Can be called several times to map several fields.
+* **fields(array $fields):** help method. Calls `field()` for each item in array.
+
+
 
 ### Delete documents
 

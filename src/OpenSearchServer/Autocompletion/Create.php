@@ -8,6 +8,7 @@ class Create extends RequestJson
     public function __construct(array $jsonValues = null)
     {
     	$this->parameters['rows'] = 10;
+    	$this->parameters['field'] = array();
 		parent::__construct($jsonValues);
     }
     
@@ -27,7 +28,8 @@ class Create extends RequestJson
 	 * @return OpenSearchServer\Autocompletion\Create
 	 */
 	public function field($field) {
-		$this->parameters['field'] = $field;
+	    array_push($this->parameters['field'], $field);
+	    $this->parameters['field'] = array_unique($this->parameters['field']);
 		return $this;
 	}
 	
@@ -48,7 +50,6 @@ class Create extends RequestJson
 	/**
 	 * Set several fields to base autocompletion on
 	 * @param array $fields
-	 * TODO : to finish, see https://github.com/jaeksoft/opensearchserver/issues/709
 	 */
 	public function fields($fields) {
 		foreach($fields as $field) {
