@@ -247,10 +247,10 @@ foreach($results as $key => $result) {
   * [Get list of more like this query templates](#get-list-of-more-like-this-query-templates)
   * [Get details of a more like this query template](#get-details-of-a-more-like-this-query-template)
   * [Execute a more like this search](#execute-a-more-like-this-search)
-* **[Spellcheck queries]
-  * [Get list of spellcheck query templates]
-  * [Delete a spellcheck query template]
-  * [Execute a spellcheck search]
+* **[Spellcheck queries](#spellcheck-queries)**
+  * [Get list of spellcheck query templates](#get-list-of-spellcheck-query-templates)
+  * [Delete a spellcheck query template](#delete-a-spellcheck-query-template)
+  * [Execute a spellcheck search](#execute-a-spellcheck-search)
 
 ## How to make requests
 
