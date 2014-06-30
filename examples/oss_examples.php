@@ -221,9 +221,9 @@ foreach($response as $key => $item) {
  */
 echo '<hr/><h2>Spellcheck\Search</h2>';
 $request = new OpenSearchServer\SpellCheck\Search();
-$request->index('gendarmerie_test')
+$request->index('00__test_file')
         ->query('"meison de kate"')
-        ->template('spellcheck_oneword');
+        ->template('spellcheck');
 $response = $oss_api->submit($request);
 var_dump($response->getBestSpellSuggestion('titleExact'));
 var_dump($response->getSpellSuggestionsArray('titleExact'));
