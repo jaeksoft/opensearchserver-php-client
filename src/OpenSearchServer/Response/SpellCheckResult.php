@@ -25,28 +25,29 @@ class SpellCheckResult extends Response
                  			...
                  			...
          */
-        $values = $this->getJsonValues()->fields;
-        foreach($values as $fieldInfo) {
-            $words = array();
-            foreach($fieldInfo->words as $wordObj) {
-                $suggestions = array();
-                foreach($wordObj->suggest as $suggestsObj) {
-                    $suggestions[$suggestsObj->term] = $suggestsObj->freq;
-                }
-                uasort($suggestions, function($a, $b) {
-                    if ($a == $b) {
-                        return 0;
+        if(!empty($this->getJsonValues()->fields)) {
+            $values = $this->getJsonValues()->fields;
+            foreach($values as $fieldInfo) {
+                $words = array();
+                foreach($fieldInfo->words as $wordObj) {
+                    $suggestions = array();
+                    foreach($wordObj->suggest as $suggestsObj) {
+                        $suggestions[$suggestsObj->term] = $suggestsObj->freq;
                     }
-                    return ($a < $b) ? 1 : -1;
-                });
-                $words[$wordObj->word] = $suggestions;
+                    uasort($suggestions, function($a, $b) {
+                        if ($a == $b) {
+                            return 0;
+                        }
+                        return ($a < $b) ? 1 : -1;
+                    });
+                    $words[$wordObj->word] = $suggestions;
+                }
+                $this->suggestions[$fieldInfo->fieldName] = array(
+                    'suggestion' => $fieldInfo->suggestion,
+                    'allSuggestions' => $words
+                );
             }
-            $this->suggestions[$fieldInfo->fieldName] = array(
-                'suggestion' => $fieldInfo->suggestion,
-                'allSuggestions' => $words
-            );
         }
-        var_dump($this->suggestions);
     }
 
     /**

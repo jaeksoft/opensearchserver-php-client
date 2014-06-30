@@ -71,7 +71,7 @@ foreach($response as $key => $item) {
  */
 echo '<hr/><h2>Spellcheck\Search</h2>';
 $request = new OpenSearchServer\SpellCheck\Search();
-$request->index('gendarmerie_test')
+$request->index('00__test_file')
         ->query('"meison de kate"')
         ->template('spellcheck_oneword');
 $response = $oss_api->submit($request);
@@ -91,7 +91,6 @@ $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
 var_dump($response->getinfo());
 
-exit;
 /**
  * ## Synonyms\Create
  * Create a list of synonyms
