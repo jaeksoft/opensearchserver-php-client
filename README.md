@@ -239,6 +239,11 @@ foreach($results as $key => $result) {
   * [Get existing lists of synonyms](#get-existing-lists-of-synonyms)
   * [Get synonyms of a list](#get-synonyms-of-a-list)
   * [Delete a list of synonyms](#delete-a-list-of-synonyms)
+* **[More like this queries](#more-like-this-queries)**
+  * [Create a more like this query template](#create-a-more-like-this-query-template)
+  * [Delete a more like this query template](#delete-a-more-like-this-query-template)
+  * [Get details of a more like this query template](#get-details-of-a-more-like-this-query-template)
+  * [Execute a more like this search](#execute-a-more-like-this-search)
 
 ## How to make requests
 
@@ -1333,6 +1338,7 @@ Available methods:
 * **template(string $template):** name of more like this query template to use
 
 Every other methods of `OpenSearchServer\MoreLikeThis\Create` can be used there.
+
 ===========================
 
 OpenSearchServer PHP Client
