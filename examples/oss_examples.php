@@ -180,8 +180,6 @@ var_dump($response->isSuccess());
 var_dump($response->getInfo());
 
 
-exit;
-
 
 /**
  * ## Spellcheck\GetList
@@ -204,12 +202,12 @@ foreach($response as $key => $item) {
  */
 echo '<hr/><h2>Spellcheck\Search</h2>';
 $request = new OpenSearchServer\SpellCheck\Search();
-$request->index('00__test_file')
+$request->index('gendarmerie_test')
         ->query('"meison de kate"')
         ->template('spellcheck_oneword');
 $response = $oss_api->submit($request);
-print_r($response->getRawContent());
-var_dump($oss_api->getLastRequest());
+var_dump($response->getBestSpellSuggestion('titleExact'));
+var_dump($response->getSpellSuggestionsArray('titleExact'));
 
 
 /**

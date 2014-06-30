@@ -187,6 +187,8 @@ foreach($results as $key => $result) {
     * _[OpenSearchServer\Response\Response](#opensearchserverresponseresponse)_
     * _[OpenSearchServer\Response\ResponseIterable](#opensearchserverresponseresponseiterable)_
     * _[OpenSearchServer\Response\SearchResult](#opensearchserverresponsesearchresult)_
+    * _[OpenSearchServer\Response\MoreLikeThisResult](#opensearchserverresponsemorelikethisresult)_
+    * _[OpenSearchServer\Response\SpellCheckResult](#opensearchserverresponsespellcheckresult)_
 * **[Work with index](#work-with-index)**
   * [Create an empty index](#create-an-empty-index)
   * [Create an index with a template](#create-an-index-with-a-template)
@@ -242,8 +244,13 @@ foreach($results as $key => $result) {
 * **[More like this queries](#more-like-this-queries)**
   * [Create a more like this query template](#create-a-more-like-this-query-template)
   * [Delete a more like this query template](#delete-a-more-like-this-query-template)
+  * [Get list of more like this query templates](#get-list-of-more-like-this-query-templates)
   * [Get details of a more like this query template](#get-details-of-a-more-like-this-query-template)
   * [Execute a more like this search](#execute-a-more-like-this-search)
+* **[Spellcheck queries]
+  * [Get list of spellcheck query templates]
+  * [Delete a spellcheck query template]
+  * [Execute a spellcheck search]
 
 ## How to make requests
 
@@ -444,6 +451,39 @@ This kind of response looks like OpenSearchServer\Response\SearchResult but with
 * Methods:
   * **getResults():** return array of objects of type OpenSearchServer\Response\Result  
   * **getQuery():** return query
+
+### OpenSearchServer\Response\SpellCheckResult
+
+This response is returned by SpellCheck queries. It is used to access spell check suggestions for each asked field.
+
+Example:
+
+```php
+$request = new OpenSearchServer\SpellCheck\Search();
+$request->index('index_name')
+        ->query('houze')
+        ->template('spellcheck');
+$response = $oss_api->submit($request);
+var_dump($response->getBestSpellSuggestion('title'));
+var_dump($response->getSpellSuggestionsArray('title'));
+```
+
+Available methods:
+
+
+* **getSpellSuggestionsArray(string $fieldname):**  return the spell suggestions for one field as array, key is searched word and value is array of suggestions: key is suggestion and value frequency. Array will be sorted with more frequent suggestions at the beginning.
+  * Example of result
+
+```  
+  array (size=3)
+  'houze' => 
+    array (size=2)
+      'house' => int 12
+      'houzz' => int 6
+```
+   
+* **getBestSpellSuggestion(string $fieldname):** return best spell suggestion for this field.
+* **getSpellSuggest(string $fieldname):** helper method, alias to `getBestSpellSuggestion()`. 
 
 ## Work with index
 
@@ -1252,6 +1292,8 @@ Available methods:
 
 ### Create a more like this query template
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/more-like-this/template_create_update.html)
+
 ```php
 $request = new OpenSearchServer\MoreLikeThis\Create();
 $request->index('index_name')
@@ -1305,6 +1347,8 @@ Available methods:
   
 ### Delete a more like this query template
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/more-like-this/delete.html)
+
 ```php
 $request = new OpenSearchServer\MoreLikeThis\Delete();
 $request->index('index_name')
@@ -1316,7 +1360,23 @@ Available methods:
 
 * **template(string $template):** name of more like this query template to delete.
 
+### Get list of more like this query templates
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/more-like-this/list.html)
+
+```php
+$request = new OpenSearchServer\MoreLikeThis\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+  
 ### Get details of a more like this query template
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/more-like-this/get.html)
 
 ```php
 $request = new OpenSearchServer\MoreLikeThis\Get();
@@ -1330,6 +1390,8 @@ Available methods:
 * **template(string $template):** name of more like this query template to retrieve.
 
 ### Execute a more like this search
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/more-like-this/template_query.html)
 
 ```php
 $request = new OpenSearchServer\MoreLikeThis\Search();
@@ -1348,6 +1410,44 @@ Available methods:
 * **template(string $template):** name of more like this query template to use
 
 Every other methods of `OpenSearchServer\MoreLikeThis\Create` can be used there.
+
+
+## Spellcheck queries
+
+It is not possible at the moment to create Spellcheck query templates through API. Spellcheck query templates can be listed, deleted and used for a search.
+
+### Get list of spellcheck query templates
+
+```php
+$request = new OpenSearchServer\SpellCheck\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+### Delete a spellcheck query template
+
+```php
+$request = new OpenSearchServer\SpellCheck\Delete();
+$request->index('index_name')
+        ->template('spellcheck');
+$response = $oss_api->submit($request);
+```
+
+### Execute a spellcheck search
+
+```php
+$request = new OpenSearchServer\SpellCheck\Search();
+$request->index('index_name')
+        ->query('house')
+        ->template('spellcheck');
+$response = $oss_api->submit($request);
+var_dump($response->getBestSpellSuggestion('title'));
+var_dump($response->getSpellSuggestionsArray('title'));
+```
 
 ===========================
 
