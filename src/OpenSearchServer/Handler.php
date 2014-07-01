@@ -100,17 +100,17 @@ class Handler
     {
         $this->options['groups'] = array($groups);
     }
-    
+
     protected function getURLStringCredentials() {
    		$url = '&';
-   		if(!empty($this->options['user'])) {
-   			$url .= 'user='.$this->options['user'];
-   		}
-       	if(!empty($this->options['groups'])) {
-       		foreach($this->groups as $group) {
-       			$url .= '&group='.urlencode($group);
+        if(!empty($this->options['user'])) {
+            $url .= 'user='.$this->options['user'];
+        }
+        if(!empty($this->options['groups'])) {
+            foreach($this->groups as $group) {
+                $url .= '&group='.urlencode($group);
             }
-   		}
+        }
     }
     
     /**

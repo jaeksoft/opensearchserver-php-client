@@ -843,7 +843,7 @@ Every type of location share some common methods for insertion:
 
 ```php
 ...
-        ->path('E:\_temp\faq')
+        ->path('/files/invoices')
         ->ignoreHiddenFile(true)
         ->includeSubDirectory(true)
         ->enabled(true)
