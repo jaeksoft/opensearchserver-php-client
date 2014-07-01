@@ -210,9 +210,18 @@ foreach($results as $key => $result) {
     * _[Insert exclusion patterns](#insert-exclusion-patterns)_
     * _[List exclusion patterns](#list-exclusion-patterns)_
     * _[Delete exclusion patterns](#delete-exclusion-patterns)_
-  * [Start crawler](#start-crawler)
-  * [Stop crawler](#stop-crawler)
-  * [Get crawler status](#get-crawler-status)
+  * [Start web crawler](#start-web-crawler)
+  * [Stop web crawler](#stop-web-crawler)
+  * [Get web crawler status](#get-web-crawler-status)
+* **[File crawler](#file-crawler)**
+  * [Start file crawler](#start-file-crawler)
+  * [Stop file crawler](#stop-file-crawler)
+  * [Get file crawler status](#get-file-crawler-status)
+  * [File repositories](#file-repositories)
+    * _[Local file](#local-file)_
+    * _[FTP](#ftp)_
+    * _[SMB/CIFS](#smbcifs)_
+    * _[Swift](#swift)_
 * **[REST crawler](#rest-crawler)**
   * [List existing REST crawlers](#list-existing-rest-crawlers)
   * [Execute a REST crawler](#execute-a-rest-crawler)
@@ -767,7 +776,7 @@ $request->index('index_name')
 $response = $oss_api->submit($request);
 ```
 
-### Start crawler
+### Start web crawler
 
 [Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/WEB_crawler/start.html)
 
@@ -777,7 +786,7 @@ $request->index('index_name');
 $response = $oss_api->submit($request);
 ```
 
-### Stop crawler
+### Stop web crawler
 
 [Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/WEB_crawler/stop.html)
 
@@ -787,7 +796,7 @@ $request->index('index_name');
 $response = $oss_api->submit($request);
 ```
 
-### Get crawler status
+### Get web crawler status
 
 [Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/WEB_crawler/status.html)
 
@@ -797,6 +806,231 @@ $request->index('index_name');
 $response = $oss_api->submit($request);
 ```
 
+## File crawler
+
+### Start file crawler
+
+```php
+$request = new OpenSearchServer\Crawler\File\Start();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+```
+
+Available method:
+
+* **run($runType):** run crawler `once` or `forever`. Defaults to `forever`.
+
+### Stop file crawler
+
+```php
+$request = new OpenSearchServer\Crawler\File\Stop();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+```
+
+### Get file crawler status
+
+```php
+$request = new OpenSearchServer\Crawler\File\GetStatus();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+var_dump($response->getInfo());
+```
+
+### File repositories
+
+Every type of location share some common methods for insertion:
+
+```php
+...
+        ->path('E:\_temp\faq')
+        ->ignoreHiddenFile(true)
+        ->includeSubDirectory(true)
+        ->enabled(true)
+        ->delay(100);
+...
+```
+
+Available methods:
+
+* **path(string $path)**
+* **ignoreHiddenFile(boolean $ignoreHiddenFile)**
+* **includeSubDirectory(boolean $includeSubDirectory)**
+* **enabled(string $path):** enable/disable this location
+* **delay(int $delay):** delay between each access to a file, in ms.
+
+#### Local file
+
+##### Insert local file location
+
+```php
+$request = new OpenSearchServer\Crawler\File\Repository\LocalFile\Insert();
+$request->index('index_name')
+        ->path('/archives/pdf')
+        ->ignoreHiddenFile(true)
+        ->includeSubDirectory(true)
+        ->enabled(true)
+        ->delay(100);
+$response = $oss_api->submit($request);
+```
+
+##### Delete local file location
+
+```php
+$request = new OpenSearchServer\Crawler\File\Repository\LocalFile\Delete();
+$request->index('index_name')
+        ->path('/archives/pdf');
+$response = $oss_api->submit($request);
+```
+
+One method must be called to target location to delete.
+
+Available method:
+
+* **path(string $path):** path of location to delete
+
+#### FTP
+
+##### Insert FTP location
+
+```php
+$request = new OpenSearchServer\Crawler\File\Repository\Ftp\Insert();
+$request->index('index_name')
+        ->path('/archives/office_documents')
+        ->ignoreHiddenFile(true)
+        ->includeSubDirectory(true)
+        ->enabled(true)
+        ->delay(100)
+        ->username('user')
+        ->password('p455w0rD')
+        ->host('ftp.host.net')
+        ->ssl(true);
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **username(string $username)** 
+* **password(string $password)** 
+* **host(string $host)** 
+* **ssl(boolean $isSsl):** if set to true uses FTP over SSL. 
+
+##### Delete FTP location
+
+```php
+$request = new OpenSearchServer\Crawler\File\Repository\Ftp\Delete();
+$request->index('index_name')
+        ->path('/archives/office_documents')
+        ->username('user')
+        ->host('ftp.host.net')
+        ->ssl(true);
+$response = $oss_api->submit($request);
+```
+
+Several methods must be called to target location to delete.
+
+Available methods:
+
+* **path(string $path):** path of location to delete
+* **username(string $username)** 
+* **host(string $host)** 
+* **ssl(boolean $isSsl):** set to true if location to delete uses FTP over SSL 
+
+#### SMB/CIFS
+
+##### Insert SMB/CIFS location
+
+```php
+$request = new OpenSearchServer\Crawler\File\Repository\Smb\Insert();
+$request->index('index_name')
+        ->path('/archives/pdf')
+        ->ignoreHiddenFile(true)
+        ->includeSubDirectory(true)
+        ->enabled(true)
+        ->delay(100)
+        ->username('user')
+        ->password('p455w0rD')
+        ->domain('mydomain')
+        ->host('myhost.net');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **username(string $username)** 
+* **password(string $password)** 
+* **domain(string $domain)** 
+* **host(string $host)** 
+
+##### Delete SMB/CIFS location
+
+```php
+$request = new OpenSearchServer\Crawler\File\Repository\Smb\Delete();
+$request->index('index_name')
+        ->path('/archives/pdf')
+        ->username('user')
+        ->domain('mydomain')
+        ->host('myhost.net');
+$response = $oss_api->submit($request);
+```
+
+Several methods must be called to target location to delete.
+
+Available methods:
+
+* **path(string $path):** path of location to delete
+* **username(string $username)** 
+* **domain(string $domain)**
+* **host(string $host)** 
+
+#### Swift
+
+##### Insert Swift location
+
+```php
+$request = new OpenSearchServer\Crawler\File\Repository\Swift\Insert();
+$request->index('index_name')
+        ->path('/archives/pdf')
+        ->ignoreHiddenFile(true)
+        ->includeSubDirectory(true)
+        ->enabled(true)
+        ->delay(100)
+        ->username('user')
+        ->password('p455w0rD')
+        ->tenant('mytenant')
+        ->container('container_main')
+        ->authUrl('http://auth.example.com')
+        ->authType(OpenSearchServer\Crawler\File\Repository\Swift\Insert::AUTH_KEYSTONE);
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **username(string $username)** 
+* **password(string $password)** 
+* **tenant(string $tenant)** 
+* **container(string $container)** 
+* **authUrl(string $authUrl)** 
+* **authType(string $authType):** can be `KEYSTONE` or `IAM`.
+
+##### Delete Swift location
+
+```php
+$request = new OpenSearchServer\Crawler\File\Repository\Swift\Delete();
+$request->index('index_name')
+        ->path('/archives/pdf')
+        ->username('user')
+        ->container('container_main');
+$response = $oss_api->submit($request);
+```
+
+Several methods must be called to target location to delete.
+
+Available methods:
+
+* **path(string $path):** path of location to delete
+* **username(string $username)** 
+* **container(string $container)**
 
 ## REST crawler
 
@@ -844,10 +1078,9 @@ $response = $oss_api->submit($request);
 
 Available methods:
 
-* **name(string $name)**: name of autocompletion item to create.
-* **field(string $name)**: name of field in main schema from which suggestion are returned.
-
-*TODO*: a bug need to be fixed for this class to be able to set several fields. See https://github.com/jaeksoft/opensearchserver/issues/709.
+* **name(string $name):** name of autocompletion item to create.
+* **field(string $name):** name of field in main schema from which suggestion are returned.
+* fields(array $fields):** helper method, calls `field()` for each item in array.
 
 ### Build autocompletion
 
@@ -866,7 +1099,7 @@ $response = $oss_api->submit($request);
 
 Available methods:
 
-* **name(string $name)**: name of autocompletion item to build.
+* **name(string $name):** name of autocompletion item to build.
 
 
 ### Get list of existing autocompletion items
@@ -1358,6 +1591,7 @@ $response = $oss_api->submit($request);
 Available methods:
 
 * **template(string $template):** name of more like this query template to create
+* **docQuery(string $docQuery):** query to match document
 * **likeText(string $likeText):** searched text
 * **analyzerName(string $analyzer):** name of analyzer to apply on searched text
 * **fields(array $fields):** array of fieldnames to use

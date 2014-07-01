@@ -1,9 +1,9 @@
 <?php
 namespace OpenSearchServer\Crawler\File\Repository\Ftp;
 
-use OpenSearchServer\Crawler\File\Repository;
+use OpenSearchServer\Crawler\File\Repository\Repository;
 
-class Smb extends Repository
+class Delete extends Repository
 {
     public function username($username) {
         $this->parameters['username'] = $username;
@@ -16,7 +16,13 @@ class Smb extends Repository
     }
     
     public function ssl($ssl) {
-        $this->parameters['ssl'] = $ssl;
+        if($ssl === true) {
+            $this->parameters['ssl'] = 'true';
+        } elseif($ssl === false) {
+            $this->parameters['ssl'] = 'false';
+        } else {
+            $this->parameters['ssl'] = $ssl;
+        }
         return $this;
     }
     

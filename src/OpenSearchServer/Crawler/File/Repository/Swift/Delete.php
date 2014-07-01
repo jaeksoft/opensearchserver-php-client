@@ -1,9 +1,9 @@
 <?php
 namespace OpenSearchServer\Crawler\File\Repository\Swift;
 
-use OpenSearchServer\Crawler\File\Repository;
+use OpenSearchServer\Crawler\File\Repository\Repository;
 
-class Smb extends Repository
+class Delete extends Repository
 {
     public function username($username) {
         $this->parameters['username'] = $username;

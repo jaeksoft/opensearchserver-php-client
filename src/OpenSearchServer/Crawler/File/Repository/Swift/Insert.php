@@ -1,10 +1,13 @@
 <?php
 namespace OpenSearchServer\Crawler\File\Repository\Swift;
 
-use OpenSearchServer\Crawler\File\Repository;
+use OpenSearchServer\Crawler\File\Repository\Repository;
 
 class Insert extends Repository
 {
+    const AUTH_KEYSTONE = 'KEYSTONE';
+    const AUTH_IAM = 'IAM';
+    
     public function username($username) {
         $this->parameters['username'] = $username;
         return $this;
@@ -30,6 +33,9 @@ class Insert extends Repository
         return $this;
     }
     
+    /**
+     * @param string $authType KEYSTONE|IAM
+     */
     public function authType($authType) {
         $this->parameters['authType'] = $authType;
         return $this;

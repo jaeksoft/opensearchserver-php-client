@@ -1,7 +1,7 @@
 <?php
 namespace OpenSearchServer\Crawler\File\Repository\LocalFile;
 
-use OpenSearchServer\Crawler\File\Repository;
+use OpenSearchServer\Crawler\File\Repository\Repository;
 
 class Delete extends Repository
 {

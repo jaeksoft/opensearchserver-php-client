@@ -10,7 +10,7 @@ abstract class Repository extends RequestFileCrawler
         return $this;
     }
 
-    public function ignoreHiddenFile($ignoreHiddenFile) {
+    public function ignoreHiddenFile($ignoreHiddenFile = true) {
         if($ignoreHiddenFile === true) {
             $this->parameters['ignoreHiddenFile'] = 'true';
         } elseif($ignoreHiddenFile === false) {
@@ -21,7 +21,7 @@ abstract class Repository extends RequestFileCrawler
         return $this;
     }
 
-    public function includeSubDirectory($includeSubDirectory) {
+    public function includeSubDirectory($includeSubDirectory = true) {
         if($includeSubDirectory === true) {
             $this->parameters['includeSubDirectory'] = 'true';
         } elseif($includeSubDirectory === false) {

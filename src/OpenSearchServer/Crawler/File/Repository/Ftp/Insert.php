@@ -1,7 +1,7 @@
 <?php
 namespace OpenSearchServer\Crawler\File\Repository\Ftp;
 
-use OpenSearchServer\Crawler\File\Repository;
+use OpenSearchServer\Crawler\File\Repository\Repository;
 
 class Insert extends Repository
 {
@@ -9,14 +9,25 @@ class Insert extends Repository
         $this->parameters['username'] = $username;
         return $this;
     }
-    
+
     public function password($password) {
         $this->parameters['password'] = $password;
         return $this;
     }
-    
+
     public function host($host) {
         $this->parameters['host'] = $host;
+        return $this;
+    }
+
+    public function ssl($ssl) {
+        if($ssl === true) {
+            $this->parameters['ssl'] = 'true';
+        } elseif($ssl === false) {
+            $this->parameters['ssl'] = 'false';
+        } else {
+            $this->parameters['ssl'] = $ssl;
+        }
         return $this;
     }
 
@@ -30,7 +41,7 @@ class Insert extends Repository
     {
         return self::METHOD_PUT;
     }
-    
+
     /**
      * {@inheritdoc}
      */

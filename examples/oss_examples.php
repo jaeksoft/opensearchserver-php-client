@@ -5,8 +5,6 @@ $app_key 	= '54a51ee4f27cbbcb7a771352b980567f';
 $login      = 'admin';
 $oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ));
 
-
-
 /**
  * ## Monitor\Monitor
  * Get monitoring information on instance
@@ -90,14 +88,132 @@ echo '<hr/><h2>Crawler\File\Repository\LocalFile\Insert</h2>';
 $request = new OpenSearchServer\Crawler\File\Repository\LocalFile\Insert();
 $request->index('00__test_file')
         ->path('E:\_temp\faq')
-        ->ignoreHiddenFile('no')
-        ->includeSubDirectory('yes')
-        ->enabled('true')
-        ->delay(600);
+        ->ignoreHiddenFile(true)
+        ->includeSubDirectory(true)
+        ->enabled(true)
+        ->delay(100);
 $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
 var_dump($response->getInfo());
-var_dump($oss_api->getLastRequest());
+
+/**
+ * ## Crawler\File\Repository\LocalFile\Delete
+ * Delete a location of type LocalFile
+ */
+echo '<hr/><h2>Crawler\File\Repository\LocalFile\Delete</h2>';
+$request = new OpenSearchServer\Crawler\File\Repository\LocalFile\Delete();
+$request->index('00__test_file')
+        ->path('E:\_temp\faq');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+
+
+/**
+ * ## Crawler\File\Repository\Ftp\Insert
+ * Insert a location of type FTP
+ */
+echo '<hr/><h2>Crawler\File\Repository\Ftp\Insert</h2>';
+$request = new OpenSearchServer\Crawler\File\Repository\Ftp\Insert();
+$request->index('00__test_file')
+        ->path('E:\_temp\faq')
+        ->ignoreHiddenFile(true)
+        ->includeSubDirectory(true)
+        ->enabled(true)
+        ->delay(100)
+        ->username('user')
+        ->password('p455w0rD')
+        ->host('ftp.host.net')
+        ->ssl(true);
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+
+/**
+ * ## Crawler\File\Repository\Ftp\Delete
+ * Delete a location of type FTP
+ */
+echo '<hr/><h2>Crawler\File\Repository\Ftp\Delete</h2>';
+$request = new OpenSearchServer\Crawler\File\Repository\Ftp\Delete();
+$request->index('00__test_file')
+        ->path('E:\_temp\faq')
+        ->username('user')
+        ->host('ftp.host.net')
+        ->ssl(true);
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+/**
+ * ## Crawler\File\Repository\Smb\Insert
+ * Insert a location of type SMB/CIFS
+ */
+echo '<hr/><h2>Crawler\File\Repository\Smb\Insert</h2>';
+$request = new OpenSearchServer\Crawler\File\Repository\Smb\Insert();
+$request->index('00__test_file')
+        ->path('E:\_temp\faq')
+        ->ignoreHiddenFile(true)
+        ->includeSubDirectory(true)
+        ->enabled(true)
+        ->delay(100)
+        ->username('user')
+        ->password('p455w0rD')
+        ->domain('mydomain')
+        ->host('myhost.net');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+/**
+ * ## Crawler\File\Repository\Smb\Delete
+ * Delete a location of type SMB/CIFS
+ */
+echo '<hr/><h2>Crawler\File\Repository\Smb\Delete</h2>';
+$request = new OpenSearchServer\Crawler\File\Repository\Smb\Delete();
+$request->index('00__test_file')
+        ->path('E:\_temp\faq')
+        ->username('user')
+        ->domain('mydomain')
+        ->host('myhost.net');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+/**
+ * ## Crawler\File\Repository\Swift\Insert
+ * Insert a location of type Swift
+ */
+echo '<hr/><h2>Crawler\File\Repository\Swift\Insert</h2>';
+$request = new OpenSearchServer\Crawler\File\Repository\Swift\Insert();
+$request->index('00__test_file')
+        ->path('E:\_temp\faq')
+        ->ignoreHiddenFile(true)
+        ->includeSubDirectory(true)
+        ->enabled(true)
+        ->delay(100)
+        ->username('user')
+        ->password('p455w0rD')
+        ->tenant('mytenant')
+        ->container('container_main')
+        ->authUrl('http://auth.example.com')
+        ->authType(OpenSearchServer\Crawler\File\Repository\Swift\Insert::AUTH_KEYSTONE);
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+/**
+ * ## Crawler\File\Repository\Swift\Delete
+ * Delete a location of type Swift
+ */
+echo '<hr/><h2>Crawler\File\Repository\Swift\Delete</h2>';
+$request = new OpenSearchServer\Crawler\File\Repository\Swift\Delete();
+$request->index('00__test_file')
+        ->path('E:\_temp\faq')
+        ->username('user')
+        ->container('container_main');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
 exit;
 
 echo '<hr/><h2>Document\Put</h2>';
