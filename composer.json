@@ -9,7 +9,7 @@
    "license": "GPL-3.0",
    "require": {
         "php": ">=5.3.3",
-        "kriswallsmith/buzz": ">=0.6",
+        "kriswallsmith/buzz": ">=0.6"
     },
     "autoload": {
         "psr-0": {
