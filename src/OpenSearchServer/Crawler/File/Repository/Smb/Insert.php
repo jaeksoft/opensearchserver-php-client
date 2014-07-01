@@ -1,7 +1,7 @@
 <?php
 namespace OpenSearchServer\Crawler\File\Repository\Smb;
 
-use OpenSearchServer\Crawler\File\Repository;
+use OpenSearchServer\Crawler\File\Repository\Repository;
 
 class Insert extends Repository
 {

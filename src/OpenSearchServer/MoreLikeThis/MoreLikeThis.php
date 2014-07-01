@@ -16,9 +16,19 @@ abstract class MoreLikeThis extends SearchAbstract
 	}
 	
 	/**
+	 * Specify the doc query
+	 * @param string $query
+	 * @return OpenSearchServer\MoreLikeThis\MoreLikeThis
+	 */
+	public function docQuery($query = NULL) {
+		$this->data['docQuery'] = $query;
+		return $this;
+	}
+	
+	/**
 	 * Specify the query
 	 * @param string $query
-	 * @return OpenSearchServer\Search\Search
+	 * @return OpenSearchServer\MoreLikeThis\MoreLikeThis
 	 */
 	public function likeText($query = NULL) {
 		$this->data['likeText'] = $query;
@@ -26,7 +36,7 @@ abstract class MoreLikeThis extends SearchAbstract
 	}
 
 	/**
-	 * @return OpenSearchServer\Search\Search
+	 * @return OpenSearchServer\MoreLikeThis\MoreLikeThis
 	 */
 	public function analyzerName($analyzer) {
 		$this->data['analyzer'] = $analyzer;
@@ -34,7 +44,7 @@ abstract class MoreLikeThis extends SearchAbstract
 	}
 
 	/**
-	 * @return OpenSearchServer\Search\Search
+	 * @return OpenSearchServer\MoreLikeThis\MoreLikeThis
 	 */
 	public function fields($fields) {
 		$this->data['fields'] = $fields;
@@ -42,7 +52,7 @@ abstract class MoreLikeThis extends SearchAbstract
 	}
 	
 	/**
-	 * @return OpenSearchServer\Search\Search
+	 * @return OpenSearchServer\MoreLikeThis\MoreLikeThis
 	 */
 	public function minWordLen($value) {
 		$this->data['minWordLen'] = $value;
@@ -50,7 +60,7 @@ abstract class MoreLikeThis extends SearchAbstract
 	}
 	
 	/**
-	 * @return OpenSearchServer\Search\Search
+	 * @return OpenSearchServer\MoreLikeThis\MoreLikeThis
 	 */
 	public function maxWordLen($value) {
 		$this->data['maxWordLen'] = $value;
@@ -58,7 +68,7 @@ abstract class MoreLikeThis extends SearchAbstract
 	}
 	
 	/**
-	 * @return OpenSearchServer\Search\Search
+	 * @return OpenSearchServer\MoreLikeThis\MoreLikeThis
 	 */
 	public function minDocFreq($value) {
 		$this->data['minDocFreq'] = $value;
@@ -66,7 +76,7 @@ abstract class MoreLikeThis extends SearchAbstract
 	}
 	
 	/**
-	 * @return OpenSearchServer\Search\Search
+	 * @return OpenSearchServer\MoreLikeThis\MoreLikeThis
 	 */
 	public function minTermFreq($value) {
 		$this->data['minTermFreq'] = $value;
@@ -74,7 +84,7 @@ abstract class MoreLikeThis extends SearchAbstract
 	}
 	
 	/**
-	 * @return OpenSearchServer\Search\Search
+	 * @return OpenSearchServer\MoreLikeThis\MoreLikeThis
 	 */
 	public function maxNumTokensParsed($value) {
 		$this->data['maxNumTokensParsed'] = $value;
@@ -82,7 +92,7 @@ abstract class MoreLikeThis extends SearchAbstract
 	}
 	
 	/**
-	 * @return OpenSearchServer\Search\Search
+	 * @return OpenSearchServer\MoreLikeThis\MoreLikeThis
 	 */
 	public function maxQueryTerms($value) {
 		$this->data['maxQueryTerms'] = $value;
@@ -90,7 +100,7 @@ abstract class MoreLikeThis extends SearchAbstract
 	}
 
 	/**
-	 * @return OpenSearchServer\Search\Search
+	 * @return OpenSearchServer\MoreLikeThis\MoreLikeThis
 	 */
 	public function boost($value) {
 		$this->data['boost'] = $value;
@@ -98,7 +108,7 @@ abstract class MoreLikeThis extends SearchAbstract
 	}
 	
 	/**
-	 * @return OpenSearchServer\Search\Search
+	 * @return OpenSearchServer\MoreLikeThis\MoreLikeThis
 	 */
 	public function stopWords($value) {
 		$this->data['stopWords'] = $value;
