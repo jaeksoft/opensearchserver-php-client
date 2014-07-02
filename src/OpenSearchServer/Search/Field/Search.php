@@ -23,7 +23,7 @@ class Search extends SearchField
 	public function getPath()
 	{
     	$this->checkPathIndexNeeded();
-        $path = $this->options['index'].'/search/field';
-        return (!empty($this->options['template'])) ? $path.'/'.$this->options['template'] : $path;
+        $path = rawurlencode($this->options['index']).'/search/field';
+        return (!empty($this->options['template'])) ? $path.'/'.rawurlencode($this->options['template']) : $path;
 	}
 }

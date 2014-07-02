@@ -75,6 +75,13 @@ class Request
 	 */
     protected $jsonValues;
     
+	/**
+	 * JSON text to use directly with this request. If set, this text will be used
+	 * even if some values are defined in $data or in $jsonValues.
+	 * @var string $jsonText
+	 */
+    protected $jsonText;
+    
     /**
      * Prefix to use in URL. Defaults to /services/rest/index/ but some Request may override it (like Monitor for example)
      * @var string $urlPrefix
@@ -86,13 +93,18 @@ class Request
      * @param array $jsonValues JSON values to send with the request. If set will be used 
      * even if some values are defined later by calling other methods.
      */
-    public function __construct(array $jsonValues = null)
+    public function __construct(array $jsonValues = null, $jsonText = null)
     {
 		$this->setJsonValues($jsonValues);
+		$this->setJsonText($jsonText);
     }
-    
+
     public function setJsonValues($jsonValues) {
     	$this->jsonValues = $jsonValues;
+    }
+    
+    public function setJsonText($jsonText) {
+    	$this->jsonText = $jsonText;
     }
     
     /**
@@ -109,7 +121,9 @@ class Request
      */
     public function getData()
     {
-    	if(!empty($this->jsonValues)) {
+        if(!empty($this->jsonText)) {
+    		return $this->jsonText;
+    	}elseif(!empty($this->jsonValues)) {
     		return json_encode($this->jsonValues);
     	} elseif(!empty($this->data)) {
         	return json_encode($this->data);

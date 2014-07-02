@@ -20,6 +20,6 @@ class Exists extends Request
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-        return $this->options['index'];
+        return rawurlencode($this->options['index']);
     }
 }

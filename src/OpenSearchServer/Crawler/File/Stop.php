@@ -22,6 +22,6 @@ class Stop extends RequestFileCrawler
     public function getPath()
     {
         $this->checkPathIndexNeeded();
-        return 'crawler/file/stop/'.$this->options['index'].'/json';
+        return 'crawler/file/stop/'.rawurlencode($this->options['index']).'/json';
     }
 }

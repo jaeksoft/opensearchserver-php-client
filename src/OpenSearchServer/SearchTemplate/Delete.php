@@ -35,6 +35,6 @@ class Delete extends Request
     	if(empty($this->options['name'])) {
     		throw new \Exception('Method "name($name)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/search/template/'.$this->options['name'];
+        return rawurlencode($this->options['index']).'/search/template/'.rawurlencode($this->options['name']);
     }
 }

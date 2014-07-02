@@ -1,17 +1,17 @@
 <?php
-namespace OpenSearchServer\SearchTemplate;
+namespace OpenSearchServer\Scheduler;
 
 use OpenSearchServer\Request;
 
-class Get extends Request
+class GetStatus extends Request
 {
 	/**
-	 * Specify the name of search template
+	 * Specify the name of scheduler job
 	 * @param string $name
-	 * @return OpenSearchServer\SearchTemplate\Get
+	 * @return OpenSearchServer\Scheduler\GetStatus
 	 */
 	public function name($name) {
-		$this->options['name'] = $name;
+		$this->options['scheduler_name'] = $name;
 		return $this;
 	}
 	
@@ -32,9 +32,9 @@ class Get extends Request
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-    	if(empty($this->options['name'])) {
+    	if(empty($this->options['scheduler_name'])) {
     		throw new \Exception('Method "name($name)" must be called before submitting request.');
     	}
-        return rawurlencode($this->options['index']).'/search/template/'.rawurlencode($this->options['name']);
+        return rawurlencode($this->options['index']).'/scheduler/'.rawurlencode($this->options['scheduler_name']).'/run';
     }
 }

@@ -26,6 +26,6 @@ class Put extends SearchPattern
 		if(empty($this->options['template'])) {
     		throw new \Exception('Method "template($templateName)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/search/pattern/'.$this->options['template'];
+        return rawurlencode($this->options['index']).'/search/pattern/'.rawurlencode($this->options['template']);
 	}
 }

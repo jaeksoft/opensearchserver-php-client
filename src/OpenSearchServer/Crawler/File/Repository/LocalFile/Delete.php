@@ -22,6 +22,6 @@ class Delete extends Repository
     public function getPath()
     {
         $this->checkPathIndexNeeded();
-        return 'crawler/file/repository/remove/localfile/'.$this->options['index'].'/json';
+        return 'crawler/file/repository/remove/localfile/'.rawurlencode($this->options['index']).'/json';
     }
 }

@@ -35,6 +35,6 @@ class Get extends Request
     	if(empty($this->options['template'])) {
     		throw new \Exception('Method "template($template)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/morelikethis/template/'.$this->options['template'];
+        return rawurlencode($this->options['index']).'/morelikethis/template/'.rawurlencode($this->options['template']);
     }
 }

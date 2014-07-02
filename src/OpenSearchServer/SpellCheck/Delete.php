@@ -35,6 +35,6 @@ class Delete extends RequestJson
     	if(empty($this->options['template'])) {
     		throw new \Exception('Method "template($name)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/spellcheck/'.$this->options['template'];
+        return rawurlencode($this->options['index']).'/spellcheck/'.rawurlencode($this->options['template']);
     }
 }

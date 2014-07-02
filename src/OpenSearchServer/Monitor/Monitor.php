@@ -5,9 +5,9 @@ use OpenSearchServer\Request;
 
 class Monitor extends Request
 {
-    public function __construct(array $jsonValues = null)
+    public function __construct(array $jsonValues = null, $jsonText = null)
     {
-		parent::__construct($jsonValues);
+		parent::__construct($jsonValues, $jsonText);
 		//this request does not use "/services/rest/index/"
 		$this->setUrlPrefix('/services/rest/');
     }

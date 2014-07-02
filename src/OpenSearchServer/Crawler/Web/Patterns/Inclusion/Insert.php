@@ -13,6 +13,6 @@ class Insert extends PatternsInsert
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-        return $this->options['index'].'/crawler/web/patterns/inclusion';
+        return rawurlencode($this->options['index']).'/crawler/web/patterns/inclusion';
     }
 }

@@ -58,6 +58,6 @@ class Insert extends Repository
     public function getPath()
     {
         $this->checkPathIndexNeeded();
-        return 'crawler/file/repository/inject/swift/'.$this->options['index'].'/json';
+        return 'crawler/file/repository/inject/swift/'.rawurlencode($this->options['index']).'/json';
     }
 }

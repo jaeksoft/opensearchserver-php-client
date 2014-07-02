@@ -58,6 +58,6 @@ class Delete extends RequestJson
 		if(empty($this->options['field'])) {
     		throw new \Exception('Method "field($fieldname)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/document/'.$this->options['field'];
+        return rawurlencode($this->options['index']).'/document/'.rawurlencode($this->options['field']);
 	}
 }

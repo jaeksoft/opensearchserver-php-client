@@ -32,6 +32,6 @@ class Delete extends Repository
     public function getPath()
     {
         $this->checkPathIndexNeeded();
-        return 'crawler/file/repository/remove/swift/'.$this->options['index'].'/json';
+        return 'crawler/file/repository/remove/swift/'.rawurlencode($this->options['index']).'/json';
     }
 }

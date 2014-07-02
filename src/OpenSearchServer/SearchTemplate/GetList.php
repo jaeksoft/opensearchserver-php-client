@@ -20,6 +20,6 @@ class GetList extends Request
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-        return $this->options['index'].'/search/template';
+        return rawurlencode($this->options['index']).'/search/template';
     }
 }
