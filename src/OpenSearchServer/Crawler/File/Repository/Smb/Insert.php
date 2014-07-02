@@ -42,6 +42,6 @@ class Insert extends Repository
     public function getPath()
     {
         $this->checkPathIndexNeeded();
-        return 'crawler/file/repository/inject/smb/'.$this->options['index'].'/json';
+        return 'crawler/file/repository/inject/smb/'.rawurlencode($this->options['index']).'/json';
     }
 }

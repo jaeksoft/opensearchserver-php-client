@@ -261,6 +261,9 @@ foreach($results as $key => $result) {
   * [Get list of spellcheck query templates](#get-list-of-spellcheck-query-templates)
   * [Delete a spellcheck query template](#delete-a-spellcheck-query-template)
   * [Execute a spellcheck search](#execute-a-spellcheck-search)
+* **[Scheduler](#scheduler)**
+  * [Get status of a scheduler job](#get-status-of-a-scheduler-job)
+  * [Execute a scheduler job](#execute-a-scheduler-job)
 
 ## How to make requests
 
@@ -1718,6 +1721,37 @@ $response = $oss_api->submit($request);
 var_dump($response->getBestSpellSuggestion('title'));
 var_dump($response->getSpellSuggestionsArray('title'));
 ```
+
+## Scheduler
+
+### Get status of a scheduler job
+
+```php
+$request = new OpenSearchServer\Scheduler\GetStatus();
+$request->index('index_name')
+        ->name('test job');
+$response = $oss_api->submit($request);
+```
+
+Available method:
+
+* **name(string $name):** name of scheduler job
+
+### Execute a scheduler job
+
+```php
+$request = new OpenSearchServer\Scheduler\Run();
+$request->index('index_name')
+        ->name('test job')
+       ->variable('url', 'http://www.opensearchserver.com');
+$response = $oss_api->submit($request);
+```
+
+Available method:
+
+* **name(string $name):** name of scheduler job
+* **variable(string $name, string $value):** some tasks can receive variables.
+* **variables(array $variables):** helper method, calls `variable()` for each item in array. 
 
 ===========================
 

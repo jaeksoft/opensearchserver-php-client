@@ -35,6 +35,6 @@ class Get extends Request
     	if(empty($this->options['name'])) {
     		throw new \Exception('Method "name($name)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/field/'.$this->options['name'];
+        return rawurlencode($this->options['index']).'/field/'.rawurlencode($this->options['name']);
     }
 }

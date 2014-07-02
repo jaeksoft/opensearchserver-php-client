@@ -22,6 +22,6 @@ class GetStatus extends RequestFileCrawler
     public function getPath()
     {
         $this->checkPathIndexNeeded();
-        return 'crawler/file/status/'.$this->options['index'].'/json';
+        return 'crawler/file/status/'.rawurlencode($this->options['index']).'/json';
     }
 }

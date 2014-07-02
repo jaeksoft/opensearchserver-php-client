@@ -47,7 +47,7 @@ class SetDefaultUnique extends Request
     	if(empty($this->parameters['default']) && empty($this->parameters['unique'])) {
     		throw new \Exception('Method "defaultField($fieldName)" or "uniqueField($fieldName)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/field';
+        return rawurlencode($this->options['index']).'/field';
         
     }
 }

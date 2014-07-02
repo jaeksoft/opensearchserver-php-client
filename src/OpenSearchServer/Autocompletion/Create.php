@@ -5,11 +5,11 @@ use OpenSearchServer\RequestJson;
 
 class Create extends RequestJson
 {
-    public function __construct(array $jsonValues = null)
+    public function __construct(array $jsonValues = null, $jsonText = null)
     {
     	$this->parameters['rows'] = 10;
     	$this->parameters['field'] = array();
-		parent::__construct($jsonValues);
+		parent::__construct($jsonValues, $jsonText);
     }
     
 	/**
@@ -81,6 +81,6 @@ class Create extends RequestJson
     	if(empty($this->options['name'])) {
     		throw new \Exception('Method "name($name)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/autocompletion/'.$this->options['name'];
+        return rawurlencode($this->options['index']).'/autocompletion/'.rawurlencode($this->options['name']);
     }
 }

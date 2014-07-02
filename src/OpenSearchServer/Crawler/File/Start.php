@@ -6,10 +6,10 @@ use OpenSearchServer\Crawler\File\RequestFileCrawler;
 class Start extends RequestFileCrawler
 {
     
-    public function __construct(array $jsonValues = null)
+    public function __construct(array $jsonValues = null, $jsonText = null)
     {
     	$this->options['run'] = 'forever';
-		parent::__construct($jsonValues);
+		parent::__construct($jsonValues, $jsonText);
     }
     
     /**
@@ -38,6 +38,6 @@ class Start extends RequestFileCrawler
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-        return 'crawler/file/run/'.$this->options['run'].'/'.$this->options['index'].'/json';
+        return 'crawler/file/run/'.$this->options['run'].'/'.rawurlencode($this->options['index']).'/json';
     }
 }

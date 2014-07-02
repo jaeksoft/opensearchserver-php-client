@@ -41,6 +41,13 @@ class Create extends RequestTextPlain
      */
     public function getData()
     {
+        //return values or text if directly set
+        if(!empty($this->jsonText)) {
+    		return $this->jsonText;
+    	} elseif(!empty($this->jsonValues)) {
+    		return json_encode($this->jsonValues);
+        }
+        
     	if(!empty($this->data)) {
         	return implode("\n", $this->data);
         }
@@ -56,6 +63,6 @@ class Create extends RequestTextPlain
     	if(empty($this->options['name'])) {
     		throw new \Exception('Method "name($name)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/synonyms/'.$this->options['name'];
+        return rawurlencode($this->options['index']).'/synonyms/'.rawurlencode($this->options['name']);
     }
 }

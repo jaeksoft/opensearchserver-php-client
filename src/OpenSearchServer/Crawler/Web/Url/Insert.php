@@ -45,6 +45,6 @@ class Insert extends RequestJson
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-        return $this->options['index'].'/crawler/web/urls';
+        return rawurlencode($this->options['index']).'/crawler/web/urls';
     }
 }

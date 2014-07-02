@@ -32,6 +32,6 @@ class Delete extends Request
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-        return $this->options['index'].'/field/'.$this->options['name'];
+        return rawurlencode($this->options['index']).'/field/'.rawurlencode($this->options['name']);
     }
 }

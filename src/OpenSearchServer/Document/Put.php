@@ -71,6 +71,6 @@ class Put extends RequestJson
 	public function getPath()
 	{
     	$this->checkPathIndexNeeded();
-        return $this->options['index'].'/document';
+        return rawurlencode($this->options['index']).'/document';
 	}
 }

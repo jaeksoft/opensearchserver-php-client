@@ -30,6 +30,6 @@ class Start extends Request
     	if(empty($this->parameters['url'])) {
     		throw new \Exception('Method "url($url)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/crawler/web/crawl';
+        return rawurlencode($this->options['index']).'/crawler/web/crawl';
     }
 }

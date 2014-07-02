@@ -64,6 +64,6 @@ class Query extends Request
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-        return $this->options['index'].'/autocompletion/'.$this->options['name'];
+        return rawurlencode($this->options['index']).'/autocompletion/'.rawurlencode($this->options['name']);
     }
 }

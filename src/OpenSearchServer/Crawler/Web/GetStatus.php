@@ -22,6 +22,6 @@ class GetStatus extends Request
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-        return $this->options['index'].'/crawler/web/run';
+        return rawurlencode($this->options['index']).'/crawler/web/run';
     }
 }

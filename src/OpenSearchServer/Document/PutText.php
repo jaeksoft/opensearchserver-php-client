@@ -7,10 +7,10 @@ use OpenSearchServer\RequestTextPlain;
 class PutText extends RequestTextPlain
 {
     
-    public function __construct(array $jsonValues = null)
+    public function __construct(array $jsonValues = null, $jsonText = null)
     {
     	$this->parameters['field'] = array();
-		parent::__construct($jsonValues);
+		parent::__construct($jsonValues, $jsonText);
     }
 
     public function pattern($pattern) {
@@ -72,6 +72,13 @@ class PutText extends RequestTextPlain
     
     public function getData()
     {
+        //return values or text if directly set
+        if(!empty($this->jsonText)) {
+    		return $this->jsonText;
+    	} elseif(!empty($this->jsonValues)) {
+    		return json_encode($this->jsonValues);
+        }
+        
         return $this->data;
     }
 
@@ -81,6 +88,6 @@ class PutText extends RequestTextPlain
     public function getPath()
     {
         $this->checkPathIndexNeeded();
-        return $this->options['index'].'/document';
+        return rawurlencode($this->options['index']).'/document';
     }
 }
