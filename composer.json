@@ -1,8 +1,8 @@
 {
    "name" : "opensearchserver/opensearchserver",
-   "description" : "PHP library for Open Search Server. Uses API V2.",
+   "description" : "PHP library for OpenSearchServer. Uses API V2.",
    "type" : "library",
-   "keywords" : ["oss","search engine","opensearchserver","search","open source search engine"],
+   "keywords" : ["oss","search engine","opensearchserver","search","crawler","web crawler","file crawler","index","open source search engine"],
    "homepage" : "http://www.opensearchserver.com/",
    "require-dev": {
    },
