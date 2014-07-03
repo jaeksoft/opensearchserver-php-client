@@ -181,6 +181,8 @@ foreach($results as $key => $result) {
 * **[How to make requests](#how-to-make-requests)**
   * [Create an handler](#create-an-handler)
   * [Create a request](#create-a-request)
+    * _[Create request by using an array of JSON parameters](#create-request-by-using-an-array-of-json-parameters)_
+    * _[Create request by using JSON text](#create-request-by-using-json-text)_
   * [Handle response and search results](#handle-response-and-search-results)
     * _[OpenSearchServer\Response\Response](#opensearchserverresponseresponse)_
     * _[OpenSearchServer\Response\ResponseIterable](#opensearchserverresponseresponseiterable)_
