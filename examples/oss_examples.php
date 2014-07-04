@@ -18,7 +18,6 @@ foreach($response as $propName => $value) {
     echo '<li>'.$propName.': '.$value.'</li>';
 }
 echo '</ul>';
-//var_dump($response->getValues());
 
 /**
  * ## Index\Create
@@ -46,6 +45,34 @@ $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
 var_dump($response->getInfo());
 
+
+
+/**
+ * ## Scheduler\GetStatus
+ * Get status of a scheduler job
+ */
+echo '<hr/><h2>Scheduler\GetStatus</h2>';
+$request = new OpenSearchServer\Scheduler\GetStatus();
+$request->index('00__test_web')
+        ->name('test job');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+/**
+ * ## Scheduler\Run
+ * Execute a scheduler job
+ */
+echo '<hr/><h2>Scheduler\Run</h2>';
+$request = new OpenSearchServer\Scheduler\Run();
+$request->index('00__test_web')
+        ->name('test job')
+       ->variable('url', 'http://www.opensearchserver.com');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+exit;
 
 /**
  * ## Crawler\File\GetStatus
@@ -214,7 +241,6 @@ $request->index('00__test_file')
 $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
 var_dump($response->getInfo());
-exit;
 
 echo '<hr/><h2>Document\Put</h2>';
 //Add document with array notation
@@ -846,7 +872,6 @@ var_dump($oss_api->getLastRequest());
 var_dump($response->isSuccess());
 var_dump($response->getInfo());
 
-exit;
 /**
  * ## Autocompletion\GetList
  * List avalaible autocompletions
@@ -999,6 +1024,97 @@ $request->index('00__test_file')
         ->defaultField('title')
         //remove unique field for this index
         ->uniqueField();
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+
+/**
+ * Show how to pass text or array as JSON directly when creating request
+ */
+$json = <<<JSON
+{
+    "query": "open search server",
+    "start": 0,
+    "rows": 10,
+    "lang": "ENGLISH",
+    "operator": "AND",
+    "collapsing": {
+        "max": 2,
+        "mode": "OFF",
+        "type": "OPTIMIZED"
+    },
+    "returnedFields": [
+        "url"
+    ],
+    "snippets": [
+        {
+            "field": "title",
+            "tag": "em",
+            "separator": "...",
+            "maxSize": 200,
+            "maxNumber": 1,
+            "fragmenter": "NO"
+        },
+        {
+            "field": "content",
+            "tag": "em",
+            "separator": "...",
+            "maxSize": 200,
+            "maxNumber": 1,
+           "fragmenter": "SENTENCE"
+        }
+    ],
+    "enableLog": false,
+    "searchFields": [
+        {
+            "field": "title",
+            "mode": "PHRASE",
+            "boost": 3
+        },
+        {
+            "field": "content",
+            "mode": "PHRASE",
+            "boost": 4
+        },
+        {
+            "field": "titleExact",
+            "mode": "PHRASE",
+            "boost": 5
+        },
+        {
+            "field": "contentExact",
+            "mode": "PHRASE",
+            "boost": 6
+        }
+    ]
+}
+JSON;
+$request = new OpenSearchServer\Search\Field\Put(null, $json);
+$request->index('00__test_web')
+        ->template('test_with_json_text');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+$json = array();
+$json['query'] = "test with values";
+$json['searchFields'] = array(
+    array(
+        "field" => "title",
+        "mode" => "PHRASE",
+        "boost" => 3
+    ),
+    array(
+        "field" => "content",
+        "mode" => "PHRASE",
+        "boost" => 4
+    )
+);
+
+$request = new OpenSearchServer\Search\Field\Put($json);
+$request->index('00__test_web')
+        ->template('test_with_json_values');
 $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
 var_dump($response->getInfo());

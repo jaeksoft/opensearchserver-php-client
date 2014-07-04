@@ -13,6 +13,6 @@ class Delete extends PatternsDelete
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-        return $this->options['index'].'/crawler/web/patterns/exclusion';
+        return rawurlencode($this->options['index']).'/crawler/web/patterns/exclusion';
     }
 }

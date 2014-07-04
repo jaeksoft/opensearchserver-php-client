@@ -48,6 +48,6 @@ class Insert extends Repository
     public function getPath()
     {
         $this->checkPathIndexNeeded();
-        return 'crawler/file/repository/inject/ftp/'.$this->options['index'].'/json';
+        return 'crawler/file/repository/inject/ftp/'.rawurlencode($this->options['index']).'/json';
     }
 }

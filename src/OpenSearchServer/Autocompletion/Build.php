@@ -35,6 +35,6 @@ class Build extends RequestJson
     	if(empty($this->options['name'])) {
     		throw new \Exception('Method "name($name)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/autocompletion/'.$this->options['name'];
+        return rawurlencode($this->options['index']).'/autocompletion/'.rawurlencode($this->options['name']);
     }
 }

@@ -35,6 +35,6 @@ class Execute extends RequestJson
     	if(empty($this->options['name'])) {
     		throw new \Exception('Method "name($name)" must be called before submitting request.');
     	}
-        return $this->options['index'].'/crawler/rest/'.$this->options['name'].'/run';
+        return rawurlencode($this->options['index']).'/crawler/rest/'.rawurlencode($this->options['name']).'/run';
     }
 }

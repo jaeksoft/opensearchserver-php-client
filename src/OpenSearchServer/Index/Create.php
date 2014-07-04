@@ -29,7 +29,7 @@ class Create extends Request
     public function getPath()
     {
     	$this->checkPathIndexNeeded();
-        $path = $this->options['index'];
-        return (!empty($this->options['template'])) ? $path.'/template/'.$this->options['template'] : $path;
+        $path = rawurlencode($this->options['index']);
+        return (!empty($this->options['template'])) ? $path.'/template/'.rawurlencode($this->options['template']) : $path;
     }
 }
