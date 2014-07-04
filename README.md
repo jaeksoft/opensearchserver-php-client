@@ -46,14 +46,8 @@ cd ossphp_sandbox
 
 ```json
 {
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/jaeksoft/opensearchserver-php-client"
-        }
-    ],
     "require": {
-        "opensearchserver/opensearchserver": "~3.0-dev"
+        "opensearchserver/opensearchserver": "3.0.*"
     }
 }   
 ```
