@@ -46,14 +46,8 @@ cd ossphp_sandbox
 
 ```json
 {
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/jaeksoft/opensearchserver-php-client"
-        }
-    ],
     "require": {
-        "opensearchserver/opensearchserver": "~3.0-dev"
+        "opensearchserver/opensearchserver": "3.0.*"
     }
 }   
 ```
@@ -181,6 +175,8 @@ foreach($results as $key => $result) {
 * **[How to make requests](#how-to-make-requests)**
   * [Create an handler](#create-an-handler)
   * [Create a request](#create-a-request)
+    * _[Create request by using an array of JSON parameters](#create-request-by-using-an-array-of-json-parameters)_
+    * _[Create request by using JSON text](#create-request-by-using-json-text)_
   * [Handle response and search results](#handle-response-and-search-results)
     * _[OpenSearchServer\Response\Response](#opensearchserverresponseresponse)_
     * _[OpenSearchServer\Response\ResponseIterable](#opensearchserverresponseresponseiterable)_
@@ -307,6 +303,108 @@ $request->index('first_index');
 Once configured request must be sent to an OpenSearchServer instance thanks to the handler created before:
 
 ```php
+$response = $oss_api->submit($request);
+```
+
+#### Create request by using an array of JSON parameters
+
+JSON body of request can be given as an array of JSON parameters to the constructor. If values are given this way every data set by calling specific methods on this request will be ignored.
+
+However some methods must still be called to set index on which work and every parameters used directly in request's URL. 
+
+Example: create a Search field template:
+
+```php
+$json = array();
+$json['query'] = "test with values";
+$json['searchFields'] = array(
+    array(
+        "field" => "title",
+        "mode" => "PHRASE",
+        "boost" => 3
+    ),
+    array(
+        "field" => "content",
+        "mode" => "PHRASE",
+        "boost" => 4
+    )
+);
+$request = new OpenSearchServer\Search\Field\Put($json);
+$request->index('00__test_web')
+        ->template('test_with_json_values');
+$response = $oss_api->submit($request);
+```
+
+#### Create request by using JSON text
+
+JSON body of request can be given as a JSON strings to the constructor. If values are given this way every data set by calling specific methods on this request or by giving JSON array values will be ignored.
+
+However some methods must still be called to set index on which work and every parameters used directly in request's URL.
+
+Example: create a Search field template:
+
+```php
+$json = <<<JSON
+{
+    "query": "open search server",
+    "start": 0,
+    "rows": 10,
+    "lang": "ENGLISH",
+    "operator": "AND",
+    "collapsing": {
+        "max": 2,
+        "mode": "OFF",
+        "type": "OPTIMIZED"
+    },
+    "returnedFields": [
+        "url"
+    ],
+    "snippets": [
+        {
+            "field": "title",
+            "tag": "em",
+            "separator": "...",
+            "maxSize": 200,
+            "maxNumber": 1,
+            "fragmenter": "NO"
+        },
+        {
+            "field": "content",
+            "tag": "em",
+            "separator": "...",
+            "maxSize": 200,
+            "maxNumber": 1,
+           "fragmenter": "SENTENCE"
+        }
+    ],
+    "enableLog": false,
+    "searchFields": [
+        {
+            "field": "title",
+            "mode": "PHRASE",
+            "boost": 3
+        },
+        {
+            "field": "content",
+            "mode": "PHRASE",
+            "boost": 4
+        },
+        {
+            "field": "titleExact",
+            "mode": "PHRASE",
+            "boost": 5
+        },
+        {
+            "field": "contentExact",
+            "mode": "PHRASE",
+            "boost": 6
+        }
+    ]
+}
+JSON;
+$request = new OpenSearchServer\Search\Field\Put(null, $json);
+$request->index('00__test_web')
+        ->template('test_with_json_text');
 $response = $oss_api->submit($request);
 ```
 
@@ -1743,7 +1841,7 @@ Available method:
 $request = new OpenSearchServer\Scheduler\Run();
 $request->index('index_name')
         ->name('test job')
-       ->variable('url', 'http://www.opensearchserver.com');
+        ->variable('url', 'http://www.opensearchserver.com');
 $response = $oss_api->submit($request);
 ```
 
