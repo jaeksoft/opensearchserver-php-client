@@ -204,6 +204,7 @@ foreach($results as $key => $result) {
     * _[Insert exclusion patterns](#insert-exclusion-patterns)_
     * _[List exclusion patterns](#list-exclusion-patterns)_
     * _[Delete exclusion patterns](#delete-exclusion-patterns)_
+  * [Inject URL in URL database](#inject-url-in-url-database)
   * [Start web crawler](#start-web-crawler)
   * [Stop web crawler](#stop-web-crawler)
   * [Get web crawler status](#get-web-crawler-status)
@@ -874,6 +875,19 @@ $request->index('index_name')
         ->pattern('http://www.exclude1.com/page1');
 $response = $oss_api->submit($request);
 ```
+
+
+### Inject URL in URL database
+
+In addition to inserting pattern it is also needed to tell crawler which URL it should use to start crawling. It will then discover automatically new URLs to crawl.
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Url\Insert();
+$request->index('index_name')
+        ->urls(array('http://www.cnn.com/sport', 'http://website1.com'));
+$response = $oss_api->submit($request);
+```
+
 
 ### Start web crawler
 
