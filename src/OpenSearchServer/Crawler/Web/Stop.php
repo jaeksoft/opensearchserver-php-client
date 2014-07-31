@@ -3,7 +3,7 @@ namespace OpenSearchServer\Crawler\Web;
 
 use OpenSearchServer\Request;
 
-class Start extends Request
+class Stop extends Request
 {
 	/******************************
 	 * INHERITED METHODS OVERRIDDEN
