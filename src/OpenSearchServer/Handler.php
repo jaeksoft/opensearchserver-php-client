@@ -41,6 +41,7 @@ class Handler
     {
         $client = new Curl;
         $client->setVerifyPeer(false);
+        $client->setTimeout(60000);
 
         $this->client = $client;
         $this->browser = new Browser($client);

@@ -3,7 +3,7 @@ namespace OpenSearchServer\Crawler\Web;
 
 use OpenSearchServer\Request;
 
-class Start extends Request
+class Crawl extends Request
 {
 	public function url($url) {
 		$this->parameters['url'] = $url;
@@ -18,7 +18,7 @@ class Start extends Request
      */
     public function getMethod()
     {
-        return self::METHOD_DELETE;
+        return self::METHOD_GET;
     }
     
     /**

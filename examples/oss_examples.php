@@ -19,6 +19,7 @@ foreach($response as $propName => $value) {
 }
 echo '</ul>';
 
+
 /**
  * ## Index\Create
  * Create index
@@ -940,6 +941,19 @@ $request->index('00__test_file')
 $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
 var_dump($response->getInfo());
+
+/**
+ * ## Crawler\Web\Crawl
+ * Force crawling of URL
+ */
+echo '<hr/><h2>Crawler\Web\Crawl</h2>';
+$request = new OpenSearchServer\Crawler\Web\Crawl();
+$request->index('00__test_web')
+        ->url('http://www.lemonde.fr/');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
 
 /**
  * ## Field\Create
