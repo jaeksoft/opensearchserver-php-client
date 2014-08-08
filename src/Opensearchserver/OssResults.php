@@ -167,7 +167,7 @@ class OssResults
     {
         if(!empty($current[(string) $name]))
         {
-            if(is_string($current[(string) $name]) === true)
+            if(is_array($current[(string) $name]) === false)
             {
                 $firstValue = $current[(string) $name];
                 $current[(string) $name] = array($firstValue);
