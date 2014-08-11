@@ -149,17 +149,39 @@ class OssResults
         $current = array();
         foreach ($fields as $field) {
             $name = (string) $field[0]['name'];
-            $current[(string) $name] = trim($field);
+            $current = $this->getFieldOrMultivaluedField($current, $name, $field);
         }
 
         if ($modeSnippet) {
             $snippets = $doc->xpath('snippet');
             foreach ($snippets as $field) {
                 $name = (string) $field[0]['name'];
-                $current[(string) $name] = trim($field);
+                $current = $this->getFieldOrMultivaluedField($current, $name, $field);
             }
         }
 
+        return $current;
+    }
+
+    private function getFieldOrMultivaluedField($current, $name, $field)
+    {
+        if(!empty($current[(string) $name]))
+        {
+            if(is_array($current[(string) $name]) === false)
+            {
+                $firstValue = $current[(string) $name];
+                $current[(string) $name] = array($firstValue);
+            }
+            else
+            {
+                $current[(string) $name][] = trim($field);
+            }
+        }
+        else
+        {
+            $current[(string) $name] = trim($field);
+        }
+        
         return $current;
     }
 
