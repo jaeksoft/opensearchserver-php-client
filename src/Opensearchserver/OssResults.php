@@ -172,10 +172,9 @@ class OssResults
                 $firstValue = $current[(string) $name];
                 $current[(string) $name] = array($firstValue);
             }
-            else
-            {
-                $current[(string) $name][] = trim($field);
-            }
+            
+            $current[(string) $name][] = trim($field);
+            
         }
         else
         {
