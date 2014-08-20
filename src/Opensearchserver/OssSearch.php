@@ -284,7 +284,7 @@ class OssSearch extends OssSearchAbstract
             if (empty($sort)) {
                 continue;
             }
-            $queryChunks[] = 'sort=' . urlencode($sort);
+            $queryChunks[] = 'sort[]=' . urlencode($sort);
         }
 
         // Filters
