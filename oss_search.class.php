@@ -147,8 +147,12 @@ class OssSearch extends OssSearchAbstract {
    * @return OssSearch
    */
   public function sort($fields) {
-    foreach ((array)$fields as $field)
-      $this->sort[] = $field;
+    if (isArray($field)) {
+      foreach ((array)$fields as $field)
+        $this->sort[] = $field;
+    } else  {
+        $this->sort[] = $fields;
+    }
     return $this;
   }
 
