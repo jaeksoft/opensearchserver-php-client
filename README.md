@@ -1301,6 +1301,10 @@ $request->addDocument(array(
             'value' => 'The Count Of Monte-Cristo, Alexandre Dumas'
         ),
         array(
+            'name' => 'title',
+            'value' => 'Multiple value for field title'
+        ),
+        array(
             'name' => 'autocomplete',
             'value' => 'The Count Of Monte-Cristo, Alexandre Dumas'
         ),
@@ -1322,6 +1326,7 @@ $response = $oss_api->submit($request);
 $document = new OpenSearchServer\Document\Document();
 $document->lang(OpenSearchServer\Request::LANG_FR)
          ->field('title','Test The Count 2')
+         ->field('title','One field can be indexed with multiple values')
          ->field('autocomplete','Test The Count 2')
          ->field('uri', '2');
 
@@ -1345,7 +1350,7 @@ Available methods:
 Available methods for object of type OpenSearchServer\Document\Document:
 
 * **lang(string $lang)**: set lang of indexation. Used by some Analyzers to transform text.
-* **field(string $name, string $value, int $boost)**: give value to a field, with an optionnal boost. You would probably prefer to use boost at query time.
+* **field(string $name, string $value, int $boost)**: give value to a field, with an optionnal boost. You would probably prefer to use boost at query time. This method can be called several times with same `$name` argument to index multiple values for one field.  
 
 #### Add documents by pushing text file
 
