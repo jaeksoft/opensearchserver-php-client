@@ -50,13 +50,46 @@ abstract class Search extends RequestJson
 		$this->addFilter($filter, self::QUERY_FILTER, true);
 		return $this;
 	}
+	
+
+	/**
+	 * Add a RelativeDateFilter on request
+	 * @return OpenSearchServer\Search
+	 */
+	public function relativeDateFilter($field, $fromUnit = self::RELATIVE_DATE_FILTER_UNIT_MINUTES, $fromInterval, $toUnit = self::RELATIVE_DATE_FILTER_UNIT_MINUTES, $toInterval = 0, $dateFormat = self::RELATIVE_DATE_FILTER_DATEFORMAT, $isNegative = false) {
+		$parameters = array(
+	        'fromUnit' => $fromUnit,
+	        'fromInterval' => $fromInterval,
+	        'toUnit' => $toUnit,
+		    'toInterval' => $toInterval,
+		    'dateFormat' => $dateFormat,
+		    'field' => $field
+	    );
+	    $this->addFilter(null, self::RELATIVE_DATE_FILTER, $isNegative, $parameters);
+		return $this;
+	}
+	
+	/**
+	 * Add a negative RelativeDateFilter on request
+	 * @return OpenSearchServer\Search
+	 */
+	public function negativeRelativeDateFilter($field, $fromUnit = self::RELATIVE_DATE_FILTER_UNIT_MINUTES, $fromInterval, $toUnit = self::RELATIVE_DATE_FILTER_UNIT_MINUTES, $toInterval = 0, $dateFormat = self::RELATIVE_DATE_FILTER_DATEFORMAT, $isNegative = false) {
+        return $this->relativeDateFilter($field, $fromUnit, $fromInterval, $toUnit, $toInterval, $dateFormat, true);	    
+	}
+	
+	
 
 	/**
 	 * Add a GeoFilter on request
 	 * @return OpenSearchServer\Search
 	 */
-	public function geoFilter($shape = self::GEO_FILTER_SQUARED, $unit = self::GEO_FILTER_KILOMETERS, $distance) {
-		$this->addFilter($filter, self::GEO_FILTER, false, $shape, $unit, $distance);
+	public function geoFilter($shape = self::GEO_FILTER_SQUARED, $unit = self::GEO_FILTER_KILOMETERS, $distance, $isNegative = false) {
+		$parameters = array(
+	        'shape' => $shape,
+	        'unit' => $unit,
+	        'distance' => $distance
+	    );
+	    $this->addFilter(null, self::GEO_FILTER, $isNegative, $parameters);
 		return $this;
 	}
 
@@ -65,8 +98,7 @@ abstract class Search extends RequestJson
 	 * @return OpenSearchServer\Search
 	 */
 	public function negativeGeoFilter($shape = self::GEO_FILTER_SQUARED, $unit = self::GEO_FILTER_KILOMETERS, $distance) {
-		$this->addFilter($filter, self::GEO_FILTER, true, $shape, $unit, $distance);
-		return $this;
+		return $this->geoFilter(null, $shape, $unit, $distance, true);
 	}
 
 	/**
@@ -116,11 +148,11 @@ abstract class Search extends RequestJson
 	/******************************
 	 *       PRIVATE METHODS
 	 ******************************/
-	private function addFilter($value, $type, $isNegative, $shape = null, $unit = null, $distance = null) {
+	private function addFilter($value = null, $type, $isNegative, $parameters = array()) {
 		if(empty($this->data['filters'])) {
 			$this->data['filters'] = array();
 		}
-
+    
 		$newFilter = array(
 			'type' => $type,
 			'negative' => (boolean)$isNegative,
@@ -128,13 +160,25 @@ abstract class Search extends RequestJson
 		//add options depending on type of filter
 		switch($type) {
 			case self::GEO_FILTER:
-				$newFilter['shape'] = $shape;
-				$newFilter['unit'] = $unit;
-				$newFilter['distance'] = $distance;
+				$newFilter['shape'] = $parammeters['shape'];
+				$newFilter['unit'] = $parammeters['unit'];
+				$newFilter['distance'] = $parammeters['distance'];
 				break;
 			case self::QUERY_FILTER:
 				$newFilter['query'] = $value;
 				break;
+			case self::RELATIVE_DATE_FILTER:
+			    $newFilter['from'] = array(
+			    		'unit' => $parameters['fromUnit'],
+			    		'interval' => $parameters['fromInterval'],
+			        );
+			    $newFilter['to'] = array(
+			    		'unit' => $parameters['toUnit'],
+			    		'interval' => $parameters['toInterval'],
+			        );
+			    $newFilter['field'] = $parameters['field'];
+			    $newFilter['dateFormat'] = $parameters['dateFormat'];
+			    break;
 		}
 		$this->data['filters'][] = $newFilter;
 	}

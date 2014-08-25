@@ -1469,6 +1469,17 @@ Available methods:
   * **negativeFilter(string $filter):** add a negative query filter.
   * **geoFilter(string $shape, string $unit, int $distance):** add a geo filter.
   * **negativeGeoFilter(string $shape, string $unit, int $distance):** add a negative geo filter
+  * **relativeDateFilter(string $field, string $fromUnit, int $fromInterval, string $toUnit, int $toInterval, string $dateFormat, boolean $isNegative):**: add a RelativeDateFilter. This filter allows dynamic date filtering.
+    * This filter can be used to simplify date filtering, or when saving a Search template. If a template is saved with a relative date filter it will always force a date filter base on current date. For example if set with values `fromUnit` = days, `fromInterval` = 30, `toUnit` = days, `toInterval` = 0 and `dateFormat` = `yyyyMMdd` this search template will always filter documents whose chosen filtered field contains a date in last 31 days. For instance if $field is "fileSystemDate" and if a search is run on february 1st of 2014 it will translates to this filter: `fileSystemDate:[20140101 TO 20140201]`.  
+    * Parameters:
+      * `$field`: name of field on which apply filter.
+      * `$fromUnit`: unit to use for first boundary. Values can be `OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_DAYS`, `OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_HOURS` and `OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_MINUTES`.
+      * `$fromInterval`: interval to use for first boundary.
+      * `$toUnit`: unit to use for second boundary. Values can be `OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_DAYS`, `OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_HOURS` and `OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_MINUTES`.
+      * `$toInterval`: interval to use for first boundary.
+      * `$dateFormat`: format to use to render dates. Full date format is `yyyyMMddHHmmss` (`OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_DATEFORMAT`).
+      * `$isNegative`: whether this filter must be negative or not.
+  * **negativeRelativeDateFilter(string $field, string $fromUnit, int $fromInterval, string $toUnit, int $toInterval, string $dateFormat, boolean $isNegative):**: add a negative RelativeDateFilter.
   * **filter(string $field):** helper method, alias to `queryFilter()`.
   * **filterField(string $field, string / array $filter, string $join, boolean $addQuotes):** other way to add a query filter.
     * Parameters:
