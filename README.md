@@ -1350,7 +1350,7 @@ Available methods:
 Available methods for object of type OpenSearchServer\Document\Document:
 
 * **lang(string $lang)**: set lang of indexation. Used by some Analyzers to transform text.
-* **field(string $name, string $value, int $boost)**: give value to a field, with an optionnal boost. You would probably prefer to use boost at query time. This method can be called several times with same `$name` argument to index multiple value for one field.  
+* **field(string $name, string $value, int $boost)**: give value to a field, with an optionnal boost. You would probably prefer to use boost at query time. This method can be called several times with same `$name` argument to index multiple values for one field.  
 
 #### Add documents by pushing text file
 
