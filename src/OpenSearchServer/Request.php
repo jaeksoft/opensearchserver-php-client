@@ -31,10 +31,15 @@ class Request
      * Search constants
      */
     const QUERY_FILTER = 'QueryFilter';
-    const GEO_FILTER = 'GeoFilter';
+    const GEO_FILTER = 'GeoFilter';    
     const GEO_FILTER_SQUARED = 'SQUARED';
     const GEO_FILTER_KILOMETERS = 'KILOMETERS';
     const GEO_FILTER_MILES = 'MILES';
+    const RELATIVE_DATE_FILTER = 'RelativeDateFilter';
+    const RELATIVE_DATE_FILTER_DATEFORMAT = 'yyyyMMddHHmmss';
+    const RELATIVE_DATE_FILTER_UNIT_DAYS = 'days';
+    const RELATIVE_DATE_FILTER_UNIT_HOURS = 'hours';
+    const RELATIVE_DATE_FILTER_UNIT_MINUTES = 'minutes';
     const SORT_ASC = 'ASC';
     const SORT_DESC = 'DESC';
     const OPERATOR_OR = 'OR';
