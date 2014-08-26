@@ -1437,6 +1437,8 @@ $request->index('index_name')
         ->rows(5)
         //configure sorting
         ->sort('date', OpenSearchServer\Search\Search::SORT_DESC)
+        //add a level of sorting for documents with same date
+        ->sort('url', OpenSearchServer\Search\Search::SORT_ASC)
         //set facets (min 1, multivalued field)
         ->facet('category', 1, true)
         //set snippets
@@ -1458,17 +1460,28 @@ Available methods:
   * **template(string $name):** set name of query template to use. If set, query will use given registered query template but will override every parameters defined in the query object.
   * **snippet():**
 * Sorting options
-  * **sort(string $field, string $direction):**
+  * **sort(string $field, string $direction):** add a sorting on one field. Can be called multiple times to successively sort on different fields.
   * **sorts(array $sorts, string $direction):** helper method. Calls `sort()` for each item in array.
 * Scoring options
   * **scoring(string $field, int $weight, boolean $ascending, type $type):**  
 * Facetting options
-  * **facet(string $field, int $min = 0, boolean $multi = false, boolean $postCollapsing = false):**
+  * **facet(string $field, int $min = 0, boolean $multi = false, boolean $postCollapsing = false):** compute facet for one field: this will return count of every different values for this field. Facets can be used through `->getFacets()` when workingh with an `OpenSearchServer\Response\SearchResult` object. You can find more details in the [proper section](#opensearchserverresponsesearchresult).
 * Filtering options
   * **queryFilter(string $filter):** add a filter with a pattern query. For example : `lang:en`.
   * **negativeFilter(string $filter):** add a negative query filter.
   * **geoFilter(string $shape, string $unit, int $distance):** add a geo filter.
   * **negativeGeoFilter(string $shape, string $unit, int $distance):** add a negative geo filter
+  * **relativeDateFilter(string $field, string $fromUnit, int $fromInterval, string $toUnit, int $toInterval, string $dateFormat, boolean $isNegative):**: add a RelativeDateFilter. This filter allows dynamic date filtering.
+    * This filter can be used to simplify date filtering, or when saving a Search template. If a template is saved with a relative date filter it will always force a date filter base on current date. For example if set with values `fromUnit` = days, `fromInterval` = 30, `toUnit` = days, `toInterval` = 0 and `dateFormat` = `yyyyMMdd` this search template will always filter documents whose chosen filtered field contains a date in last 30 days. For instance if $field is "fileSystemDate" and if a search is run on february 1st of 2014 it will translates to this filter: `fileSystemDate:[20140101 TO 20140201]`.  
+    * Parameters:
+      * `$field`: name of field on which apply filter.
+      * `$fromUnit`: unit to use for first boundary. Values can be `OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_DAYS`, `OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_HOURS` and `OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_MINUTES`.
+      * `$fromInterval`: interval to use for first boundary.
+      * `$toUnit`: unit to use for second boundary. Values can be `OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_DAYS`, `OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_HOURS` and `OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_MINUTES`.
+      * `$toInterval`: interval to use for first boundary.
+      * `$dateFormat`: format to use to render dates. Full date format is `yyyyMMddHHmmss` (`OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_DATEFORMAT`).
+      * `$isNegative`: whether this filter must be negative or not.
+  * **negativeRelativeDateFilter(string $field, string $fromUnit, int $fromInterval, string $toUnit, int $toInterval, string $dateFormat, boolean $isNegative):**: add a negative RelativeDateFilter.
   * **filter(string $field):** helper method, alias to `queryFilter()`.
   * **filterField(string $field, string / array $filter, string $join, boolean $addQuotes):** other way to add a query filter.
     * Parameters:

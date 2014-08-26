@@ -1176,6 +1176,51 @@ foreach($response as $key => $item) {
 }
 
 /**
+ * ## Search\Field\Put
+ * Create a search template with a relative date filter
+ */
+echo '<hr/><h2>Search\Field\Put</h2>';
+//build request
+$request = new OpenSearchServer\Search\Field\Put();
+$request->index('00__test_file')
+        ->emptyReturnsAll()
+        //set operator to use when multiple keywords
+        ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
+        //set lang of keywords
+        ->lang('FRENCH')
+        ->searchFields(array('content', 'url'))
+        //set a specific different search field with Term & Phrase, term boost = 5 and phrase boost = 10
+        ->searchField('title', OpenSearchServer\Search\Field\Search::SEARCH_MODE_TERM_AND_PHRASE, 5, 10)
+        //set returned fields
+        ->returnedFields(array('title', 'url', 'date'))
+        //set a RelativeDateFilter to filter documents where date is between -236 days and -220 days from now
+        ->relativeDateFilter(
+            	'fileSystemDate', 
+                OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_DAYS, 
+                236, 
+                OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_DAYS, 
+                220
+            )
+        //negative date filter :
+        ->negativeRelativeDateFilter(
+            	'fileSystemDate', 
+                OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_DAYS, 
+                235, 
+                OpenSearchServer\Search\Field\Search::RELATIVE_DATE_FILTER_UNIT_DAYS, 
+                227
+            )
+        //set number of results
+        ->rows(10)
+        //configure sorting
+        ->sort('date', OpenSearchServer\Search\Search::SORT_DESC)
+        ->template('search_relative_date_filter');
+
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+
+/**
  * ## SearchTemplate\GetList
  * Get list of existing search templates
  */
