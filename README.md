@@ -1437,6 +1437,8 @@ $request->index('index_name')
         ->rows(5)
         //configure sorting
         ->sort('date', OpenSearchServer\Search\Search::SORT_DESC)
+        //add a level of sorting for documents with same date
+        ->sort('url', OpenSearchServer\Search\Search::SORT_ASC)
         //set facets (min 1, multivalued field)
         ->facet('category', 1, true)
         //set snippets
@@ -1458,12 +1460,12 @@ Available methods:
   * **template(string $name):** set name of query template to use. If set, query will use given registered query template but will override every parameters defined in the query object.
   * **snippet():**
 * Sorting options
-  * **sort(string $field, string $direction):**
+  * **sort(string $field, string $direction):** add a sorting on one field. Can be called multiple times to successively sort on different fields.
   * **sorts(array $sorts, string $direction):** helper method. Calls `sort()` for each item in array.
 * Scoring options
   * **scoring(string $field, int $weight, boolean $ascending, type $type):**  
 * Facetting options
-  * **facet(string $field, int $min = 0, boolean $multi = false, boolean $postCollapsing = false):**
+  * **facet(string $field, int $min = 0, boolean $multi = false, boolean $postCollapsing = false):** compute facet for one field: this will return count of every different values for this field. Facets can be used through `->getFacets()` when workingh with an `OpenSearchServer\Response\SearchResult` object. You can find more details in the [proper section](#opensearchserverresponsesearchresult).
 * Filtering options
   * **queryFilter(string $filter):** add a filter with a pattern query. For example : `lang:en`.
   * **negativeFilter(string $filter):** add a negative query filter.
