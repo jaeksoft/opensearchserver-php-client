@@ -192,6 +192,7 @@ foreach($results as $key => $result) {
 * **[Instance monitoring](#instance-monitoring)**
 * **[Configure schema](#configure-schema)**
   * [Create a field](#create-a-field)
+  * [Create full schema](#create-full-schema-at-once)
   * [Get list of fields](#get-list-of-fields)
   * [Get details of a specific field](#get-details-of-a-specific-field)
   * [Delete a field](#delete-a-field)
@@ -239,7 +240,7 @@ foreach($results as $key => $result) {
     * _[Save a Search(field) query template](#save-a-searchfield-query-template)_
   * [Search(pattern)](#searchpattern)
     * _[Save a Search(pattern) query template](#save-a-searchpattern-query-template)_
-* **[Search templates](#query-templates)**
+* **[Search templates](#search-templates)**
   * [List search template](#list-search-templates)
   * [Get details of a search template](#get-details-of-a-search-template)
   * [Delete a search template](#delete-a-search-template)
@@ -732,6 +733,46 @@ Available methods:
 * **analyzer(string $analyzerName)**: analyzer to use on this field. Analyzer allow to apply several transformations on indexed or searched data.
 * **stored(boolean $stored)**: tells whether or not this field must be stored. Stored field can return their original values in search queries, even if some Analyzers transformed it.
 * **copyOf(string/array $fields)**: field(s) from which copy value. Value is copied before transformation by analyzers. A string or an array of string can be given to this method.
+
+### Create full schema at once
+
+Schema can be totally created at once using some JSON Text or JSON array of values with object of type `OpenSearchServer\Field\CreateBulk`.
+
+```php
+$json = <<<JSON
+[
+        {
+            "name": "uniqueId",
+            "indexed": "YES",
+            "stored": "NO"
+        },
+        {
+            "name": "title",
+            "indexed": "YES",
+            "stored": "YES",
+            "analyzer": "TextAnalyzer"
+        },
+        {
+            "name": "description",
+            "indexed": "YES",
+            "stored": "YES",
+            "analyzer": "TextAnalyzer"
+        },
+        {
+            "name": "descriptionStandard",
+            "indexed": "YES",
+            "stored": "NO",
+            "analyzer": "StandardAnalyzer",
+            "copyOf": [
+                "description"
+            ]
+        }
+]
+JSON;
+$request = new OpenSearchServer\Field\CreateBulk(null, $json);
+$request->index('00__test_schema');
+$response = $oss_api->submit($request);
+```
 
 ### Get list of fields
 
@@ -1595,7 +1636,7 @@ foreach($response as $key => $item) {
 ```php
 $request = new OpenSearchServer\SearchTemplate\Get();
 $request->index('index_name')
-        ->name('template_name')
+        ->name('template_name');
 $response = $oss_api->submit($request);
 ```
 
@@ -1606,7 +1647,7 @@ $response = $oss_api->submit($request);
 ```php
 $request = new OpenSearchServer\SearchTemplate\Delete();
 $request->index('index_name')
-        ->name('template_name')
+        ->name('template_name');
 $response = $oss_api->submit($request);
 ```
 
