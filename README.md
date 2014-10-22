@@ -192,6 +192,7 @@ foreach($results as $key => $result) {
 * **[Instance monitoring](#instance-monitoring)**
 * **[Configure schema](#configure-schema)**
   * [Create a field](#create-a-field)
+  * [Create full schema](#create-full-schema-at-once)
   * [Get list of fields](#get-list-of-fields)
   * [Get details of a specific field](#get-details-of-a-specific-field)
   * [Delete a field](#delete-a-field)
@@ -733,7 +734,7 @@ Available methods:
 * **stored(boolean $stored)**: tells whether or not this field must be stored. Stored field can return their original values in search queries, even if some Analyzers transformed it.
 * **copyOf(string/array $fields)**: field(s) from which copy value. Value is copied before transformation by analyzers. A string or an array of string can be given to this method.
 
-### Create a full schema at once
+### Create full schema at once
 
 Schema can be totally created at once using some JSON Text or JSON array of values with object of type `OpenSearchServer\Field\CreateBulk`.
 
