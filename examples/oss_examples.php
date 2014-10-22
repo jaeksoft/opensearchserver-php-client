@@ -994,6 +994,133 @@ var_dump($response->isSuccess());
 var_dump($response->getInfo());
 
 
+
+/**
+ * ## Field\CreateBulk
+ * Create full schema
+ */
+echo '<hr/><h2>Index\Create</h2>';
+$request = new OpenSearchServer\Index\Create();
+$request->index('00__test_schema');
+$response = $oss_api->submit($request);
+
+echo '<hr/><h2>Field\CreateBulk</h2>';
+$json = <<<JSON
+[
+        {
+            "name": "uniqueId",
+            "indexed": "YES",
+            "stored": "NO"
+        },
+        {
+            "name": "title",
+            "indexed": "YES",
+            "stored": "YES",
+            "analyzer": "TextAnalyzer"
+        },
+        {
+            "name": "titleStandard",
+            "indexed": "YES",
+            "stored": "NO",
+            "analyzer": "StandardAnalyzer",
+            "copyOf": [
+                "title"
+            ]
+        },
+        {
+            "name": "description",
+            "indexed": "YES",
+            "stored": "YES",
+            "analyzer": "TextAnalyzer"
+        },
+        {
+            "name": "descriptionStandard",
+            "indexed": "YES",
+            "stored": "NO",
+            "analyzer": "StandardAnalyzer",
+            "copyOf": [
+                "description"
+            ]
+        },
+        {
+            "name": "chapo",
+            "indexed": "YES",
+            "stored": "YES",
+            "analyzer": "TextAnalyzer"
+        },
+        {
+            "name": "chapoStandard",
+            "indexed": "YES",
+            "stored": "NO",
+            "analyzer": "StandardAnalyzer",
+            "copyOf": [
+                "chapo"
+            ]
+        },
+        {
+            "name": "id",
+            "indexed": "YES",
+            "stored": "NO"
+        },
+        {
+            "name": "price",
+            "indexed": "YES",
+            "stored": "NO"
+        },
+        {
+            "name": "reference",
+            "indexed": "YES",
+            "stored": "NO"
+        },
+        {
+            "name": "locale",
+            "indexed": "YES",
+            "stored": "NO"
+        },
+        {
+            "name": "currency",
+            "indexed": "YES",
+            "stored": "NO"
+        },
+        {
+            "name": "full",
+            "indexed": "YES",
+            "stored": "YES",
+            "analyzer": "TextAnalyzer",
+            "copyOf": [
+                "title",
+                "chapo",
+                "description",
+                "reference"
+            ]
+        },
+        {
+            "name": "fullStandard",
+            "indexed": "YES",
+            "stored": "NO",
+            "analyzer": "StandardAnalyzer",
+            "copyOf": [
+                "title",
+                "chapo",
+                "description",
+                "reference"
+            ]
+        }
+]
+JSON;
+$request = new OpenSearchServer\Field\CreateBulk(null, $json);
+$request->index('00__test_schema');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+
+$request = new OpenSearchServer\Field\SetDefaultUnique();
+$request->index('00__test_schema')
+        ->defaultField('title')
+        ->uniqueField('uniqueId');
+$response = $oss_api->submit($request);
+
+
+
 /**
  * Show how to pass text or array as JSON directly when creating request
  */
