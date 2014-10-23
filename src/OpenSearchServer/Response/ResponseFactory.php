@@ -36,6 +36,13 @@ class ResponseFactory
                 }
                 return $response;
                 break;
+            case 'OpenSearchServer\Analyzer\GetList':
+                $response = new ResponseIterable($response, $request);
+                if(!empty($response->getJsonValues()->analyzers)) {
+                    $response->setValues($response->getJsonValues()->analyzers);
+                }
+                return $response;
+                break;
             case 'OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList':
             case 'OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList':
             case 'OpenSearchServer\Autocompletion\GetList':
