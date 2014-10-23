@@ -17,6 +17,7 @@ class Request
     /**
      * Languages
      */
+    const LANG_UNDEFINED = 'UNDEFINED';
     const LANG_FR = 'FRENCH';
     const LANG_EN = 'ENGLISH';
     const LANG_DE = 'GERMAN';
