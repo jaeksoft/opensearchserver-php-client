@@ -19,7 +19,6 @@ foreach($response as $propName => $value) {
 }
 echo '</ul>';
 
-
 /**
  * ## Index\Create
  * Create index
@@ -652,6 +651,80 @@ foreach($response as $key => $item) {
     echo '<br/>Item #'.$key .': ';
     print_r($item);
 }
+
+
+
+/**
+ * ## Analyzer\GetList
+ * Get list of analyzers
+ */
+echo '<hr/><h2>Analyzer\GetList</h2>';
+$request = new OpenSearchServer\Analyzer\GetList();
+$request->index('web_index');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+foreach($response as $analyzer) {
+    echo $analyzer->name . ' - ' . $analyzer->lang. '<br/>';
+}
+
+/**
+ * ## Analyzer\Get
+ * Get an analyzer
+ */
+echo '<hr/><h2>Analyzer\Get</h2>';
+$request = new OpenSearchServer\Analyzer\Get();
+$request->index('web_index')
+        ->name('SortingAnalyzer');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+echo '<h3>IndexTokenizer</h3>';
+var_dump($response->getJsonValues()->analyzer->indexTokenizer);
+echo '<h3>QueryTokenizer</h3>';
+var_dump($response->getJsonValues()->analyzer->queryTokenizer);
+echo '<h3>Filters</h3>';
+foreach($response->getJsonValues()->analyzer->filters as $filter) {
+    var_dump($filter);
+}
+
+/**
+ * ## Analyzer\Get
+ * Get an analyzer
+ */
+echo '<hr/><h2>Analyzer\Create</h2>';
+$json = <<<JSON
+{
+  "queryTokenizer":{"name":"KeywordTokenizer"},
+  "indexTokenizer":{"name":"KeywordTokenizer"},
+  "filters":[
+    {
+      "name":"ShingleFilter",
+      "properties":{
+        "max_shingle_size":"5",
+        "token_separator":" ",
+        "min_shingle_size":"1"
+      },
+      "scope":"QUERY_INDEX"
+    },
+    {
+      "name":"PrefixSuffixStopFilter",
+      "properties":{
+        "prefixList":"English stop words",
+        "ignore_case":"true",
+        "token_separator":" ",
+        "suffixList":"English stop words"
+      },
+      "scope":"QUERY_INDEX"
+    } 
+  ]
+}
+JSON;
+$request = new OpenSearchServer\Analyzer\Create(null, $json);
+$request->index('web_index')
+        ->name('TestAnalyzer');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+exit;
+
 
 /**
  * ## MoreLikeThis\Create

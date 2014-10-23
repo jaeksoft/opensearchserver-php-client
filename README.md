@@ -197,6 +197,10 @@ foreach($results as $key => $result) {
   * [Get details of a specific field](#get-details-of-a-specific-field)
   * [Delete a field](#delete-a-field)
   * [Set default and unique field for an index](#set-default-and-unique-field-for-an-index)
+* **[Analyzers](#analyzers)**
+  * [Create an analyzer](#create-an-analyzer)
+  * [Get list of analyzers](#get-list-of-analyzers)
+  * [Get details of a specific analyzer](#get-details-of-a-specific-analyzer)
 * **[Web crawler](#web-crawler)**
   * [Patterns](#patterns)
     * _[Insert inclusion patterns](#insert-inclusion-patterns)_
@@ -460,6 +464,7 @@ foreach($response as $key => $item) {
   * OpenSearchServer\Field\GetList
   * OpenSearchServer\SearchTemplate\GetList
   * OpenSearchServer\MoreLikeThis\GetList
+  * OpenSearchServer\Analyzer\GetList
   * OpenSearchServer\Synonyms\GetList
   * OpenSearchServer\Crawler\Rest\GetList
   * OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList
@@ -834,6 +839,85 @@ $response = $oss_api->submit($request);
 Available methods:
 * **defaultField(string $name)**: name of field that must be used as default field. Default field is used for search queries when no particular field is configured in the query. Empty value removes default field setting.
 * **uniqueField(string $name)**:  name of field that must be used as unique field. Unique field is used as a primary key. Empty value removes unique field setting.
+
+## Analyzers
+
+### Create an analyzer
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/analyzer/create_update.html)
+
+Analyzer can be created or updated using some JSON Text or JSON array of values with object of type `OpenSearchServer\Analyzer\Create`.
+
+```php
+$json = <<<JSON
+{
+  "queryTokenizer":{"name":"KeywordTokenizer"},
+  "indexTokenizer":{"name":"KeywordTokenizer"},
+  "filters":[
+    {
+      "name":"ShingleFilter",
+      "properties":{
+        "max_shingle_size":"5",
+        "token_separator":" ",
+        "min_shingle_size":"1"
+      },
+      "scope":"QUERY_INDEX"
+    },
+    {
+      "name":"PrefixSuffixStopFilter",
+      "properties":{
+        "prefixList":"English stop words",
+        "ignore_case":"true",
+        "token_separator":" ",
+        "suffixList":"English stop words"
+      },
+      "scope":"QUERY_INDEX"
+    } 
+  ]
+}
+JSON;
+$request = new OpenSearchServer\Analyzer\Create(null, $json);
+$request->index('index_name')
+        ->name('TestAnalyzer');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+```
+
+Available methods:
+
+* **name(string $name)**: name of the analyzer to create or update.
+* **lang(string $lang)**: lang of the analyzer to create or update.
+
+### Get list of analyzers
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/analyzer/list.html)
+
+```php
+$request = new OpenSearchServer\Analyzer\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request); 
+foreach($response as $key => $analyzer) {
+    echo $analyzer->name . ' - ' . $analyzer->lang. '<br/>';
+}
+```
+
+### Get details of a specific analyzer
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/analyzer/get.html)
+
+```php
+$request = new OpenSearchServer\Analyzer\Get();
+$request->index('index_name')
+        ->name('TextAnalyzer')
+        ->lang(OpenSearchServer\Request::LANG_FR);
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name(string $name)**: name of the analyzer to get information for.
+* **lang(string $lang)**: lang of the analyzer to get information for.
+
 
 ## Web Crawler
 
