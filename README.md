@@ -844,7 +844,7 @@ Available methods:
 
 ### Create an analyzer
 
-[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/analyzer/create_update.html)
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/analyzers/create_update.html)
 
 Analyzer can be created or updated using some JSON Text or JSON array of values with object of type `OpenSearchServer\Analyzer\Create`.
 
@@ -890,7 +890,7 @@ Available methods:
 
 ### Get list of analyzers
 
-[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/analyzer/list.html)
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/analyzers/list.html)
 
 ```php
 $request = new OpenSearchServer\Analyzer\GetList();
@@ -903,7 +903,7 @@ foreach($response as $key => $analyzer) {
 
 ### Get details of a specific analyzer
 
-[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/analyzer/get.html)
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/analyzers/get.html)
 
 ```php
 $request = new OpenSearchServer\Analyzer\Get();
