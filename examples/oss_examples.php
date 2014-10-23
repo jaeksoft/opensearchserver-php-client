@@ -723,8 +723,6 @@ $request->index('web_index')
         ->name('TestAnalyzer');
 $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
-exit;
-
 
 /**
  * ## MoreLikeThis\Create
