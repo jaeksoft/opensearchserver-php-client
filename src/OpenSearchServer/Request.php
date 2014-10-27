@@ -18,9 +18,26 @@ class Request
      * Languages
      */
     const LANG_UNDEFINED = 'UNDEFINED';
-    const LANG_FR = 'FRENCH';
+    const LANG_AR = 'ARABIC';
+    const LANG_ZH = 'CHINESE';
+    const LANG_DA = 'DANISH';
+    const LANG_NL = 'DUTCH';
     const LANG_EN = 'ENGLISH';
+    const LANG_FI = 'FINNISH';
+    const LANG_FR = 'FRENCH';
     const LANG_DE = 'GERMAN';
+    const LANG_HU = 'HUNGARIAN';
+    const LANG_IT = 'ITALIAN';
+    const LANG_JA = 'JAPANESE';
+    const LANG_KO = 'KOREAN';
+    const LANG_NO = 'NORWEGIAN';
+    const LANG_PL = 'POLISH';
+    const LANG_PT = 'PORTUGUESE';
+    const LANG_RO = 'ROMANIAN';
+    const LANG_RU = 'RUSSIAN';
+    const LANG_ES = 'SPANISH';
+    const LANG_SV = 'SWEDISH';
+    const LANG_TR = 'TURKISH';
     
     /** 
      * Index templates names
