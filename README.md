@@ -238,6 +238,7 @@ foreach($results as $key => $result) {
     * _[Add documents by creating OpenSearchServer\Document\Document objects](#add-documents-by-creating-opensearchserverdocumentdocument-objects)_
     * _[Add documents by pushing text file](#add-documents-by-pushing-text-file)_
   * [Delete documents](#delete-documents)
+  * [Delete documents by query](#delete-documents-using-an-existing-query-template-or-using-a-query-pattern)
 * **[Execute search queries](#run-search-queries)**
   * [Search options](#search-options)
   * [Search(field)](#searchfield)
