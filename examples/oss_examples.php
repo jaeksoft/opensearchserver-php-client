@@ -964,6 +964,16 @@ $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
 var_dump($response->getInfo());
 
+
+echo '<hr/><h2>Document\DeleteByQuery</h2>';
+$request = new OpenSearchServer\Document\DeleteByQuery();
+$request->index("00__test")
+        ->query('title:[* TO *]');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+
 /**
  * ## Crawler\Web\Crawl
  * Force crawling of URL

@@ -1531,6 +1531,32 @@ Available methods:
 * **value(string $value)**: value of the field to delete.
 * **values(array $values)**: helper method. Call `value()` for each item in array.
 
+### Delete documents using an existing query template or using a query pattern
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/document/delete_by_query.md)
+
+```php
+$request = new OpenSearchServer\Document\DeleteByQuery();
+$request->index("00__test")
+        ->query('title:[* TO *]');
+$response = $oss_api->submit($request);
+```
+
+```php
+$request = new OpenSearchServer\Document\DeleteByQuery();
+$request->index("00__test")
+        //query template deleteMoreThanOneWeek can define some relative date filters
+        ->template('deleteMoreThanOneWeek');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+_One or the other of these 2 methods must be used:_
+
+* **template($queryTemplate)**: name of a query template to use for deletion.
+* **query($pattern)**: query pattern for selecting documents to delete.
+
 ## Execute search queries
 
 ### Search options
