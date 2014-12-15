@@ -5,6 +5,36 @@ $app_key 	= '54a51ee4f27cbbcb7a771352b980567f';
 $login      = 'admin';
 $oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ));
 
+
+//create an index with WEB_CRAWLER template
+$request = new OpenSearchServer\Index\Create();
+$request->index('00__test_web')->template(OpenSearchServer\Request::TEMPLATE_WEB_CRAWLER);
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+/**
+ * ## Crawler\Web\Url\Insert
+ * Insert URL to crawl
+ */
+echo '<hr/><h2>Crawler\Web\Url\Insert</h2>';
+$request = new OpenSearchServer\Crawler\Web\Url\Insert();
+$request->index('00__test_web')
+        ->url('http://www.lemonde.fr');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+
+echo '<hr/><h2>Crawler\Web\Url\Insert</h2>';
+$request = new OpenSearchServer\Crawler\Web\Start();
+$request->index('00__test_web');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+
+exit;
+
 /**
  * ## Monitor\Monitor
  * Get monitoring information on instance

@@ -112,6 +112,7 @@ class Handler
                 $url .= '&group='.urlencode($group);
             }
         }
+        return $url;
     }
     
     /**
