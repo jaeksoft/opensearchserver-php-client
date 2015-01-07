@@ -72,6 +72,17 @@ class Request
     const SNIPPET_NO_FRAGMENTER = 'NO';
     const SNIPPET_SENTENCE_FRAGMENTER = 'SENTENCE';
     
+    /** 
+     * Types of replications
+     */
+    const REPL_BACKUP_INDEX = 'BACKUP_INDEX';
+    const REPL_MAIN_INDEX = 'MAIN_INDEX';
+    const REPL_WEB_CRAWLER_URL_DATABASE = 'WEB_CRAWLER_URL_DATABASE';
+    const REPL_FILE_CRAWLER_URI_DATABASE = 'FILE_CRAWLER_URI_DATABASE';
+    const REPL_SCHEMA_ONLY = 'SCHEMA_ONLY';
+    const REPL_MAIN_DATA_COPY = 'MAIN_DATA_COPY';
+    
+    
     /**
      * Various options for this request
      * Can have different roles, for example can be used when building full path

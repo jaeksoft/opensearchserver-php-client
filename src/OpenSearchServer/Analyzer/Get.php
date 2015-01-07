@@ -13,7 +13,7 @@ class Get extends Request
 	/**
 	 * Specify the name of analyzer
 	 * @param string $name
-	 * @return OpenSearchServer\Analyzer\Create
+	 * @return OpenSearchServer\Analyzer\Get
 	 */
 	public function name($name) {
 		$this->options['name'] = $name;
@@ -23,7 +23,7 @@ class Get extends Request
 	/**
 	 * Specify the lang of analyzer
 	 * @param string $lang
-	 * @return OpenSearchServer\Analyzer\Create
+	 * @return OpenSearchServer\Analyzer\Get
 	 */
 	public function lang($lang) {
 		$this->options['lang'] = $lang;
