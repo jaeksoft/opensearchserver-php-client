@@ -2024,6 +2024,8 @@ var_dump($response->getSpellSuggestionsArray('title'));
 
 ### Get status of a scheduler job
 
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/scheduler/get_status.md)
+
 ```php
 $request = new OpenSearchServer\Scheduler\GetStatus();
 $request->index('index_name')
@@ -2036,6 +2038,8 @@ Available method:
 * **name(string $name):** name of scheduler job
 
 ### Execute a scheduler job
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/scheduler/run.md)
 
 ```php
 $request = new OpenSearchServer\Scheduler\Run();
