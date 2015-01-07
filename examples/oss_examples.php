@@ -6,6 +6,89 @@ $login      = 'admin';
 $oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ));
 
 
+/**
+ * ## Replication\GetList
+ * Get list of existing replications
+ */
+echo '<hr/><h2>Replication\GetList</h2>';
+$request = new OpenSearchServer\Replication\GetList();
+$request->index('articles');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    var_dump($item);
+}
+
+/**
+ * ## Replication\Create
+ * Create or update one replication
+ */
+echo '<hr/><h2>Replication\Create</h2>';
+$request = new OpenSearchServer\Replication\Create();
+$request->index('articles')
+        ->replicationType(OpenSearchServer\Request::REPL_MAIN_INDEX)
+        ->remoteUrl('http://localhost:9090')
+        ->remoteIndexName('articles_test_repl');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+/**
+ * ## Replication\Get
+ * Get details about one replication
+ */
+echo '<hr/><h2>Replication\Get</h2>';
+$request = new OpenSearchServer\Replication\Get();
+$request->index('articles')
+        ->name('http://localhost:9090/articles_test_repl');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getJsonValues());
+
+/**
+ * ## Replication\Run
+ * Start a replication
+ */
+echo '<hr/><h2>Replication\Run</h2>';
+$request = new OpenSearchServer\Replication\Run();
+$request->index('articles')
+        ->name('http://localhost:9090/articles_test_repl');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+
+sleep(1);
+/**
+ * ## Replication\Delete
+ * Delete one replication
+ */
+echo '<hr/><h2>Replication\Delete</h2>';
+$request = new OpenSearchServer\Replication\Delete();
+$request->index('articles')
+        ->name('http://localhost:9090/articles_test_repl');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getInfo());
+exit;
+
+
+/**
+ * ## Monitor\Monitor
+ * Get monitoring information on instance
+ */
+echo '<hr/><h2>Monitor\Monitor</h2>';
+//create an empty index
+$request = new OpenSearchServer\Monitor\Monitor();
+$request->full(true);
+$response = $oss_api->submit($request);
+echo '<ul>';
+foreach($response as $propName => $value) {
+    echo '<li>'.$propName.': '.$value.'</li>';
+}
+echo '</ul>';
+exit;
+
 //create an index with WEB_CRAWLER template
 $request = new OpenSearchServer\Index\Create();
 $request->index('00__test_web')->template(OpenSearchServer\Request::TEMPLATE_WEB_CRAWLER);

@@ -268,6 +268,12 @@ foreach($results as $key => $result) {
 * **[Scheduler](#scheduler)**
   * [Get status of a scheduler job](#get-status-of-a-scheduler-job)
   * [Execute a scheduler job](#execute-a-scheduler-job)
+* **[Replication](#replication)**
+  * [Get list of replications](#get-list-of-replications)
+  * [Get details about one replication](#get-details-about-one-replication)
+  * [Create or update a replication](#create-or-update-a-replication)
+  * [Start a replication](#start-a-replication)
+  * [Delete a replication](#delete-a-replication)
 
 ## How to make requests
 
@@ -2044,6 +2050,92 @@ Available method:
 * **name(string $name):** name of scheduler job
 * **variable(string $name, string $value):** some tasks can receive variables.
 * **variables(array $variables):** helper method, calls `variable()` for each item in array. 
+
+## Replication
+
+### Get list of replications
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/replication/list.md)
+
+
+```php
+$request = new OpenSearchServer\Replication\GetList();
+$request->index('articles');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    var_dump($item);
+}
+```
+
+### Get details about one replication
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/replication/get.md)
+
+```php
+$request = new OpenSearchServer\Replication\Get();
+$request->index('articles')
+        ->name('http://localhost:9090/articles_test_repl');
+$response = $oss_api->submit($request);
+```
+
+Available method:
+
+* **name(string $name):** name of the replication
+
+### Create or update a replication
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/replication/create_update.md)
+
+```php
+$request = new OpenSearchServer\Replication\Create();
+$request->index('articles')
+        ->replicationType(OpenSearchServer\Request::REPL_MAIN_INDEX)
+        ->remoteUrl('http://localhost:9090')
+        ->remoteIndexName('articles_test_repl');
+$response = $oss_api->submit($request);
+```
+
+Available method:
+
+* **name(string $name):** name of the replication
+* **replicationType(string $value):** type of replication (use constants defined in `OpenSearchServer\Request`).
+* **remoteUrl(string $value):** URL of the target OpenSearchServer instance
+* **remoteLogin(string $value):** login for the target instance
+* **remoteApiKey(string $value):** API key
+* **remoteIndexName(string $value):** target index name
+* **secTimeOut(string $value):** timeout in secondes
+
+
+### Start a replication
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/replication/run.md)
+
+```php
+$request = new OpenSearchServer\Replication\Run();
+$request->index('articles')
+        ->name('http://localhost:9090/articles_test_repl');
+$response = $oss_api->submit($request);
+```
+
+Available method:
+
+* **name(string $name):** name of the replication
+
+### Delete a replication
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/replication/delete.md)
+
+```php
+$request = new OpenSearchServer\Replication\Delete();
+$request->index('articles')
+        ->name('http://localhost:9090/articles_test_repl');
+$response = $oss_api->submit($request);
+```
+
+Available method:
+
+* **name(string $name):** name of the replication
 
 ===========================
 
