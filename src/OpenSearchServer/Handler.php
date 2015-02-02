@@ -82,15 +82,19 @@ class Handler
      */
     public function submit(Request $request)
     {
-        $response = $this->browser->call(
-            $this->buildUrl($request),
-            $request->getMethod(),
-            $request->getHeaders(),
-            $request->getData()
-            );
-            
-        $response = ResponseFactory::createResponse($response, $request);
-        return $response;
+        try {
+            $response = $this->browser->call(
+                $this->buildUrl($request),
+                $request->getMethod(),
+                $request->getHeaders(),
+                $request->getData()
+                );
+              
+            $response = ResponseFactory::createResponse($response, $request);
+            return $response;
+        } catch(\Exception $e) {
+            throw new Exception\OpenSearchServerException('Error while connecting to OpenSearchServer: ' . $e->getMessage(), 1);
+        } 
     }
     
     public function setUser($value)
