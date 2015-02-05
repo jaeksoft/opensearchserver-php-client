@@ -249,6 +249,7 @@ foreach($results as $key => $result) {
   * [List search template](#list-search-templates)
   * [Get details of a search template](#get-details-of-a-search-template)
   * [Delete a search template](#delete-a-search-template)
+* **[Search in batch](#search-in-batch)
 * **[Synonyms](#synonyms)**
   * [Create a list of synonyms](#create-a-list-of-synoyms)
   * [Check if a list of synonyms exists](#check-if-a-list-of-synonyms-exists)
@@ -1767,6 +1768,71 @@ $request->index('index_name')
         ->name('template_name');
 $response = $oss_api->submit($request);
 ```
+
+## Search in batch
+
+Multiple queries can be sent at once. Results will be returned for each query, unless parameter `mode` is set to
+`first`: then queries will stop as soon as one return results.
+
+Queries must be created as usual: Search field, Search pattern, with or without template.
+
+```
+// Build batch request
+$requestBatch = new OpenSearchServer\SearchBatch\SearchBatch();
+$requestBatch->index('articles');
+
+// Create some queries with different types
+// A Search Field query
+$request = new OpenSearchServer\Search\Field\Search();
+$request->query('lorem')
+        ->emptyReturnsAll()
+        ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
+        ->searchField('title', OpenSearchServer\Search\Field\Search::SEARCH_MODE_TERM_AND_PHRASE, 5, 10)
+        ->returnedFields(array('title', 'date'));
+
+// A Search Pattern query
+$request2 = new OpenSearchServer\Search\Pattern\Search();
+$request2->query('lorem')
+         ->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10')
+         ->patternSnippetQuery('title:($$) OR content:($$)')
+         ->returnedFields(array('title', 'date'))
+         ->rows(4);
+
+// A Search Field query using a pre-saved query template
+$request3 = new OpenSearchServer\Search\Field\Search();
+$request3->query('lorem')
+         ->template('search');
+
+// Add the queries to the batch and send the request
+$requestBatch->addQueries(array($request, $request2, $request3));
+$response = $oss_api->submit($requestBatch);
+
+echo 'This batch returned ' . $response->getNumberOfQueriesWithResult() . ' set of results.';
+echo "\n".'<hr/> Results from the second set:'."\n";
+$results = $response->getResultsByPosition(1);
+foreach($results as $result) {
+    var_dump($result);
+}
+echo "\n".'<hr/> Results from the third set:'."\n";
+$results = $response->getResultsByPosition(2);
+foreach($results as $result) {
+    var_dump($result);
+}
+```
+
+Available methods:
+
+* **mode(string $mode)**: `first` or `all` (default value).
+* **addQuery(OpenSearchServer\Search $query)**: one query to add to the batch.
+* **addQueries(array $queries)**: add several queries to the batch.
+
+Response for this request will be of type `SearchBatchResult`.
+
+Available methods for `SearchBatchResult`:
+
+* **getNumberOfQueriesWithResult()**: return number of results set (even empty ones).
+* **getResults()**: return all results for all queries.
+* **getResultsByPosition(int $position)**: return results for one query. Position starts at 0. This method return object of type [`SearchResult`](#opensearchserverresponsesearchresult).
 
 ## Synonyms
 

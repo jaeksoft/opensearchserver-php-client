@@ -113,7 +113,7 @@ abstract class Search extends RequestJson
 		$this->data['returnedFields'] = array_unique(array_merge($this->data['returnedFields'], (array)$fields));
 		return $this;
 	}
-
+	
 	/******************************
 	 *     HELPER AND ALIASES
 	 ******************************/
@@ -145,6 +145,13 @@ abstract class Search extends RequestJson
 		return $this->queryFilter($filterString);
 	}
 
+	/** 
+	 * Return template used by the query, if any
+	 */
+	public function getTemplate() {
+	    return ($this->options['template']) ? $this->options['template'] : null;
+	} 
+	
 	/******************************
 	 *       PRIVATE METHODS
 	 ******************************/

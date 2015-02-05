@@ -97,6 +97,9 @@ class ResponseFactory
             case 'OpenSearchServer\MoreLikeThis\Search':
                 return new \OpenSearchServer\Response\MoreLikeThisResult($response, $request);
                 break;
+            case 'OpenSearchServer\SearchBatch\SearchBatch':
+                return new \OpenSearchServer\Response\SearchBatchResult($response, $request);
+                break;
             default:
                 return new \OpenSearchServer\Response\Response($response, $request);
         }
