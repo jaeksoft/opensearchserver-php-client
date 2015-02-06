@@ -6,6 +6,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Buzz\Browser;
 use Buzz\Client\Curl;
+use Buzz\Message\Response as BuzzResponse;
 use OpenSearchServer\Request;
 use OpenSearchServer\Response\ResponseFactory;
 
@@ -77,7 +78,7 @@ class Handler
     /**
      * Submit a request to the API.
      * 
-     * @param RequestInterface $request
+     * @param OpenSearchServer\Request $request
      * @return object
      */
     public function submit(Request $request)
@@ -95,6 +96,39 @@ class Handler
         } catch(\Exception $e) {
             throw new Exception\OpenSearchServerException('Error while connecting to OpenSearchServer: ' . $e->getMessage(), 1);
         } 
+    }
+    
+    /**
+     * Submit a PUT or POST request to the API, sending a file using CURL directly.
+     * @param OpenSearchServer\RequestFile $requestOSS
+     * @param array $options
+     */
+    public function submitFile(RequestFile $requestOSS, array $options = array()) {
+        $request = curl_init($this->buildUrl($requestOSS));
+        ($requestOSS->getMethod() == 'PUT') ?
+                curl_setopt($request, CURLOPT_CUSTOMREQUEST, 'PUT') :
+                curl_setopt($request, CURLOPT_POST, true);
+        $args['file'] = new \CurlFile($requestOSS->getFilePath());
+        curl_setopt($request, CURLOPT_POSTFIELDS, $args);
+        curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+        //send
+        $content = curl_exec ( $request );
+        //build BuzzResponse
+        $errmsg = curl_error ( $request );
+        $headers = curl_getinfo ( $request );
+        $httpCode = curl_getinfo ( $request, CURLINFO_HTTP_CODE );
+        //build header for BuzzResponse to parse HTTP code properly
+        $newHeader = 'HTTP ' . $httpCode . ' ';
+        $newHeader .= ($errmsg) ? $errmsg : '-'; 
+        array_unshift($headers, $newHeader);
+	    $response = new BuzzResponse();
+	    $response->setContent($content);
+	    $response->setHeaders($headers);
+	    //force parsing of first header
+	    $response->getStatusCode();
+        curl_close($request);
+        //build and return an OpenSearchServer\Response
+        return new \OpenSearchServer\Response\Response($response, $requestOSS);
     }
     
     public function setUser($value)
