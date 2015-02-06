@@ -5,15 +5,6 @@ $app_key 	= '54a51ee4f27cbbcb7a771352b980567f';
 $login      = 'admin';
 $oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ));
 
-
-echo '<hr/><h2>Parser\Parse\Upload</h2>';
-$request = new OpenSearchServer\Parser\Parse\Upload();
-$request->name('pdf')
-        ->file(__DIR__.'/BookPdf.pdf');
-$response = $oss_api->submit($request);
-var_dump($response->getJsonValues());
-exit;
-
 /**
  * ## Monitor\Monitor
  * Get monitoring information on instance
@@ -28,6 +19,14 @@ foreach($response as $propName => $value) {
 }
 echo '</ul>';
 exit;
+
+//Send a file to the PDF parser
+echo '<hr/><h2>Parser\Parse\Upload</h2>';
+$request = new OpenSearchServer\Parser\Parse\Upload();
+$request->name('pdf')
+        ->file(__DIR__.'/BookPdf.pdf');
+$response = $oss_api->submit($request);
+var_dump($response->getJsonValues());
 
 //create an index with WEB_CRAWLER template
 $request = new OpenSearchServer\Index\Create();
