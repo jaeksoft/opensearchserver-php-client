@@ -1,11 +1,10 @@
 <?php
 namespace OpenSearchServer\Parser\Parse;
 
-use OpenSearchServer\RequestFile;
+use OpenSearchServer\RequestJson;
 
-class Upload extends RequestFile
+class Local extends RequestJson
 {
-    private $filePath;
     
     public function __construct(array $jsonValues = null, $jsonText = null) {
         $this->setUrlPrefix('/services/rest/');
@@ -32,31 +31,15 @@ class Upload extends RequestFile
 	    $this->parameters['p.'.$name] = $value;
 	    return $this;
 	}
-
+	
 	/**
 	 * Set filepath for the file to upload
-	 * Use this method if you want to send the request with the standard "submit" function
 	 * @param string $fullPath Absolute path to the file to upload
 	 * @return OpenSearchServer\Parser\Parse\Upload
 	 */
 	public function file($fullPath) {
-	    $this->jsonText = file_get_contents($fullPath);
+	    $this->parameters['path'] = $fullPath;
 	    return $this;
-	}
-	
-	/**
-	 * Set filepath for the file to upload
-	 * Use this method if you want to send the request with the submitFile function
-	 * @param string $fullPath Absolute path to the file to upload
-	 * @return OpenSearchServer\Parser\Parse\Upload
-	 */
-	public function filePath($fullPath) {
-	    $this->filePath = $fullPath;
-	    return $this;
-	}
-	
-	public function getFilePath() {
-	    return $this->filePath;
 	}
 	
 	/******************************

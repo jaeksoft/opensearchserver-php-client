@@ -49,6 +49,7 @@ class ResponseFactory
             case 'OpenSearchServer\Synonyms\GetList':
             case 'OpenSearchServer\Crawler\Rest\GetList':
             case 'OpenSearchServer\Replication\GetList':
+            case 'OpenSearchServer\Parser\GetList':
                 $response = new ResponseIterable($response, $request);
                 if(!empty($response->getJsonValues()->items)) {
                     $response->setValues($response->getJsonValues()->items);

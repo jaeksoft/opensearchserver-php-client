@@ -5,6 +5,7 @@ $app_key 	= '54a51ee4f27cbbcb7a771352b980567f';
 $login      = 'admin';
 $oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ));
 
+
 /**
  * ## Monitor\Monitor
  * Get monitoring information on instance
@@ -20,6 +21,24 @@ foreach($response as $propName => $value) {
 echo '</ul>';
 exit;
 
+
+//Get list of existing parsers
+echo '<hr/><h2>Parser\GetList</h2>';
+$request = new OpenSearchServer\Parser\GetList();
+$response = $oss_api->submit($request);
+foreach($response as $value) {
+    var_dump($value);
+}
+
+//Get detail about the HTML parser
+echo '<hr/><h2>Parser\Get</h2>';
+$request = new OpenSearchServer\Parser\Get();
+$request->name('html');
+$response = $oss_api->submit($request);
+var_dump($response->getJsonValues());
+echo 'Information returned by HTML parser:';
+var_dump($response->getJsonValues()->fields);
+
 //Send a file to the PDF parser
 echo '<hr/><h2>Parser\Parse\Upload</h2>';
 $request = new OpenSearchServer\Parser\Parse\Upload();
@@ -27,6 +46,23 @@ $request->name('pdf')
         ->file(__DIR__.'/BookPdf.pdf');
 $response = $oss_api->submit($request);
 var_dump($response->getJsonValues());
+
+//Send a file to the PDF parser using CURL
+echo '<hr/><h2>Parser\Parse\Upload</h2>';
+$request = new OpenSearchServer\Parser\Parse\Upload();
+$request->name('pdf')
+        ->filePath(__DIR__.'/BookPdf.pdf');
+$response = $oss_api->submitFile($request);
+var_dump($response->getJsonValues());
+
+//Parse a file located on the OSS server
+echo '<hr/><h2>Parser\Parse\Local</h2>';
+$request = new OpenSearchServer\Parser\Parse\Local();
+$request->name('pdf')
+        ->file('E:/_temp/BookPdf.pdf');
+$response = $oss_api->submit($request);
+var_dump($response);
+
 
 //create an index with WEB_CRAWLER template
 $request = new OpenSearchServer\Index\Create();
