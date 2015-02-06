@@ -6,12 +6,19 @@ $login      = 'admin';
 $oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ));
 
 
+echo '<hr/><h2>Parser\Parse\Upload</h2>';
+$request = new OpenSearchServer\Parser\Parse\Upload();
+$request->name('pdf')
+        ->file(__DIR__.'/BookPdf.pdf');
+$response = $oss_api->submit($request);
+var_dump($response->getJsonValues());
+exit;
+
 /**
  * ## Monitor\Monitor
  * Get monitoring information on instance
  */
 echo '<hr/><h2>Monitor\Monitor</h2>';
-//create an empty index
 $request = new OpenSearchServer\Monitor\Monitor();
 $request->full(true);
 $response = $oss_api->submit($request);
