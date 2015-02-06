@@ -20,7 +20,7 @@ class Handler
      * 
      * @param array $options
      */
-    public function __construct(array $options = array(), array $curlOptions= array())
+    public function __construct(array $options = array(), array $curlOptions = array())
     {
         //Handle options
         if(empty($options['key']) || empty($options['login'])) {
