@@ -20,7 +20,7 @@ class Handler
      * 
      * @param array $options
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = array(), array $curlOptions= array())
     {
         //Handle options
         if(empty($options['key']) || empty($options['login'])) {
@@ -32,18 +32,21 @@ class Handler
         
         $this->options = array_merge($defaultOptions, $options);
 
-        $this->init();
+        $this->init($curlOptions);
     }
 
     /**
      * Initialise
      */
-    protected function init()
+    protected function init($curlOptions)
     {
         $client = new Curl;
         $client->setVerifyPeer(false);
         $client->setTimeout(60000);
-
+        foreach($curlOptions as $option => $value) {
+          $client->setOption($option, $value);
+        }
+        
         $this->client = $client;
         $this->browser = new Browser($client);
     }

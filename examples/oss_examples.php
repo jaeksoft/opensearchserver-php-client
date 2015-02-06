@@ -4,7 +4,8 @@
 $app_key 	= '54a51ee4f27cbbcb7a771352b980567f';
 $login      = 'admin';
 $oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ));
-
+//example when using custom CURL options:
+//$oss_api  = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ), array(CURLOPT_SSL_VERIFYHOST => 0));
 
 /**
  * ## Monitor\Monitor
