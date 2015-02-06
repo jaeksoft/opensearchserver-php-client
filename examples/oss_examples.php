@@ -729,17 +729,22 @@ $request3->query('lorem')
          ->template('search');
 
 //add the queries to the batch
-$requestBatch->addQueries(array($request, $request2, $request3));
+$requestBatch->mode(OpenSearchServer\SearchBatch\SearchBatch::MODE_MANUAL);
+$requestBatch->addQueries(array(
+                array($request, OpenSearchServer\SearchBatch\SearchBatch::ACTION_CONTINUE), 
+                array($request2, OpenSearchServer\SearchBatch\SearchBatch::ACTION_STOP_IF_FOUND),
+                array($request3)
+              ));
 $response = $oss_api->submit($requestBatch);
 
 echo 'This batch returned ' . $response->getNumberOfQueriesWithResult() . ' set of results.';
-echo "\n".'<hr/> Results from the second set:'."\n";
-$results = $response->getResultsByPosition(1);
+echo "\n".'<hr/> Results from the first set:'."\n";
+$results = $response->getResultsByPosition(0);
 foreach($results as $result) {
     var_dump($result);
 }
-echo "\n".'<hr/> Results from the third set:'."\n";
-$results = $response->getResultsByPosition(2);
+echo "\n".'<hr/> Results from the second set:'."\n";
+$results = $response->getResultsByPosition(1);
 foreach($results as $result) {
     var_dump($result);
 }
