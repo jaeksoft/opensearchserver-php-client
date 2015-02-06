@@ -651,6 +651,57 @@ foreach($response as $key => $item) {
     print_r($item);
 }
 
+
+/**
+ * ## SearchBatch\SearchBatch
+ * Make multiple queries at once
+ */
+echo '<hr/><h2>SearchBatch\SearchBatch</h2>';
+//build request
+$requestBatch = new OpenSearchServer\SearchBatch\SearchBatch();
+$requestBatch->index('articles');
+
+//create some queries with different types
+//A Search Field query
+$request = new OpenSearchServer\Search\Field\Search();
+$request->query('lorem')
+        ->emptyReturnsAll()
+        ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
+        ->lang('FRENCH')
+        ->searchField('title', OpenSearchServer\Search\Field\Search::SEARCH_MODE_TERM_AND_PHRASE, 5, 10)
+        ->searchField('content', OpenSearchServer\Search\Field\Search::SEARCH_MODE_TERM_AND_PHRASE, 3, 7)
+        ->returnedFields(array('title', 'date'));
+
+//A Search Pattern query
+$request2 = new OpenSearchServer\Search\Pattern\Search();
+$request2->query('lorem')
+         ->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10')
+         ->patternSnippetQuery('title:($$) OR content:($$)')
+         ->returnedFields(array('title', 'date'))
+         ->rows(4);
+
+//A Search Field query using a pre-saved query template
+$request3 = new OpenSearchServer\Search\Field\Search();
+$request3->query('lorem')
+         ->template('search');
+
+//add the queries to the batch
+$requestBatch->addQueries(array($request, $request2, $request3));
+$response = $oss_api->submit($requestBatch);
+
+echo 'This batch returned ' . $response->getNumberOfQueriesWithResult() . ' set of results.';
+echo "\n".'<hr/> Results from the second set:'."\n";
+$results = $response->getResultsByPosition(1);
+foreach($results as $result) {
+    var_dump($result);
+}
+echo "\n".'<hr/> Results from the third set:'."\n";
+$results = $response->getResultsByPosition(2);
+foreach($results as $result) {
+    var_dump($result);
+}
+
+
 /**
  * ## Index\GetList
  * Get list of index on the OpenSearchServer instance
