@@ -1822,9 +1822,9 @@ foreach($results as $result) {
 
 Available methods:
 
-* **mode(string $mode)**: `first` or `all` (default value).
-* **addQuery(OpenSearchServer\Search $query)**: one query to add to the batch.
-* **addQueries(array $queries)**: add several queries to the batch.
+* **mode(string $mode)**: `OpenSearchServer\SearchBatch\SearchBatch::MODE_FIRST`, or `OpenSearchServer\SearchBatch\SearchBatch::MODE_ALL` (default value) or `OpenSearchServer\SearchBatch\SearchBatch::MODE_MANUAL`.
+* **addQuery(OpenSearchServer\Search $query, string $modeManualAction)**: add one query to the batch. Parameter `$modeManualAction`  is the batch action to use for the query, if mode is "manual"
+* **addQueries(array $queries)**: add several queries to the batch. Parameter `$queries` is an array of array: each sub array contains one required item, the query, and a second optionnal item, the batchAction to use for this query if mode is "manual".
 
 Response for this request will be of type `SearchBatchResult`.
 
@@ -1835,7 +1835,6 @@ Available methods for `SearchBatchResult`:
 * **getResultsByPosition(int $position)**: return results for one query. Position starts at 0. This method return object of type [`SearchResult`](#opensearchserverresponsesearchresult).
 
 ## Synonyms
-
 
 ### Create a list of synonyms
 
