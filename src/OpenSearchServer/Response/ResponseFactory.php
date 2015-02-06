@@ -49,6 +49,7 @@ class ResponseFactory
             case 'OpenSearchServer\Synonyms\GetList':
             case 'OpenSearchServer\Crawler\Rest\GetList':
             case 'OpenSearchServer\Replication\GetList':
+            case 'OpenSearchServer\Parser\GetList':
                 $response = new ResponseIterable($response, $request);
                 if(!empty($response->getJsonValues()->items)) {
                     $response->setValues($response->getJsonValues()->items);
@@ -96,6 +97,9 @@ class ResponseFactory
                 break;
             case 'OpenSearchServer\MoreLikeThis\Search':
                 return new \OpenSearchServer\Response\MoreLikeThisResult($response, $request);
+                break;
+            case 'OpenSearchServer\SearchBatch\SearchBatch':
+                return new \OpenSearchServer\Response\SearchBatchResult($response, $request);
                 break;
             default:
                 return new \OpenSearchServer\Response\Response($response, $request);

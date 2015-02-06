@@ -4,14 +4,14 @@
 $app_key 	= '54a51ee4f27cbbcb7a771352b980567f';
 $login      = 'admin';
 $oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ));
-
+//example when using custom CURL options:
+//$oss_api  = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ), array(CURLOPT_SSL_VERIFYHOST => 0));
 
 /**
  * ## Monitor\Monitor
  * Get monitoring information on instance
  */
 echo '<hr/><h2>Monitor\Monitor</h2>';
-//create an empty index
 $request = new OpenSearchServer\Monitor\Monitor();
 $request->full(true);
 $response = $oss_api->submit($request);
@@ -21,6 +21,49 @@ foreach($response as $propName => $value) {
 }
 echo '</ul>';
 exit;
+
+
+//Get list of existing parsers
+echo '<hr/><h2>Parser\GetList</h2>';
+$request = new OpenSearchServer\Parser\GetList();
+$response = $oss_api->submit($request);
+foreach($response as $value) {
+    var_dump($value);
+}
+
+//Get detail about the HTML parser
+echo '<hr/><h2>Parser\Get</h2>';
+$request = new OpenSearchServer\Parser\Get();
+$request->name('html');
+$response = $oss_api->submit($request);
+var_dump($response->getJsonValues());
+echo 'Information returned by HTML parser:';
+var_dump($response->getJsonValues()->fields);
+
+//Send a file to the PDF parser
+echo '<hr/><h2>Parser\Parse\Upload</h2>';
+$request = new OpenSearchServer\Parser\Parse\Upload();
+$request->name('pdf')
+        ->file(__DIR__.'/BookPdf.pdf');
+$response = $oss_api->submit($request);
+var_dump($response->getJsonValues());
+
+//Send a file to the PDF parser using CURL
+echo '<hr/><h2>Parser\Parse\Upload</h2>';
+$request = new OpenSearchServer\Parser\Parse\Upload();
+$request->name('pdf')
+        ->filePath(__DIR__.'/BookPdf.pdf');
+$response = $oss_api->submitFile($request);
+var_dump($response->getJsonValues());
+
+//Parse a file located on the OSS server
+echo '<hr/><h2>Parser\Parse\Local</h2>';
+$request = new OpenSearchServer\Parser\Parse\Local();
+$request->name('pdf')
+        ->file('E:/_temp/BookPdf.pdf');
+$response = $oss_api->submit($request);
+var_dump($response);
+
 
 //create an index with WEB_CRAWLER template
 $request = new OpenSearchServer\Index\Create();
@@ -650,6 +693,62 @@ foreach($response as $key => $item) {
     echo '<br/>Item #'.$key .': ';
     print_r($item);
 }
+
+
+/**
+ * ## SearchBatch\SearchBatch
+ * Make multiple queries at once
+ */
+echo '<hr/><h2>SearchBatch\SearchBatch</h2>';
+//build request
+$requestBatch = new OpenSearchServer\SearchBatch\SearchBatch();
+$requestBatch->index('articles');
+
+//create some queries with different types
+//A Search Field query
+$request = new OpenSearchServer\Search\Field\Search();
+$request->query('lorem')
+        ->emptyReturnsAll()
+        ->operator(OpenSearchServer\Search\Search::OPERATOR_AND)
+        ->lang('FRENCH')
+        ->searchField('title', OpenSearchServer\Search\Field\Search::SEARCH_MODE_TERM_AND_PHRASE, 5, 10)
+        ->searchField('content', OpenSearchServer\Search\Field\Search::SEARCH_MODE_TERM_AND_PHRASE, 3, 7)
+        ->returnedFields(array('title', 'date'));
+
+//A Search Pattern query
+$request2 = new OpenSearchServer\Search\Pattern\Search();
+$request2->query('lorem')
+         ->patternSearchQuery('title:($$)^10 OR titleExact:($$)^10 OR titlePhonetic:($$)^10')
+         ->patternSnippetQuery('title:($$) OR content:($$)')
+         ->returnedFields(array('title', 'date'))
+         ->rows(4);
+
+//A Search Field query using a pre-saved query template
+$request3 = new OpenSearchServer\Search\Field\Search();
+$request3->query('lorem')
+         ->template('search');
+
+//add the queries to the batch
+$requestBatch->mode(OpenSearchServer\SearchBatch\SearchBatch::MODE_MANUAL);
+$requestBatch->addQueries(array(
+                array($request, OpenSearchServer\SearchBatch\SearchBatch::ACTION_CONTINUE), 
+                array($request2, OpenSearchServer\SearchBatch\SearchBatch::ACTION_STOP_IF_FOUND),
+                array($request3)
+              ));
+$response = $oss_api->submit($requestBatch);
+
+echo 'This batch returned ' . $response->getNumberOfQueriesWithResult() . ' set of results.';
+echo "\n".'<hr/> Results from the first set:'."\n";
+$results = $response->getResultsByPosition(0);
+foreach($results as $result) {
+    var_dump($result);
+}
+echo "\n".'<hr/> Results from the second set:'."\n";
+$results = $response->getResultsByPosition(1);
+foreach($results as $result) {
+    var_dump($result);
+}
+
 
 /**
  * ## Index\GetList
