@@ -249,7 +249,7 @@ foreach($results as $key => $result) {
   * [List search template](#list-search-templates)
   * [Get details of a search template](#get-details-of-a-search-template)
   * [Delete a search template](#delete-a-search-template)
-* **[Search in batch](#search-in-batch)
+* **[Search in batch](#search-in-batch)**
 * **[Synonyms](#synonyms)**
   * [Create a list of synonyms](#create-a-list-of-synoyms)
   * [Check if a list of synonyms exists](#check-if-a-list-of-synonyms-exists)
@@ -1776,7 +1776,7 @@ Multiple queries can be sent at once. Results will be returned for each query, u
 
 Queries must be created as usual: Search field, Search pattern, with or without template.
 
-```
+```php
 // Build batch request
 $requestBatch = new OpenSearchServer\SearchBatch\SearchBatch();
 $requestBatch->index('articles');
