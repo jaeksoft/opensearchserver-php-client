@@ -227,7 +227,7 @@ foreach($results as $key => $result) {
   * [List existing REST crawlers](#list-existing-rest-crawlers)
   * [Execute a REST crawler](#execute-a-rest-crawler)
 * **[Parse files](#parse-files)**
-  * [List existing parser](#list-existing-parser)
+  * [List existing parsers](#list-existing-parsers)
   * [Get details about a specific parser](#get-details-about-a-specific-parser)
   * [Parse a file by uploading it](#parse-a-file-by-uloading-it)
   * [Parse a file located on the server](#parse-a-file-located-on-the-server)
@@ -482,6 +482,7 @@ foreach($response as $key => $item) {
   * OpenSearchServer\Crawler\Rest\GetList
   * OpenSearchServer\Crawler\Web\Patterns\Exclusion\GetList
   * OpenSearchServer\Crawler\Web\Patterns\Inclusion\GetList
+  * OpenSearchServer\Parser\GetList
   
 #### OpenSearchServer\Response\SearchResult
 
@@ -1328,7 +1329,7 @@ OpenSearchServer is able to parse files from lots of different types. Parsers al
 Methods for this API do not require an `index` to work with, since parsing is "index-free". Those API do not index any data, they simply 
 parse files and send back parsed data.
 
-### List existing parser
+### List existing parsers
 
 [Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/parsers/list.md)
 
@@ -1368,7 +1369,7 @@ var_dump($response->getJsonValues());
 ```
 
 Another way to send the file is by using a particular method of the Handler. 
-This method does not use the Buzz HTTP client but rather directly make a CURL call, using CurlFile to send the file.
+This method does not use the Buzz HTTP client but rather directly makes a CURL call, using CurlFile to send the file.
 
 The file path must be given using method `filePath()` instead of `file()`, and request must be submitted using `submitFile()` instead of `submit()`.
 
@@ -1393,7 +1394,7 @@ $request = new OpenSearchServer\Parser\Parse\Local();
 $request->name('pdf')
         ->file('E:/_temp/BookPdf.pdf');
 $response = $oss_api->submit($request);
-var_dump($response);
+var_dump($response->getJsonValues());
 ```
 
 ## Autocompletion
