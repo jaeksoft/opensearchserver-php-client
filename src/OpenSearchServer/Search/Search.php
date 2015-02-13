@@ -149,7 +149,7 @@ abstract class Search extends SearchAbstract
 		$this->data['joins'][] = array(
 			'indexName' => $indexName,
 			'queryTemplate' => $queryTemplate,
-			'$queryString' => $queryString,
+			'queryString' => $queryString,
 			'localField' => $localField,
 			'$foreignField' => $foreignField,
 			'type' => $type,

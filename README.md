@@ -209,6 +209,7 @@ foreach($results as $key => $result) {
     * _[Insert exclusion patterns](#insert-exclusion-patterns)_
     * _[List exclusion patterns](#list-exclusion-patterns)_
     * _[Delete exclusion patterns](#delete-exclusion-patterns)_
+    * _[Set status for inclusion and exclusion lists](#set-status-for-inclusion-and-exclusion-lists)_
   * [Inject URL in URL database](#inject-url-in-url-database)
   * [Force crawling of URL](#force-crawling-of-url)
   * [Start web crawler](#start-web-crawler)
@@ -1016,6 +1017,17 @@ $request->index('index_name')
 $response = $oss_api->submit($request);
 ```
 
+#### Set status for inclusion and exclusion lists
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Patterns\SetStatus();
+$request->index('00__test_web')
+        ->inclusion(false)
+        ->exclusion(true);
+$response = $oss_api->submit($request);
+var_dump($response);
+```
+
 ### Inject URL in URL database
 
 In addition to inserting pattern it is also needed to tell crawler which URL it should use to start crawling. It will then discover automatically new URLs to crawl.
@@ -1036,6 +1048,17 @@ $request = new OpenSearchServer\Crawler\Web\Crawl();
 $request->index('index_name')
         ->url('http://www.cnn.com/sport');
 $response = $oss_api->submit($request);
+```
+
+If you want OSS to return the crawled data (content of the page and all extracted fields), use method `returnData(true)`:
+
+```php
+$request = new OpenSearchServer\Crawler\Web\Crawl();
+$request->index('index_name')
+        ->url('http://www.cnn.com/sport')
+        ->returnData();
+$response = $oss_api->submit($request);
+var_dump($response);
 ```
 
 ### Start web crawler
@@ -1885,7 +1908,11 @@ $request3->query('lorem')
          ->template('search');
 
 // Add the queries to the batch and send the request
-$requestBatch->addQueries(array($request, $request2, $request3));
+$requestBatch->addQueries(array(
+                array($request, OpenSearchServer\SearchBatch\SearchBatch::ACTION_CONTINUE), 
+                array($request2, OpenSearchServer\SearchBatch\SearchBatch::ACTION_STOP_IF_FOUND),
+                array($request3)
+              ));
 $response = $oss_api->submit($requestBatch);
 
 echo 'This batch returned ' . $response->getNumberOfQueriesWithResult() . ' set of results.';
