@@ -1,0 +1,12 @@
+<phpunit bootstrap="./bootstrap.php">
+  <testsuites>
+    <testsuite name="oss-php-client">
+      <directory>Monitor</directory>
+      <directory>Index</directory>
+      <directory>Field</directory>
+      <directory>Analyzer</directory>
+      <directory>Document</directory>
+      <directory>Search</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

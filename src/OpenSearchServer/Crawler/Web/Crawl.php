@@ -10,6 +10,11 @@ class Crawl extends Request
 		return $this;
 	}
 	
+	public function returnData($returnData = true) {
+	    $this->parameters['returnData'] = ($returnData) ? 'true' : 'false';
+		return $this;
+	}
+	
 	/******************************
 	 * INHERITED METHODS OVERRIDDEN
 	 ******************************/	
