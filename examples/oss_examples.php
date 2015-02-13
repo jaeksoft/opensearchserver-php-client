@@ -1010,6 +1010,19 @@ $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
 var_dump($response->getInfo());
 
+
+/**
+ * ## Crawler\Web\Patterns\SetStatus
+ * Set status for Inclusion / Exclusion list
+ */
+echo '<hr/><h2>Crawler\Web\Patterns\SetStatus</h2>';
+$request = new OpenSearchServer\Crawler\Web\Patterns\SetStatus();
+$request->index('00__test_web')
+        ->inclusion(false)
+        ->exclusion(true);
+$response = $oss_api->submit($request);
+var_dump($response);
+
 /**
  * ## Crawler\Web\Url\Insert
  * Insert URL to crawl
@@ -1128,6 +1141,13 @@ $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
 var_dump($response->getInfo());
 
+//Get back crawled data
+$request = new OpenSearchServer\Crawler\Web\Crawl();
+$request->index('web_index')
+        ->url('http://www.lemonde.fr/')
+        ->returnData();
+$response = $oss_api->submit($request);
+var_dump($response);
 
 /**
  * ## Field\Create

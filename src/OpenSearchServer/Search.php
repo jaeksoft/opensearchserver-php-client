@@ -149,7 +149,7 @@ abstract class Search extends RequestJson
 	 * Return template used by the query, if any
 	 */
 	public function getTemplate() {
-	    return ($this->options['template']) ? $this->options['template'] : null;
+	    return (!empty($this->options['template'])) ? $this->options['template'] : null;
 	} 
 	
 	/******************************
