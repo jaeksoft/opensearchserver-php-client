@@ -19,6 +19,7 @@ class TestWrapperCreateIndex extends TestWrapper
     //Delete index when tests end
     public static function tearDownAfterClass() {
         parent::tearDownAfterClass();
+        
         $request = new \OpenSearchServer\Index\Delete();
         $request->index(self::$indexName);
         $response = self::$oss_api->submit($request);
