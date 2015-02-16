@@ -64,13 +64,19 @@ $request->name('pdf')
 $response = $oss_api->submit($request);
 var_dump($response);
 
-
-//create an index with WEB_CRAWLER template
-$request = new OpenSearchServer\Index\Create();
-$request->index('00__test_web')->template(OpenSearchServer\Request::TEMPLATE_WEB_CRAWLER);
+echo '<hr/><h2>Parser\Parse\DetectType - upload file</h2>';
+$request = new OpenSearchServer\Parser\Parse\DetectType();
+$request->file(__DIR__.'/BookPdf.pdf')
+        ->name('BookPdf.pdf');
 $response = $oss_api->submit($request);
-var_dump($response->isSuccess());
-var_dump($response->getInfo());
+var_dump($response);
+
+echo '<hr/><h2>Parser\Parse\DetectType - local file</h2>';
+$request = new OpenSearchServer\Parser\Parse\DetectType();
+$request->path('E:/_temp/report.docx');
+$response = $oss_api->submit($request);
+var_dump($response);
+
 /**
  * ## Crawler\Web\Url\Insert
  * Insert URL to crawl
