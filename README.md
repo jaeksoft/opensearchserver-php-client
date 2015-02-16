@@ -232,6 +232,7 @@ foreach($results as $key => $result) {
   * [Get details about a specific parser](#get-details-about-a-specific-parser)
   * [Parse a file by uploading it](#parse-a-file-by-uloading-it)
   * [Parse a file located on the server](#parse-a-file-located-on-the-server)
+  * [Parse a file and let OpenSearchServer detect its type](#parse-a-file-and-let-opensearchserver-detect-its-type)
 * **[Autocompletion](#autocompletion)**
   * [Create an autocompletion](#create-an-autocompletion)
   * [Build autocompletion](#build-autocompletion)
@@ -1419,6 +1420,28 @@ $request->name('pdf')
 $response = $oss_api->submit($request);
 var_dump($response->getJsonValues());
 ```
+
+### Parse a file and let OpenSearchServer detect its type
+
+[Go to API documentation for this method](http://www.opensearchserver.com/documentation/api_v2/parsers/parse_detect_mime.md)
+
+Use this API to send a file or to parse a file located on the server: OpenSearchServer will try to automatically detect its MIME type to apply the correct parser on it.
+
+```php
+$request = new OpenSearchServer\Parser\Parse\DetectType();
+$request->path('E:/_temp/report.docx');
+$response = $oss_api->submit($request);
+var_dump($response);
+```
+
+Available methods:
+
+* **name(string $name):** name of the file. Optionnal.
+* **type(string $type):** type of the file. Optionnal.
+* **path(string $path):** path of the file located on the server. Optionnal.
+* **file(string $fullPath):** path of the file to send to the parser. Optionnal.
+* **filePath(string $fullPath):** path of the file to send to the parser if request is submitted using `submitFile()`. Optionnal.
+* **variable(string $variable, string $value):** one property of the parser. Optionnal.
 
 ## Autocompletion
 

@@ -14,7 +14,7 @@ class Local extends RequestJson
 	/**
 	 * Specify the name of the parser
 	 * @param string $name
-	 * @return OpenSearchServer\Parser\Parse\Upload
+	 * @return OpenSearchServer\Parser\Parse\Local
 	 */
 	public function name($name) {
 		$this->options['parser_name'] = $name;
@@ -25,7 +25,7 @@ class Local extends RequestJson
 	 * Add a variable
 	 * @param string $name Name of variable
 	 * @param string $name value of variable
-	 * @return OpenSearchServer\Parser\Parse\Upload
+	 * @return OpenSearchServer\Parser\Parse\Local
 	 */
 	public function variable($name, $value) {
 	    $this->parameters['p.'.$name] = $value;
@@ -33,9 +33,9 @@ class Local extends RequestJson
 	}
 	
 	/**
-	 * Set filepath for the file to upload
-	 * @param string $fullPath Absolute path to the file to upload
-	 * @return OpenSearchServer\Parser\Parse\Upload
+	 * Set filepath for the file to parse
+	 * @param string $fullPath Absolute path to the file to parse on the server
+	 * @return OpenSearchServer\Parser\Parse\Local
 	 */
 	public function file($fullPath) {
 	    $this->parameters['path'] = $fullPath;
