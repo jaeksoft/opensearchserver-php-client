@@ -1749,7 +1749,9 @@ Available methods:
   * **sort(string $field, string $direction):** add a sorting on one field. Can be called multiple times to successively sort on different fields.
   * **sorts(array $sorts, string $direction):** helper method. Calls `sort()` for each item in array.
 * Scoring options
-  * **scoring(string $field, int $weight, boolean $ascending, type $type):**  
+  * **scoring(string $field, int $weight, boolean $ascending, type $type):** add one level of scoring.
+* Boosting queries
+  * **boostingQuery(string $queryPattern, int $boost):** add one boosting query.  
 * Facetting options
   * **facet(string $field, int $min = 0, boolean $multi = false, boolean $postCollapsing = false):** compute facet for one field: this will return count of every different values for this field. Facets can be used through `->getFacets()` when workingh with an `OpenSearchServer\Response\SearchResult` object. You can find more details in the [proper section](#opensearchserverresponsesearchresult).
 * Filtering options
