@@ -50,6 +50,7 @@ class ResponseFactory
             case 'OpenSearchServer\Crawler\Rest\GetList':
             case 'OpenSearchServer\Replication\GetList':
             case 'OpenSearchServer\Parser\GetList':
+            case 'OpenSearchServer\StopWords\GetList':
                 $response = new ResponseIterable($response, $request);
                 if(!empty($response->getJsonValues()->items)) {
                     $response->setValues($response->getJsonValues()->items);
@@ -77,6 +78,7 @@ class ResponseFactory
                 return $response;
                 break;
             case 'OpenSearchServer\Synonyms\Get':
+            case 'OpenSearchServer\StopWords\Get':
                 $response = new ResponseIterable($response, $request);
                 $content = $response->getRawContent();
                 if(!empty($content)) {
@@ -86,6 +88,7 @@ class ResponseFactory
                 break;
             //Synonyms\Exists has a particular behaviour: existence is based on HTTP response code (200 / 404)
             case 'OpenSearchServer\Synonyms\Exists':
+            case 'OpenSearchServer\StopWords\Exists':
                 $headers = $response->getHeaders();
                 $responseHttpCode = $headers[0];
                 $response = new \OpenSearchServer\Response\Response($response, $request);
