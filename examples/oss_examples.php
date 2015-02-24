@@ -7,6 +7,8 @@ $oss_api    = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $
 //example when using custom CURL options:
 //$oss_api  = new OpenSearchServer\Handler(array('key' => $app_key, 'login' => $login ), array(CURLOPT_SSL_VERIFYHOST => 0));
 
+header('Content-Type: text/html; charset=utf-8');
+
 /**
  * ## Monitor\Monitor
  * Get monitoring information on instance
@@ -629,6 +631,118 @@ var_dump($response->getinfo());
 echo '<hr/><h2>Synonyms\GetList</h2>';
 $request = new OpenSearchServer\Synonyms\GetList();
 $request->index('00__test_file');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+
+/**
+ * ## StopWords\Create
+ * Create a list of StopWords
+ */
+echo '<hr/><h2>StopWords\Create</h2>';
+$request = new OpenSearchServer\StopWords\Create();
+$request->index('0__test_web')
+        ->name('StopWords_test')
+        ->addStopWords(array(
+            'of',
+            'the'
+        ));
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getinfo());
+
+/**
+ * ## StopWords\Create
+ * Create a list of StopWords
+ */
+echo '<hr/><h2>StopWords\Create</h2>';
+$request = new OpenSearchServer\StopWords\Create();
+$request->index('0__test_web')
+        ->name('StopWords_test2')
+        ->addStopWords(array(
+            'im',
+            'à',
+            'test',
+            'list',
+            'ça',
+            'hé'
+        ));
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getinfo());
+
+
+/**
+ * ## StopWords\GetList
+ * Get existing lists of StopWords
+ */
+echo '<hr/><h2>StopWords\GetList</h2>';
+$request = new OpenSearchServer\StopWords\GetList();
+$request->index('0__test_web');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+/**
+ * ## StopWords\Exists
+ * Check if a list of StopWords exists
+ */
+echo '<hr/><h2>StopWords\Exists</h2>';
+$request = new OpenSearchServer\StopWords\Exists();
+$request->index('0__test_web')
+        ->name('StopWords_test');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+
+/**
+ * ## StopWords\Exists
+ * Check if a list of StopWords exists
+ */
+echo '<hr/><h2>StopWords\Exists - not an existing list</h2>';
+$request = new OpenSearchServer\StopWords\Exists();
+$request->index('0__test_web')
+        ->name('___not_an_existing_list___');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+
+/**
+ * ## StopWords\Get
+ * Get StopWords of a list
+ */
+echo '<hr/><h2>StopWords\Get</h2>';
+$request = new OpenSearchServer\StopWords\Get();
+$request->index('0__test_web')
+        ->name('StopWords_test2');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+
+/**
+ * ## StopWords\Delete
+ * Delete a list of StopWords
+ */
+echo '<hr/><h2>StopWords\Delete</h2>';
+$request = new OpenSearchServer\StopWords\Delete();
+$request->index('0__test_web')
+        ->name('StopWords_test2');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+var_dump($response->getinfo());
+
+/**
+ * ## StopWords\GetList
+ * Get existing lists of StopWords
+ */
+echo '<hr/><h2>StopWords\GetList</h2>';
+$request = new OpenSearchServer\StopWords\GetList();
+$request->index('0__test_web');
 $response = $oss_api->submit($request);
 foreach($response as $key => $item) {
     echo '<br/>Item #'.$key .': ';
