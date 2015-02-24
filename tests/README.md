@@ -10,5 +10,5 @@ Make sure phpunit is installed and available in `vendor/bin/phpunit`.
 
 ```bash
 cd vendor/opensearchserver
-../bin/phpunit --configuration ./test/phpunit.xml
+../bin/phpunit --configuration ./tests/phpunit.xml
 ```

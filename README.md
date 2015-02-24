@@ -263,6 +263,12 @@ foreach($results as $key => $result) {
   * [Get existing lists of synonyms](#get-existing-lists-of-synonyms)
   * [Get synonyms of a list](#get-synonyms-of-a-list)
   * [Delete a list of synonyms](#delete-a-list-of-synonyms)
+* **[Stop words](#stop-words)**
+  * [Create a list of stop words](#create-a-list-of-stop-words)
+  * [Check if a list of stop words exists](#check-if-a-list-of-stop-words-exists)
+  * [Get existing lists of stop words](#get-existing-lists-of-stop-words)
+  * [Get stop words of a list](#get-stop-words-of-a-list)
+  * [Delete a list of stop words](#delete-a-list-of-stop-words)
 * **[More like this queries](#more-like-this-queries)**
   * [Create a more like this query template](#create-a-more-like-this-query-template)
   * [Delete a more like this query template](#delete-a-more-like-this-query-template)
@@ -2055,6 +2061,83 @@ Available methods:
 
 * **name(string $name):** name of list to delete
 
+
+## Stop words
+
+### Create a list of stop words
+
+```php
+$request = new OpenSearchServer\StopWords\Create();
+$request->index('index_name')
+        ->name('Stopwords')
+        ->addStopWords(array(
+            'of',
+            'the',
+            'by'
+        ));
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name(string $name):** name of list to create
+* **addSynonyms(array/string $list):** stop words to add. One array entry for each stop word.
+
+### Check if a list of stop words exists
+
+```php
+$request = new OpenSearchServer\StopWords\Exists();
+$request->index('index_name')
+        ->name('___not_an_existing_list___');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+```
+
+Available methods:
+
+* **name(string $name):** name of list to check
+
+### Get existing lists of stop words
+
+```php
+$request = new OpenSearchServer\StopWords\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+### Get stop words of a list
+
+```php
+$request = new OpenSearchServer\StopWords\Get();
+$request->index('index_name')
+        ->name('StopWords');
+$response = $oss_api->submit($request);
+foreach($response as $key => $item) {
+    echo '<br/>Item #'.$key .': ';
+    print_r($item);
+}
+```
+
+Available methods:
+
+* **name(string $name):** name of list to get
+
+### Delete a list of stop words
+
+```php
+$request = new OpenSearchServer\StopWords\Delete();
+$request->index('index_name')
+        ->name('StopWords');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name(string $name):** name of list to delete
 
 ## More like this queries
 
