@@ -137,7 +137,23 @@ abstract class Search extends SearchAbstract
 		$this->data['scorings'][] = $newScoring;
 		return $this;
 	}
-
+	
+	/**
+	 * Add one boosting query
+	 * @return OpenSearchServer\Search\Search
+	 */
+	public function boostingQuery($query, $boost = 1) {
+		if(empty($this->data['boostingQueries'])) {
+			$this->data['boostingQueries'] = array();
+		}
+		$newBoosting = array(
+			'patternQuery' => $query,
+			'boost' => $boost
+		);
+		$this->data['boostingQueries'][] = $newBoosting;
+		return $this;
+	}
+	
 	/**
 	 * Add one join
 	 * @return OpenSearchServer\Search\Search

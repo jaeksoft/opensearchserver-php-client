@@ -692,7 +692,9 @@ $request->index('00__test_file')
         ->facet('category', 1, true)
         //set snippets
         ->snippet('title')
-        ->snippet('content', 'b', '...', 200, 1, OpenSearchServer\Search\Search::SNIPPET_SENTENCE_FRAGMENTER);
+        ->snippet('content', 'b', '...', 200, 1, OpenSearchServer\Search\Search::SNIPPET_SENTENCE_FRAGMENTER)
+        //one boosting query
+        ->boostingQuery('title:lorem', 5);
 echo '<pre style="word-wrap: break-word;">'; print_r($request->getData()); echo '</pre>';
 $response = $oss_api->submit($request);
 foreach($response as $key => $item) {
