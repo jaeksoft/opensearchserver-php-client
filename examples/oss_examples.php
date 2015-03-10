@@ -200,6 +200,18 @@ var_dump($response->isSuccess());
 var_dump($response->getInfo());
 
 /**
+ * ## Crawler\File\Repository\GetList
+ * Get list of file repositories
+ */
+echo '<hr/><h2>Crawler\File\Repository\GetList</h2>';
+$request = new OpenSearchServer\Crawler\File\Repository\GetList();
+$request->index('file_index');
+$response = $oss_api->submit($request);
+foreach($response as $repo) {
+    var_dump($repo);
+}
+
+/**
  * ## Crawler\File\Repository\LocalFile\Insert
  * Insert a location of type LocalFile
  */
