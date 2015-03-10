@@ -220,6 +220,7 @@ foreach($results as $key => $result) {
   * [Stop file crawler](#stop-file-crawler)
   * [Get file crawler status](#get-file-crawler-status)
   * [File repositories](#file-repositories)
+    * _[List repositories](#list-repositories)_
     * _[Local file](#local-file)_
     * _[FTP](#ftp)_
     * _[SMB/CIFS](#smbcifs)_
@@ -1150,6 +1151,20 @@ Available methods:
 * **includeSubDirectory(boolean $includeSubDirectory)**
 * **enabled(string $path):** enable/disable this location
 * **delay(int $delay):** delay between each access to a file, in ms.
+
+
+#### List repositories
+
+Get list of existing repositories in one index.
+
+```php
+$request = new OpenSearchServer\Crawler\File\Repository\GetList();
+$request->index('index_name');
+$response = $oss_api->submit($request);
+foreach($response as $repo) {
+    var_dump($repo);
+}
+```
 
 #### Local file
 
