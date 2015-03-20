@@ -942,6 +942,22 @@ Available methods:
 * **lang(string $lang)**: lang of the analyzer to get information for.
 
 
+### Delete an analyzer
+
+```php
+$request = new OpenSearchServer\Analyzer\Delete();
+$request->index('index_name')
+        ->lang(OpenSearchServer\Request::LANG_EN)
+        ->name('TestAnalyzerDelete');
+$response = $oss_api->submit($request);
+```
+
+Available methods:
+
+* **name(string $name)**: name of the analyzer to delete.
+* **lang(string $lang)**: lang of the analyzer to delete.
+
+
 ## Web Crawler
 
 ### Patterns
