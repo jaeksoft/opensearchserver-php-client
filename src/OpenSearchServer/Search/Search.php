@@ -175,6 +175,24 @@ abstract class Search extends SearchAbstract
 		);
 		return $this;
 	}
+	
+    /**
+     * Set username for this query
+     * @param String $user
+     */
+	public function user($user) {
+	    $this->data['user'] = $user;
+	    return $this;
+	}
+	
+	/**
+	 * Set user groups for this query
+	 * @param String|Array $groups
+	 */
+	public function groups($groups) {
+	    $this->data['groups'] = (array)$groups;
+	    return $this;
+	}
 
 	/**
 	 * Helper method (alias)

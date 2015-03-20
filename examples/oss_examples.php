@@ -963,8 +963,8 @@ foreach($response->getJsonValues()->analyzer->filters as $filter) {
 }
 
 /**
- * ## Analyzer\Get
- * Get an analyzer
+ * ## Analyzer\Create
+ * Create an analyzer
  */
 echo '<hr/><h2>Analyzer\Create</h2>';
 $json = <<<JSON
@@ -996,7 +996,20 @@ $json = <<<JSON
 JSON;
 $request = new OpenSearchServer\Analyzer\Create(null, $json);
 $request->index('web_index')
+        ->lang(OpenSearchServer\Request::LANG_EN)
         ->name('TestAnalyzer');
+$response = $oss_api->submit($request);
+var_dump($response->isSuccess());
+
+/**
+ * ## Analyzer\Delete
+ * Delete an analyzer
+ */
+echo '<hr/><h2>Analyzer\Delete</h2>';
+$request = new OpenSearchServer\Analyzer\Delete();
+$request->index('web_index')
+        ->lang(OpenSearchServer\Request::LANG_EN)
+        ->name('TestAnalyzerDelete');
 $response = $oss_api->submit($request);
 var_dump($response->isSuccess());
 
