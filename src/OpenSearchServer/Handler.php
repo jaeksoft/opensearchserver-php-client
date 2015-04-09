@@ -1,9 +1,6 @@
 <?php
 namespace OpenSearchServer;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\OptionsResolver\Options;
 use Buzz\Browser;
 use Buzz\Client\Curl;
 use Buzz\Message\Response as BuzzResponse;
