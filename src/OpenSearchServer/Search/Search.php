@@ -167,7 +167,7 @@ abstract class Search extends SearchAbstract
 			'queryTemplate' => $queryTemplate,
 			'queryString' => $queryString,
 			'localField' => $localField,
-			'$foreignField' => $foreignField,
+			'foreignField' => $foreignField,
 			'type' => $type,
 			'returnFields' => $returnFields,
 			'returnScores' => $returnScores,
