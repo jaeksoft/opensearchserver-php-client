@@ -5,6 +5,7 @@ class Result
 {
 	protected $fields = array();
 	protected $snippets = array();
+	protected $highlightedSnippets = array();
 	protected $pos;
 	protected $score;
 	protected $collapsedCount;
@@ -34,7 +35,12 @@ class Result
                     $fieldValue = $fieldObject->values;
                 }
                 //add snippet to array of snippets
-                $this->snippets[$fieldObject->fieldName] = $fieldValue; 
+                $this->snippets[$fieldObject->fieldName] = $fieldValue;
+                //if snippet is highlighted, save the name of the field in $highlightedSnippets
+                if($fieldObject->highlighted == true) {
+                    $this->highlightedSnippets[] = $fieldObject->fieldName;
+                }
+                 
             }
         }
     }    
@@ -95,5 +101,15 @@ class Result
             }
             return $fieldsWithValues;
         }    
+    }
+
+    /**
+     * Return list of all fields for which an higlighted snippet has been made
+     */
+    public function getHighlightedSnippets() {
+        return $this->highlightedSnippets;
+    }
+    public function isHighlightedSnippets($fieldname) {
+        return in_array($fieldname, $this->highlightedSnippets);
     }
 }
