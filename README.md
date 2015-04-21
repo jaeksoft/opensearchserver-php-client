@@ -560,6 +560,7 @@ This class creates object of type **OpenSearchServer\Response\Result**:
     *  `$returnAllWithoutValues` can be set to true to return fields that have been configured as `returnedFields` in the query even if they have no value for this result.
   * **getAvailableSnippets($returnAllWithoutValues = false):** return all available snippets for this result.
     *  `$returnAllWithoutValues` can be set to true to return snippets that have been asked the query even if they have no value for this result.
+  * **getHighlightedSnippets()**: return list of all fields for which an higlighted snippet has been made
 * Example:
 
 ```php    
