@@ -46,8 +46,12 @@ class Create extends RequestJson
 	 * @return OpenSearchServer\Field\Create
 	 */
 	public function stored($stored) {
-		$this->data['stored'] = (string)$stored;
-		return $this;
+                if($stored === true or $stored === false) {
+                        $this->data['stored'] = ($stored) ? 'YES' : 'NO';
+                } else {
+                        $this->data['stored'] = $stored;
+                }
+                return $this;
 	}
 	
 	
