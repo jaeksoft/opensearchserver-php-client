@@ -68,7 +68,6 @@ class ResponseFactory
                     $response->setValues($response->getJsonValues()->templates);
                 }
                 return $response;
-                break;
          } else if (   is_a($request, 'OpenSearchServer\Synonyms\Get')
                     || is_a($request, 'OpenSearchServer\StopWords\Get')) {
                 $response = new ResponseIterable($response, $request);
