@@ -1093,6 +1093,7 @@ var_dump($response);
 ```php
 $request = new OpenSearchServer\Crawler\Web\Start();
 $request->index('index_name');
+$request->once(false);
 $response = $oss_api->submit($request);
 ```
 
