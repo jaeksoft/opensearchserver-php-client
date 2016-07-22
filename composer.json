@@ -6,7 +6,7 @@
    "homepage" : "http://www.opensearchserver.com/",
    "require-dev": {
    },
-   "license": "GPL-3.0",
+   "license": "Apache-2.0",
    "require": {
         "php": ">=5.3.3",
         "kriswallsmith/buzz": ">=0.6"
