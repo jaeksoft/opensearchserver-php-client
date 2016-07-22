@@ -34,9 +34,9 @@ class Start extends Request
         if ($once === true) {
             $this->parameters['once'] = 'true';
         } elseif ($once === false) {
-            $this->parameters['$once'] = 'false';
+            $this->parameters['once'] = 'false';
         } else {
-            $this->parameters['$once'] = $once;
+            $this->parameters['once'] = $once;
         }
         return $this;
     }
