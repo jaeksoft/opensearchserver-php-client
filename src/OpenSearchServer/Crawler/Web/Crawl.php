@@ -9,15 +9,15 @@ class Crawl extends Request
 		$this->parameters['url'] = $url;
 		return $this;
 	}
-	
+
 	public function returnData($returnData = true) {
 	    $this->parameters['returnData'] = ($returnData) ? 'true' : 'false';
 		return $this;
 	}
-	
+
 	/******************************
 	 * INHERITED METHODS OVERRIDDEN
-	 ******************************/	
+	 ******************************/
     /**
      * {@inheritdoc}
      */
@@ -25,7 +25,7 @@ class Crawl extends Request
     {
         return self::METHOD_GET;
     }
-    
+
     /**
      * {@inheritdoc}
      */
