@@ -4,8 +4,6 @@
    "type" : "library",
    "keywords" : ["oss","search engine","opensearchserver","search","crawler","web crawler","file crawler","index","open source search engine"],
    "homepage" : "http://www.opensearchserver.com/",
-   "require-dev": {
-   },
    "license": "Apache-2.0",
    "require": {
         "php": ">=5.3.3",
