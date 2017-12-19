@@ -9,6 +9,7 @@ abstract class Search extends SearchAbstract
 	 * Set name of search template to use
 	 * Optional
 	 * @param string $value
+     * @return OpenSearchServer\Search\Search
 	 */
 	public function template($value) {
 		$this->options['template'] = $value;
@@ -49,6 +50,14 @@ abstract class Search extends SearchAbstract
 		$this->data['emptyReturnsAll'] = (boolean) $emptyReturnsAll;
 		return $this;
 	}
+
+    /**
+     * @return OpenSearchServer\Search\Search
+     */
+    public function allowLeadingWildcard($allowLeadingWildcard = true) {
+        $this->data['allowLeadingWildcard'] = (boolean) $allowLeadingWildcard;
+        return $this;
+    }
 
 	/**
 	 * Add one level of sorting
