@@ -1,5 +1,6 @@
-composer.phar
+/composer.phar
 /vendor/
 
 .idea/
-opensearchserver-php-client.iml
+/opensearchserver-php-client.iml
+/composer.lock
