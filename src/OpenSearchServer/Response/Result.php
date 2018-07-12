@@ -63,8 +63,10 @@ class Result
      * 										Default value: true.
      */
     public function getField($fieldName, $returnFirstValueOnly = true) {
-        if(!empty($this->fields[$fieldName]) && count($this->fields[$fieldName] > 0)) {
-            return ($returnFirstValueOnly) ? $this->fields[$fieldName][0] : $this->fields[$fieldName];
+        if(!empty($this->fields[$fieldName]) ) {
+            if (is_array($this->fields[$fieldName]) && count($this->fields[$fieldName]) > 0) {
+                return ($returnFirstValueOnly) ? $this->fields[$fieldName][0] : $this->fields[$fieldName];
+            }
         }
     }
     
@@ -76,8 +78,10 @@ class Result
      * 										Default value: true.
      */
     public function getSnippet($fieldName, $returnFirstValueOnly = true) {
-        if(!empty($this->snippets[$fieldName]) && count($this->snippets[$fieldName] > 0)) {
-            return ($returnFirstValueOnly) ? $this->snippets[$fieldName][0] : $this->snippets[$fieldName];
+        if(!empty($this->snippets[$fieldName]) && is_array($this->snippets[$fieldName])) {
+            if (count($this->snippets[$fieldName]) > 0) {
+                return ($returnFirstValueOnly) ? $this->snippets[$fieldName][0] : $this->snippets[$fieldName];
+            }
         }
     }
 
